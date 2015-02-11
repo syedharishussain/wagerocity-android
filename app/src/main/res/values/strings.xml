@@ -6,5 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="app_id">1425566607690211</string>
+
 
 </resources>

@@ -3,6 +3,7 @@ package com.plego.wagerocity.android.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -32,12 +33,6 @@ public class LoginActivity extends RoboFragmentActivity {
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
     }
-
-//    @Override
-//    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-//        LoginButton authButton = (LoginButton) parent.findViewById(R.id.authButton);
-//        return parent;
-//    }
 
     @Override
     public void onResume() {
@@ -81,6 +76,14 @@ public class LoginActivity extends RoboFragmentActivity {
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
             Log.i(TAG, "Logged in...");
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                }
+            }, 0);
+
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
         }

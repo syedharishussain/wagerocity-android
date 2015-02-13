@@ -9,5 +9,8 @@
     <string name="app_id">1425566607690211</string>
     <string name="title_activity_dashboard">DashboardActivity</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

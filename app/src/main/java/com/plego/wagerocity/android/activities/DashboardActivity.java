@@ -1,6 +1,5 @@
 package com.plego.wagerocity.android.activities;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 
 import com.plego.wagerocity.R;

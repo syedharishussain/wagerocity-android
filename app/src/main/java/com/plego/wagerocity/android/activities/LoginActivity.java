@@ -81,6 +81,7 @@ public class LoginActivity extends RoboFragmentActivity {
                 @Override
                 public void run() {
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                    finish();
                 }
             }, 0);
 

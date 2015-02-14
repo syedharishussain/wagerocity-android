@@ -18,7 +18,7 @@ public class DashboardActivity
         implements NavigationBarFragment.OnNavigationBarFragmentInteractionListener,
         StatsFragment.OnStatsFragmentInteractionListener,
         DashboardFragment.OnDashboardFragmentInteractionListener,
-GetDollarsFragment.OnGetDollarsFragmentInteractionListener{
+        GetDollarsFragment.OnGetDollarsFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +30,20 @@ GetDollarsFragment.OnGetDollarsFragmentInteractionListener{
         addDashboardFragment();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1 ) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void addNavigationBarFragment() {
         NavigationBarFragment navigationBarFragment = new NavigationBarFragment();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container_navigation_bar, navigationBarFragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -49,7 +57,6 @@ GetDollarsFragment.OnGetDollarsFragmentInteractionListener{
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container_stats, statsFragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -63,7 +70,6 @@ GetDollarsFragment.OnGetDollarsFragmentInteractionListener{
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container_dashboard, statsFragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 

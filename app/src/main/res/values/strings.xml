@@ -14,7 +14,25 @@
     <string name="get_dollars_2000">$2,000 \n Virtual Dollars</string>
     <string name="get_dollars_15000">$15,000 \n Virtual Dollars</string>
     <string name="get_dollars_100000">100,000 \n Virtual Dollars</string>
+    <string name="uri_open_betting_portal_fragment">Open Betting Portal Fragment</string>
+    <string name="uri_open_pools_fragment">Open Pools Fragment</string>
+    <string name="uri_open_my_picks_fragment">Open My Picks Fragment</string>
+    <string name="uri_open_leaderboards_list_fragment">Open Leaderboard ListFragment</string>
+    <string name="uri_open_expers_fragment">Open Experts Fragment</string>
     <string name="uri_open_get_dollars_fragment">Open Get Dollars Fragment</string>
 
+    <string-array name="leaderboard_filters">
+        <item>All Leaderboards</item>
+        <item>NFL FOOTBALL</item>
+        <item>NCAA FOOTBALL</item>
+        <item>NBA BASKETBALL</item>
+        <item>NCAA BASKETBALL</item>
+        <item>SOCCER</item>
+    </string-array>
+
+    <string-array name="leaderboard_users">
+        <item>Saad Yusuf</item>
+        <item>Haris Hussain</item>
+    </string-array>
 
 </resources>

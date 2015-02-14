@@ -71,7 +71,47 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.v("Test", "Betting Portal Pressed");
-                Uri uri = Uri.parse("Open Game Fragment");
+                Uri uri = Uri.parse(getString(R.string.uri_open_betting_portal_fragment));
+                mListener.onDashboardFragmentInteraction(uri);
+            }
+        });
+
+        Button poolsButton = (Button) view.findViewById(R.id.button_pools);
+        poolsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("Test", "Get Dollars Pressed");
+                Uri uri = Uri.parse(getString(R.string.uri_open_get_dollars_fragment));
+                mListener.onDashboardFragmentInteraction(uri);
+            }
+        });
+
+        Button myPicksButton = (Button) view.findViewById(R.id.button_my_picks);
+        myPicksButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("Test", "My Picks Pressed");
+                Uri uri = Uri.parse(getString(R.string.uri_open_my_picks_fragment));
+                mListener.onDashboardFragmentInteraction(uri);
+            }
+        });
+
+        Button leaderboardListButton = (Button) view.findViewById(R.id.button_leaderboards);
+        leaderboardListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("Test", "Leader Board List Pressed");
+                Uri uri = Uri.parse(getString(R.string.uri_open_leaderboards_list_fragment));
+                mListener.onDashboardFragmentInteraction(uri);
+            }
+        });
+
+        Button expertsButton = (Button) view.findViewById(R.id.button_experts);
+        expertsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("Test", "Experts Pressed");
+                Uri uri = Uri.parse(getString(R.string.uri_open_expers_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
             }
         });
@@ -109,7 +149,7 @@ public class DashboardFragment extends Fragment {
             mListener = (OnDashboardFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnDashboardFragmentInteractionListener");
         }
     }
 

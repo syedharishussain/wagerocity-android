@@ -1,0 +1,25 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.plego.wagerocity.android.fragments.LeaderBoardListFragment">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <Spinner
+            android:id="@+id/spinner_leaderboard_filters"
+            android:layout_width="fill_parent"
+            android:layout_height="64dp"
+            android:entries="@array/leaderboard_filters"
+             />
+
+        <ListView
+            android:id="@+id/listview_leaderboards"
+            android:layout_below="@id/spinner_leaderboard_filters"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</FrameLayout>

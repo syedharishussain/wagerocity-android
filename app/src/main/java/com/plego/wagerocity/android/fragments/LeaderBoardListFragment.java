@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -15,8 +14,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.plego.wagerocity.R;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,7 +70,7 @@ public class LeaderBoardListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Spinner leaderboardFilterSpinner = (Spinner)  view.findViewById(R.id.spinner_leaderboard_filters);
+        Spinner leaderboardFilterSpinner = (Spinner) view.findViewById(R.id.spinner_leaderboard_filters);
         leaderboardFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -86,10 +83,32 @@ public class LeaderBoardListFragment extends Fragment {
             }
         });
 
-        ListView leaderboardListView = (ListView) view.findViewById(R.id.listview_leaderboards);
+        final ListView leaderboardListView = (ListView) view.findViewById(R.id.listview_leaderboards);
 
-//        ArrayAdapter <String> leaderboardUsersArrayAdapter = new ArrayAdapter<String>(this, R.layout.fragment_navigation_bar, )
+        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
+                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                "Linux", "OS/2"};
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
+                R.layout.layout_cell_leaderboard_users, R.id.textview_leaderboard_user_name, values);
+
+        leaderboardListView.setAdapter(adapter);
+
+        leaderboardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // ListView Clicked item index
+                int itemPosition     = position;
+
+                // ListView Clicked item value
+                String  itemValue    = (String) leaderboardListView.getItemAtPosition(position);
+
+                // Show Alert
+                Toast.makeText(view.getContext(),
+                        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
 
     }
 

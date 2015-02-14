@@ -2,10 +2,12 @@ package com.plego.wagerocity.android.activities;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.fragments.DashboardFragment;
+import com.plego.wagerocity.android.fragments.GetDollarsFragment;
 import com.plego.wagerocity.android.fragments.NavigationBarFragment;
 import com.plego.wagerocity.android.fragments.StatsFragment;
 
@@ -15,7 +17,8 @@ public class DashboardActivity
         extends RoboFragmentActivity
         implements NavigationBarFragment.OnNavigationBarFragmentInteractionListener,
         StatsFragment.OnStatsFragmentInteractionListener,
-        DashboardFragment.OnDashboardFragmentInteractionListener {
+        DashboardFragment.OnDashboardFragmentInteractionListener,
+GetDollarsFragment.OnGetDollarsFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,24 @@ public class DashboardActivity
 
     @Override
     public void onDashboardFragmentInteraction(Uri uri) {
+        if (uri.toString().equals(getString(R.string.uri_open_get_dollars_fragment))) {
+            replaceGetDollarsFragment();
+        }
+    }
+
+    private void replaceGetDollarsFragment() {
+        replaceFragment(new GetDollarsFragment());
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container_dashboard, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onGetDollarsFragmentInteraction(Uri uri) {
 
     }
 }

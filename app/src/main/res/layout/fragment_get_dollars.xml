@@ -1,0 +1,113 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.plego.wagerocity.android.fragments.DashboardFragment">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+        <LinearLayout
+            android:id="@+id/get_dollars_01"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <EditText
+                android:id="@+id/text_get_dollars_2000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/get_dollars_2000"
+                android:background="#00000000"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:textSize="20dp"
+                android:layout_weight="1.0"
+                />
+
+            <Button
+                android:id="@+id/button_get_dollars_2000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/get_dollar_field"
+                android:text="$4.99"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="10dp"
+                />
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/get_dollars_02"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/get_dollars_01">
+
+            <EditText
+                android:id="@+id/text_get_dollars_15000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/get_dollars_15000"
+                android:background="#00000000"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:textSize="20dp"
+                android:layout_weight="1.0"
+                />
+
+            <Button
+                android:id="@+id/button_get_dollars_15000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/get_dollar_field"
+                android:text="$19.99"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="10dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/get_dollars_03"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/get_dollars_02">
+
+            <EditText
+                android:id="@+id/text_get_dollars_100000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/get_dollars_100000"
+                android:background="#00000000"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:textSize="20dp"
+                android:layout_weight="1.0"
+                />
+
+            <Button
+                android:id="@+id/button_get_dollars_100000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/get_dollar_field"
+                android:text="$99.99"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="10dp"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</FrameLayout>

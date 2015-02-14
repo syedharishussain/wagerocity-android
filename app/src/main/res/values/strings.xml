@@ -11,6 +11,10 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="get_dollars_2000">$2,000 \n Virtual Dollars</string>
+    <string name="get_dollars_15000">$15,000 \n Virtual Dollars</string>
+    <string name="get_dollars_100000">100,000 \n Virtual Dollars</string>
+    <string name="uri_open_get_dollars_fragment">Open Get Dollars Fragment</string>
 
 
 </resources>

@@ -7,6 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
+    android:background="@drawable/background"
     tools:context="com.plego.wagerocity.android.activities.DashboardActivity">
 
     <FrameLayout
@@ -19,6 +20,15 @@
         android:id="@+id/fragment_container_stats"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        >
+
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/fragment_container_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
         >
 
     </FrameLayout>

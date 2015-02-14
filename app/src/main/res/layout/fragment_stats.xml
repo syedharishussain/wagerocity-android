@@ -52,7 +52,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/field_stats_rank"
         android:textColor="#ffffff"
-        android:textSize="8pt"
+        android:textSize="7pt"
         />
 
     <ImageView
@@ -72,7 +72,7 @@
         android:text="$1000000"
         android:id="@+id/field_stats_available"
         android:textColor="#ffffff"
-        android:textSize="8pt"
+        android:textSize="7pt"
         />
 
     <ImageView
@@ -90,10 +90,10 @@
         android:background="#00000000"
         android:layout_alignParentRight="true"
         android:layout_marginTop="35dp"
-        android:layout_marginRight="35dp"
+        android:layout_marginRight="30dp"
         android:text="987.00"
         android:id="@+id/field_stats_record"
         android:textColor="#ffffff"
-        android:textSize="8pt"
+        android:textSize="7pt"
         />
 </RelativeLayout>

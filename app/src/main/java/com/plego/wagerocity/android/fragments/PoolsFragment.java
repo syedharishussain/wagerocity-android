@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -60,6 +61,16 @@ public class PoolsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Button showMyPoolsButton = (Button) view.findViewById(R.id.button_show_my_pools);
+        showMyPoolsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(),
+                        "My Pools Screen Under Progress", Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
 
         final ListView poolsListView = (ListView) view.findViewById(R.id.listview_pools);
 

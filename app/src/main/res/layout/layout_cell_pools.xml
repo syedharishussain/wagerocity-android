@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#15000000"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_pools_cell_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/textview_pools_cell_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="SUPER POOL"
+                android:textSize="10pt" />
+
+            <Button
+                android:id="@+id/button_pool_join_unjoin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/blue_button_small"
+                android:text="JOIN"
+                android:textColor="#ffffff"
+
+                />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_pools_cell_header"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pool_open_close_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:text="Status"
+
+                />
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pipe_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/textview_pool_cell_pool_open_close_status"
+                android:layout_toRightOf="@id/textview_pool_cell_pool_open_close_status"
+                android:text="|" />
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pool_members_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:text="Members:"
+                android:layout_toRightOf="@id/textview_pool_cell_pipe_1"
+                android:layout_toEndOf="@id/textview_pool_cell_pipe_1"
+                />
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pool_members_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:textColor="#0070ff"
+                android:text="6"
+                android:layout_toRightOf="@id/textview_pool_cell_pool_members_label"
+                android:layout_toEndOf="@id/textview_pool_cell_pool_members_label"
+                />
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pipe_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/textview_pool_cell_pool_members_count"
+                android:layout_toRightOf="@id/textview_pool_cell_pool_members_count"
+                android:text="|" />
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pool_members_active_inactive_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:text="Active"
+                android:layout_toRightOf="@id/textview_pool_cell_pipe_2"
+                android:layout_toEndOf="@id/textview_pool_cell_pipe_2"
+                />
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pool_start_date_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Start:"
+                android:layout_below="@id/textview_pool_cell_pipe_1"
+                />
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pool_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="12-2-2022"
+                android:layout_below="@id/textview_pool_cell_pipe_1"
+                android:layout_toRightOf="@id/textview_pool_cell_pool_start_date_label"
+                android:layout_toEndOf="@id/textview_pool_cell_pool_start_date_label"
+                android:textColor="#0070ff"
+                />
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pool_end_date_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="End:"
+                android:layout_below="@id/textview_pool_cell_pool_start_date_label"
+                />
+
+            <TextView
+                android:id="@+id/textview_pool_cell_pool_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="12-2-2022"
+                android:layout_below="@id/textview_pool_cell_pool_start_date"
+                android:layout_toRightOf="@id/textview_pool_cell_pool_start_date_label"
+                android:layout_toEndOf="@id/textview_pool_cell_pool_start_date_label"
+                android:textColor="#0070ff"
+                />
+
+        </RelativeLayout>
+
+        </RelativeLayout>
+
+
+
+</RelativeLayout>
+
+

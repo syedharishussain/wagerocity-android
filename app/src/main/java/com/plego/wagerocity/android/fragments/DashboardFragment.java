@@ -70,7 +70,7 @@ public class DashboardFragment extends Fragment {
         bettingPortalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Test", "Betting Portal Pressed");
+                Log.v("Test", getString(R.string.uri_open_betting_portal_fragment));
                 Uri uri = Uri.parse(getString(R.string.uri_open_betting_portal_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
             }
@@ -80,8 +80,8 @@ public class DashboardFragment extends Fragment {
         poolsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Test", "Get Dollars Pressed");
-                Uri uri = Uri.parse(getString(R.string.uri_open_get_dollars_fragment));
+                Log.v("Test", getString(R.string.uri_open_pools_fragment));
+                Uri uri = Uri.parse(getString(R.string.uri_open_pools_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
             }
         });
@@ -90,7 +90,7 @@ public class DashboardFragment extends Fragment {
         myPicksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Test", "My Picks Pressed");
+                Log.v("Test", getString(R.string.uri_open_my_picks_fragment));
                 Uri uri = Uri.parse(getString(R.string.uri_open_my_picks_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
             }
@@ -100,7 +100,7 @@ public class DashboardFragment extends Fragment {
         leaderboardListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Test", "Leader Board List Pressed");
+                Log.v("Test", getString(R.string.uri_open_leaderboards_list_fragment));
                 Uri uri = Uri.parse(getString(R.string.uri_open_leaderboards_list_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
             }
@@ -110,7 +110,7 @@ public class DashboardFragment extends Fragment {
         expertsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Test", "Experts Pressed");
+                Log.v("Test", getString(R.string.uri_open_expers_fragment));
                 Uri uri = Uri.parse(getString(R.string.uri_open_expers_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
             }
@@ -120,7 +120,7 @@ public class DashboardFragment extends Fragment {
         getDollarsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Test", "Get Dollars Pressed");
+                Log.v("Test", getString(R.string.uri_open_get_dollars_fragment));
                 Uri uri = Uri.parse(getString(R.string.uri_open_get_dollars_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
             }

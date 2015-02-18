@@ -1,0 +1,38 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.plego.wagerocity.android.fragments.PoolsFragment">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:id="@+id/button_show_my_pools"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_button"
+            android:text="Show My Pools"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            />
+
+        <!--<Spinner-->
+            <!--android:id="@+id/spinner_leaderboard_filters"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="64dp"-->
+            <!--android:entries="@array/leaderboard_filters"-->
+            <!--/>-->
+
+        <ListView
+            android:id="@+id/listview_pools"
+            android:layout_below="@id/button_show_my_pools"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            />
+
+    </RelativeLayout>
+
+</FrameLayout>

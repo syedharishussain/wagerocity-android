@@ -16,6 +16,7 @@
     <string name="get_dollars_100000">100,000 \n Virtual Dollars</string>
     <string name="uri_open_betting_portal_fragment">Open Betting Portal Fragment</string>
     <string name="uri_open_pools_fragment">Open Pools Fragment</string>
+    <string name="uri_open_my_pools_fragment">Open My Pools Fragment</string>
     <string name="uri_open_my_picks_fragment">Open My Picks Fragment</string>
     <string name="uri_open_leaderboards_list_fragment">Open Leaderboard ListFragment</string>
     <string name="uri_open_expers_fragment">Open Experts Fragment</string>

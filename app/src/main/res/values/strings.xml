@@ -21,6 +21,7 @@
     <string name="uri_open_leaderboards_list_fragment">Open Leaderboard ListFragment</string>
     <string name="uri_open_expers_fragment">Open Experts Fragment</string>
     <string name="uri_open_get_dollars_fragment">Open Get Dollars Fragment</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</string>
 
     <string-array name="leaderboard_filters">
         <item>All Leaderboards</item>

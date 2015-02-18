@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.fragments.DashboardFragment;
+import com.plego.wagerocity.android.fragments.ExpertsFragment;
 import com.plego.wagerocity.android.fragments.GetDollarsFragment;
 import com.plego.wagerocity.android.fragments.LeaderBoardListFragment;
 import com.plego.wagerocity.android.fragments.MyPoolsFragment;
@@ -24,7 +25,8 @@ public class DashboardActivity
         GetDollarsFragment.OnGetDollarsFragmentInteractionListener,
         LeaderBoardListFragment.OnLeaderboardListFragmentInteractionListener,
         PoolsFragment.OnPoolsFragmentInteractionListener,
-        MyPoolsFragment.OnMyPoolsFragmentInteractionListener {
+        MyPoolsFragment.OnMyPoolsFragmentInteractionListener,
+        ExpertsFragment.OnExpertsFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class DashboardActivity
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1 ) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
@@ -92,6 +94,10 @@ public class DashboardActivity
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
             replaceFragment(new PoolsFragment());
         }
+
+        if (uri.toString().equals(getString(R.string.uri_open_experts_fragment))) {
+            replaceFragment(new ExpertsFragment());
+        }
     }
 
     private void replaceGetDollarsFragment() {
@@ -124,6 +130,11 @@ public class DashboardActivity
 
     @Override
     public void onMyPoolsFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onExpertsFragmentInteraction(Uri uri) {
 
     }
 }

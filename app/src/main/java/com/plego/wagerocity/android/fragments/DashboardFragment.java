@@ -110,8 +110,8 @@ public class DashboardFragment extends Fragment {
         expertsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Test", getString(R.string.uri_open_expers_fragment));
-                Uri uri = Uri.parse(getString(R.string.uri_open_expers_fragment));
+                Log.v("Test", getString(R.string.uri_open_experts_fragment));
+                Uri uri = Uri.parse(getString(R.string.uri_open_experts_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
             }
         });

@@ -3,10 +3,15 @@ package com.plego.wagerocity.android.fragments;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.plego.wagerocity.R;
 
@@ -50,6 +55,38 @@ public class ExpertsFragment extends Fragment {
 
     public ExpertsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        final ListView expertsListView = (ListView) view.findViewById(R.id.listview_experts);
+
+        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
+                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                "Linux", "OS/2"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
+                R.layout.layout_cell_experts, R.id.textview_experts_cell_user_name, values);
+
+        expertsListView.setAdapter(adapter);
+
+        expertsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // ListView Clicked item index
+                int itemPosition = position;
+
+                // ListView Clicked item value
+                String itemValue = (String) expertsListView.getItemAtPosition(position);
+
+                // Show Alert
+                Toast.makeText(view.getContext(),
+                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
     }
 
     @Override

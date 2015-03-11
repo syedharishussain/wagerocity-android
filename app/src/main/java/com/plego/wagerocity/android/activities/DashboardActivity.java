@@ -13,6 +13,7 @@ import com.plego.wagerocity.android.fragments.LeaderBoardListFragment;
 import com.plego.wagerocity.android.fragments.MyPoolsFragment;
 import com.plego.wagerocity.android.fragments.NavigationBarFragment;
 import com.plego.wagerocity.android.fragments.PoolsFragment;
+import com.plego.wagerocity.android.fragments.SportsListFragment;
 import com.plego.wagerocity.android.fragments.StatsFragment;
 
 import roboguice.activity.RoboFragmentActivity;
@@ -26,7 +27,8 @@ public class DashboardActivity
         LeaderBoardListFragment.OnLeaderboardListFragmentInteractionListener,
         PoolsFragment.OnPoolsFragmentInteractionListener,
         MyPoolsFragment.OnMyPoolsFragmentInteractionListener,
-        ExpertsFragment.OnExpertsFragmentInteractionListener {
+        ExpertsFragment.OnExpertsFragmentInteractionListener,
+        SportsListFragment.OnSportsListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,10 @@ public class DashboardActivity
         if (uri.toString().equals(getString(R.string.uri_open_experts_fragment))) {
             replaceFragment(new ExpertsFragment());
         }
+
+        if (uri.toString().equals(getString(R.string.uri_open_sports_list_fragment))) {
+            replaceFragment(new SportsListFragment());
+        }
     }
 
     private void replaceGetDollarsFragment() {
@@ -135,6 +141,11 @@ public class DashboardActivity
 
     @Override
     public void onExpertsFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onSportsListFragmentInteraction(Uri uri) {
 
     }
 }

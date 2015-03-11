@@ -25,14 +25,17 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/dashboard_board" />
+                    android:background="@drawable/dashboard_board"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
                 <Button
                     android:id="@+id/button_betting_portal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/betting_portal_icon" />
+                    android:background="@drawable/betting_portal_icon"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
             </RelativeLayout>
 
@@ -46,7 +49,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/dashboard_board" />
+                    android:background="@drawable/dashboard_board"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
                 <Button
                     android:id="@+id/button_pools"
@@ -77,7 +82,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/dashboard_board" />
+                    android:background="@drawable/dashboard_board"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
                 <Button
                     android:id="@+id/button_my_picks"
@@ -99,7 +106,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/dashboard_board" />
+                    android:background="@drawable/dashboard_board"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
                 <Button
                     android:id="@+id/button_leaderboards"
@@ -130,7 +139,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/dashboard_board" />
+                    android:background="@drawable/dashboard_board"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
                 <Button
                     android:id="@+id/button_experts"
@@ -152,7 +163,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/dashboard_board" />
+                    android:background="@drawable/dashboard_board"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
                 <Button
                     android:id="@+id/button_get_dollars"
@@ -185,7 +198,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/blue_button" />
+                    android:background="@drawable/blue_button"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
                 <Button
                     android:id="@+id/button_clear_balance"
@@ -209,7 +224,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/blue_button" />
+                    android:background="@drawable/blue_button"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
                 <Button
                     android:id="@+id/button_get_settings"

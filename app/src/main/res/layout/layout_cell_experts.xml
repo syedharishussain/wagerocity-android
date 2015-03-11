@@ -27,7 +27,6 @@
             android:layout_toEndOf="@id/imageview_expert_user"
             android:layout_marginLeft="20dp"
             android:textSize="10pt"
-
             />
 
         <Button

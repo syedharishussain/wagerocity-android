@@ -70,8 +70,8 @@ public class DashboardFragment extends Fragment {
         bettingPortalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Test", getString(R.string.uri_open_betting_portal_fragment));
-                Uri uri = Uri.parse(getString(R.string.uri_open_betting_portal_fragment));
+                Log.v("Test", getString(R.string.uri_open_sports_list_fragment));
+                Uri uri = Uri.parse(getString(R.string.uri_open_sports_list_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
             }
         });

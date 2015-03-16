@@ -1,10 +1,17 @@
 package com.plego.wagerocity.android.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.fragments.DashboardFragment;
 import com.plego.wagerocity.android.fragments.ExpertsFragment;
@@ -15,7 +22,14 @@ import com.plego.wagerocity.android.fragments.NavigationBarFragment;
 import com.plego.wagerocity.android.fragments.PoolsFragment;
 import com.plego.wagerocity.android.fragments.SportsListFragment;
 import com.plego.wagerocity.android.fragments.StatsFragment;
+import com.plego.wagerocity.android.model.Pool;
+import com.plego.wagerocity.android.model.RestClient;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
 import roboguice.activity.RoboFragmentActivity;
 
 public class DashboardActivity
@@ -38,6 +52,12 @@ public class DashboardActivity
         addNavigationBarFragment();
         addStatsFragment();
         addDashboardFragment();
+
+        String facebokoID = getSharedPreferences(getString(R.string.USER_FACEBOOK_ID), Context.MODE_PRIVATE).getString(getString(R.string.USER_FACEBOOK_ID),null);
+        if (facebokoID!= null) {
+            Log.v("FACEBOOKID", facebokoID);
+        }
+
     }
 
     @Override
@@ -94,7 +114,23 @@ public class DashboardActivity
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
-            replaceFragment(new PoolsFragment());
+
+            RestClient restClient = new RestClient();
+            restClient.getApiService().getAllPools(new Callback<ArrayList<Pool>>() {
+                @Override
+                public void success(ArrayList<Pool> pools, retrofit.client.Response response) {
+                    Log.v("getAllPools", String.valueOf(pools));
+                    replaceFragment(new PoolsFragment(pools));
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("getAllPools", String.valueOf(error));
+                }
+
+            });
+
+
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_experts_fragment))) {

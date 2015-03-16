@@ -15,6 +15,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.model.Pool;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +37,8 @@ public class PoolsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ArrayList <Pool> pools;
 
     private OnPoolsFragmentInteractionListener mListener;
 
@@ -58,6 +64,10 @@ public class PoolsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public PoolsFragment (ArrayList <Pool> pools) {
+        this.pools = pools;
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -77,8 +87,14 @@ public class PoolsFragment extends Fragment {
                 "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
                 "Linux", "OS/2"};
 
+        ArrayList<String> poolNames = new ArrayList();
+
+        for (Pool pool : pools) {
+            poolNames.add(pool.getName());
+        }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
-                R.layout.layout_cell_pools, R.id.textview_pools_cell_name, values);
+                R.layout.layout_cell_pools, R.id.textview_pools_cell_name, poolNames);
 
         poolsListView.setAdapter(adapter);
 

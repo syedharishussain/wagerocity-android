@@ -2,16 +2,16 @@ package com.plego.wagerocity.android.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.widget.LoginButton;
+import com.facebook.model.GraphUser;
 import com.plego.wagerocity.R;
 import com.facebook.Session;
 import com.plego.wagerocity.utils.AndroidUtils;
@@ -77,13 +77,25 @@ public class LoginActivity extends RoboFragmentActivity {
         if (state.isOpened()) {
             Log.i(TAG, "Logged in...");
 
-            new Handler().postDelayed(new Runnable() {
+            Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
-                public void run() {
-                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                    finish();
+                public void onCompleted(GraphUser user, Response response) {
+                    Log.v("FACEBOOK", "Response : " + response);
+
+                    SharedPreferences.Editor pref = getSharedPreferences(getString(R.string.PREF_PLEGO), Context.MODE_PRIVATE).edit();
+                    pref.putString(getString(R.string.USER_FACEBOOK_ID), user.getId());
+                    pref.commit();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                            finish();
+                        }
+                    }, 0);
+
                 }
-            }, 0);
+            }).executeAsync();
 
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");

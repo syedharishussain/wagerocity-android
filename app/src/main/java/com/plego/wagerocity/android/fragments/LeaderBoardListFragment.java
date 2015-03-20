@@ -14,6 +14,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.model.LeaderboardPlayer;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +35,7 @@ public class LeaderBoardListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ArrayList<LeaderboardPlayer> leaderboardPlayers;
 
     private OnLeaderboardListFragmentInteractionListener mListener;
 
@@ -55,6 +59,10 @@ public class LeaderBoardListFragment extends Fragment {
 
     public LeaderBoardListFragment() {
         // Required empty public constructor
+    }
+
+    public LeaderBoardListFragment (ArrayList <LeaderboardPlayer> leaderboardPlayers) {
+        this.leaderboardPlayers = leaderboardPlayers;
     }
 
     @Override
@@ -85,12 +93,14 @@ public class LeaderBoardListFragment extends Fragment {
 
         final ListView leaderboardListView = (ListView) view.findViewById(R.id.listview_leaderboards);
 
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
+        ArrayList<String> playerNames = new ArrayList();
+
+        for (LeaderboardPlayer leaderboardPlayer : leaderboardPlayers) {
+            playerNames.add(leaderboardPlayer.getUsername());
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
-                R.layout.layout_cell_leaderboard_users, R.id.textview_leaderboard_user_name, values);
+                R.layout.layout_cell_leaderboard_users, R.id.textview_leaderboard_user_name, playerNames);
 
         leaderboardListView.setAdapter(adapter);
 

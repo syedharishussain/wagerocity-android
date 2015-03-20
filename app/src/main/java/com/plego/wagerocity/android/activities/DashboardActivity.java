@@ -22,6 +22,8 @@ import com.plego.wagerocity.android.fragments.NavigationBarFragment;
 import com.plego.wagerocity.android.fragments.PoolsFragment;
 import com.plego.wagerocity.android.fragments.SportsListFragment;
 import com.plego.wagerocity.android.fragments.StatsFragment;
+import com.plego.wagerocity.android.model.ExpertPlayer;
+import com.plego.wagerocity.android.model.LeaderboardPlayer;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
 
@@ -110,7 +112,19 @@ public class DashboardActivity
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_leaderboards_list_fragment))) {
-            replaceFragment(new LeaderBoardListFragment());
+
+            RestClient restClient = new RestClient();
+            restClient.getApiService().getLeaderboards(new Callback<ArrayList<LeaderboardPlayer>>() {
+                @Override
+                public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, retrofit.client.Response response) {
+                    replaceFragment(new LeaderBoardListFragment(leaderboardPlayers));
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("getLeaderboards", String.valueOf(error));
+                }
+            });
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
@@ -119,7 +133,7 @@ public class DashboardActivity
             restClient.getApiService().getAllPools(new Callback<ArrayList<Pool>>() {
                 @Override
                 public void success(ArrayList<Pool> pools, retrofit.client.Response response) {
-                    Log.v("getAllPools", String.valueOf(pools));
+
                     replaceFragment(new PoolsFragment(pools));
                 }
 
@@ -129,12 +143,23 @@ public class DashboardActivity
                 }
 
             });
-
-
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_experts_fragment))) {
-            replaceFragment(new ExpertsFragment());
+
+            RestClient restClient = new RestClient();
+            restClient.getApiService().getExperts(new Callback<ArrayList<ExpertPlayer>>() {
+                @Override
+                public void success(ArrayList<ExpertPlayer> expertPlayers, retrofit.client.Response response) {
+                    replaceFragment(new ExpertsFragment(expertPlayers));
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("getExperts", String.valueOf(error));
+                }
+            });
+
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_sports_list_fragment))) {

@@ -117,7 +117,7 @@ public class DashboardActivity
             restClient.getApiService().getLeaderboards(new Callback<ArrayList<LeaderboardPlayer>>() {
                 @Override
                 public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, retrofit.client.Response response) {
-                    replaceFragment(new LeaderBoardListFragment(leaderboardPlayers));
+                    replaceFragment(LeaderBoardListFragment.newInstance(leaderboardPlayers));
                 }
 
                 @Override
@@ -134,7 +134,7 @@ public class DashboardActivity
                 @Override
                 public void success(ArrayList<Pool> pools, retrofit.client.Response response) {
 
-                    replaceFragment(new PoolsFragment(pools));
+                    replaceFragment(PoolsFragment.newInstance(pools));
                 }
 
                 @Override
@@ -151,7 +151,7 @@ public class DashboardActivity
             restClient.getApiService().getExperts(new Callback<ArrayList<ExpertPlayer>>() {
                 @Override
                 public void success(ArrayList<ExpertPlayer> expertPlayers, retrofit.client.Response response) {
-                    replaceFragment(new ExpertsFragment(expertPlayers));
+                    replaceFragment(ExpertsFragment.newInstance(expertPlayers));
                 }
 
                 @Override

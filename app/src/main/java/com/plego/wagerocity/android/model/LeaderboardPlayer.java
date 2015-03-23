@@ -1,9 +1,12 @@
 package com.plego.wagerocity.android.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class LeaderboardPlayer {
+public class LeaderboardPlayer implements Parcelable{
 
     @SerializedName("usr_id")
     @Expose
@@ -108,4 +111,39 @@ public class LeaderboardPlayer {
         this.rakCurrentRecord = rakCurrentRecord;
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.usrId);
+        dest.writeString(this.displayname);
+        dest.writeString(this.email);
+        dest.writeString(this.username);
+        dest.writeString(this.rakCurrentRecord);
+    }
+
+    public LeaderboardPlayer() {
+    }
+
+    private LeaderboardPlayer(Parcel in) {
+        this.usrId = in.readString();
+        this.displayname = in.readString();
+        this.email = in.readString();
+        this.username = in.readString();
+        this.rakCurrentRecord = in.readString();
+    }
+
+    public static final Creator<LeaderboardPlayer> CREATOR = new Creator<LeaderboardPlayer>() {
+        public LeaderboardPlayer createFromParcel(Parcel source) {
+            return new LeaderboardPlayer(source);
+        }
+
+        public LeaderboardPlayer[] newArray(int size) {
+            return new LeaderboardPlayer[size];
+        }
+    };
 }

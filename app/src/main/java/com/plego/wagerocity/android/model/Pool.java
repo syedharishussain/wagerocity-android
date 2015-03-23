@@ -1,9 +1,12 @@
 package com.plego.wagerocity.android.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Pool {
+public class Pool implements Parcelable {
 
     @SerializedName("pool_id")
     @Expose
@@ -66,7 +69,7 @@ public class Pool {
     @Expose
     private String isPaid;
     @Expose
-    private Object amount;
+    private Integer amount;
     @SerializedName("min_people")
     @Expose
     private String minPeople;
@@ -481,7 +484,7 @@ public class Pool {
      * @param amount
      * The amount
      */
-    public void setAmount(Object amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 
@@ -503,4 +506,77 @@ public class Pool {
         this.minPeople = minPeople;
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.poolId);
+        dest.writeString(this.userId);
+        dest.writeString(this.name);
+        dest.writeString(this.motto);
+        dest.writeString(this.description);
+        dest.writeString(this.privacy);
+        dest.writeString(this.size);
+        dest.writeString(this.limitedSize);
+        dest.writeString(this.matchUp);
+        dest.writeString(this.fromDate);
+        dest.writeString(this.toDate);
+        dest.writeString(this.regStartDate);
+        dest.writeString(this.regEndDate);
+        dest.writeString(this.games);
+        dest.writeString(this.pickGame);
+        dest.writeString(this.pickgameDateFrom);
+        dest.writeString(this.pickgameDateTo);
+        dest.writeString(this.wagerType);
+        dest.writeString(this.poolType);
+        dest.writeString(this.dateTime);
+        dest.writeString(this.joinedMembers);
+        dest.writeString(this.isPaid);
+        dest.writeValue(this.amount);
+        dest.writeString(this.minPeople);
+    }
+
+    public Pool() {
+    }
+
+    private Pool(Parcel in) {
+        this.poolId = in.readString();
+        this.userId = in.readString();
+        this.name = in.readString();
+        this.motto = in.readString();
+        this.description = in.readString();
+        this.privacy = in.readString();
+        this.size = in.readString();
+        this.limitedSize = in.readString();
+        this.matchUp = in.readString();
+        this.fromDate = in.readString();
+        this.toDate = in.readString();
+        this.regStartDate = in.readString();
+        this.regEndDate = in.readString();
+        this.games = in.readString();
+        this.pickGame = in.readString();
+        this.pickgameDateFrom = in.readString();
+        this.pickgameDateTo = in.readString();
+        this.wagerType = in.readString();
+        this.poolType = in.readString();
+        this.dateTime = in.readString();
+        this.joinedMembers = in.readString();
+        this.isPaid = in.readString();
+        this.amount = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.minPeople = in.readString();
+    }
+
+    public static final Creator<Pool> CREATOR = new Creator<Pool>() {
+        public Pool createFromParcel(Parcel source) {
+            return new Pool(source);
+        }
+
+        public Pool[] newArray(int size) {
+            return new Pool[size];
+        }
+    };
 }

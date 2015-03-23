@@ -18,7 +18,6 @@ import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Pool;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,12 +30,7 @@ import java.util.Arrays;
 public class PoolsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARGS_POOLS = "args_pools";
 
     private ArrayList <Pool> pools;
 
@@ -46,26 +40,20 @@ public class PoolsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param pools Parameter 1.
      * @return A new instance of fragment PoolsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PoolsFragment newInstance(String param1, String param2) {
+    public static PoolsFragment newInstance(ArrayList<Pool> pools) {
         PoolsFragment fragment = new PoolsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelableArrayList(ARGS_POOLS, pools);
         fragment.setArguments(args);
         return fragment;
     }
 
     public PoolsFragment() {
         // Required empty public constructor
-    }
-
-    public PoolsFragment (ArrayList <Pool> pools) {
-        this.pools = pools;
     }
 
     @Override
@@ -122,8 +110,7 @@ public class PoolsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.pools = getArguments().getParcelableArrayList(ARGS_POOLS);
         }
     }
 

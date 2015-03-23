@@ -29,13 +29,8 @@ import java.util.ArrayList;
 public class ExpertsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private ArrayList<ExpertPlayer> expertPlayers = new ArrayList();
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARGS_EXPERT_PLAYERS = "args_expert_players";
+    private ArrayList<ExpertPlayer> expertPlayers;
 
     private OnExpertsFragmentInteractionListener mListener;
 
@@ -43,16 +38,14 @@ public class ExpertsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param expertPlayers Parameter 1.
      * @return A new instance of fragment ExpertsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ExpertsFragment newInstance(String param1, String param2) {
+    public static ExpertsFragment newInstance(ArrayList<ExpertPlayer> expertPlayers) {
         ExpertsFragment fragment = new ExpertsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelableArrayList(ARGS_EXPERT_PLAYERS, expertPlayers);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,10 +53,10 @@ public class ExpertsFragment extends Fragment {
     public ExpertsFragment() {
         // Required empty public constructor
     }
-
-    public ExpertsFragment (ArrayList<ExpertPlayer> expertPlayers) {
-        this.expertPlayers = expertPlayers;
-    }
+//
+//    public ExpertsFragment (ArrayList<ExpertPlayer> expertPlayers) {
+//        this.expertPlayers = expertPlayers;
+//    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -102,9 +95,9 @@ public class ExpertsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.expertPlayers = new ArrayList<>();
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.expertPlayers = getArguments().getParcelableArrayList(ARGS_EXPERT_PLAYERS);
         }
     }
 

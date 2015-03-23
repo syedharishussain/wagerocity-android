@@ -36,5 +36,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.squareup.okio:okio:1.0.1'
+    compile 'com.anjlab.android.iab.v3:library:1.0.+@aar'
     compile project(':libs:facebook')
 }

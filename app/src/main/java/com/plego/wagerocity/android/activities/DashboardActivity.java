@@ -1,5 +1,6 @@
 package com.plego.wagerocity.android.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -45,6 +46,8 @@ public class DashboardActivity
         MyPoolsFragment.OnMyPoolsFragmentInteractionListener,
         ExpertsFragment.OnExpertsFragmentInteractionListener,
         SportsListFragment.OnSportsListFragmentInteractionListener {
+
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,15 +116,20 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_leaderboards_list_fragment))) {
 
+            progress = ProgressDialog.show(this, "loading..",
+                    null , true);
+
             RestClient restClient = new RestClient();
             restClient.getApiService().getLeaderboards(new Callback<ArrayList<LeaderboardPlayer>>() {
                 @Override
                 public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, retrofit.client.Response response) {
+                    progress.dismiss();
                     replaceFragment(LeaderBoardListFragment.newInstance(leaderboardPlayers));
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
+                    progress.dismiss();
                     Log.e("getLeaderboards", String.valueOf(error));
                 }
             });
@@ -129,16 +137,20 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
 
+            progress = ProgressDialog.show(this, "loading..",
+                    null , true);
+
             RestClient restClient = new RestClient();
             restClient.getApiService().getAllPools(new Callback<ArrayList<Pool>>() {
                 @Override
                 public void success(ArrayList<Pool> pools, retrofit.client.Response response) {
-
+                    progress.dismiss();
                     replaceFragment(PoolsFragment.newInstance(pools));
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
+                    progress.dismiss();
                     Log.e("getAllPools", String.valueOf(error));
                 }
 
@@ -147,15 +159,22 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_experts_fragment))) {
 
+            progress = ProgressDialog.show(this, "loading..",
+                    null , true);
+
             RestClient restClient = new RestClient();
             restClient.getApiService().getExperts(new Callback<ArrayList<ExpertPlayer>>() {
                 @Override
                 public void success(ArrayList<ExpertPlayer> expertPlayers, retrofit.client.Response response) {
+
+                    progress.dismiss();
+
                     replaceFragment(ExpertsFragment.newInstance(expertPlayers));
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
+                    progress.dismiss();
                     Log.e("getExperts", String.valueOf(error));
                 }
             });

@@ -1,5 +1,6 @@
 package com.plego.wagerocity.android.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +25,7 @@ public class LoginActivity extends RoboFragmentActivity {
 
     private static final String TAG = "LoginActivity";
     private UiLifecycleHelper uiHelper;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +77,15 @@ public class LoginActivity extends RoboFragmentActivity {
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
-            Log.i(TAG, "Logged in...");
+            Log.e(TAG, "Logged in...");
+
+            progress = ProgressDialog.show(this, "loading..",
+                    null , true);
 
             Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
-                    Log.v("FACEBOOK", "Response : " + response);
+                    Log.e("FACEBOOK", "Response : " + response);
 
                     SharedPreferences.Editor pref = getSharedPreferences(getString(R.string.PREF_PLEGO), Context.MODE_PRIVATE).edit();
                     pref.putString(getString(R.string.USER_FACEBOOK_ID), user.getId());
@@ -89,6 +94,7 @@ public class LoginActivity extends RoboFragmentActivity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            progress.dismiss();
                             startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                             finish();
                         }
@@ -98,7 +104,7 @@ public class LoginActivity extends RoboFragmentActivity {
             }).executeAsync();
 
         } else if (state.isClosed()) {
-            Log.i(TAG, "Logged out...");
+            Log.e(TAG, "Logged out...");
         }
     }
 

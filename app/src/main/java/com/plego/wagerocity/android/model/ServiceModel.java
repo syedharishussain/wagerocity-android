@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import retrofit.Callback;
 import retrofit.http.GET;
+import retrofit.http.Query;
 
 
 /**
@@ -21,6 +22,11 @@ public interface ServiceModel {
 
     @GET("/getExperts")
     public void getExperts(Callback<ArrayList<ExpertPlayer>> callback);
-}
 
+    @GET("/getUser?facebookID={facebookID}")
+    public void getUser(@Query("facebookID") String facebookID, Callback <User> callback) ;
+
+//    @GET("/users/{user}/repos" "getUser?facebookID")
+//    List<Repo> listRepos(@Path("user") String user);
+}
 

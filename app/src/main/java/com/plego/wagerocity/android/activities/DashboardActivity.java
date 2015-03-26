@@ -14,6 +14,7 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.fragments.DashboardFragment;
 import com.plego.wagerocity.android.fragments.ExpertsFragment;
 import com.plego.wagerocity.android.fragments.GetDollarsFragment;
@@ -58,9 +59,9 @@ public class DashboardActivity
         addStatsFragment();
         addDashboardFragment();
 
-        String facebokoID = getSharedPreferences(getString(R.string.USER_FACEBOOK_ID), Context.MODE_PRIVATE).getString(getString(R.string.USER_FACEBOOK_ID),null);
+        String facebokoID = new WagerocityPref(getApplicationContext()).facebookID();
         if (facebokoID!= null) {
-            Log.v("FACEBOOKID", facebokoID);
+            Log.e("FACEBOOKID", facebokoID);
         }
 
     }

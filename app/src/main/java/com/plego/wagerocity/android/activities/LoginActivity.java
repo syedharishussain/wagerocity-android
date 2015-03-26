@@ -15,6 +15,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.plego.wagerocity.R;
 import com.facebook.Session;
+import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.Arrays;
@@ -85,16 +86,18 @@ public class LoginActivity extends RoboFragmentActivity {
             Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
+                    progress.dismiss();
                     Log.e("FACEBOOK", "Response : " + response);
 
-                    SharedPreferences.Editor pref = getSharedPreferences(getString(R.string.PREF_PLEGO), Context.MODE_PRIVATE).edit();
-                    pref.putString(getString(R.string.USER_FACEBOOK_ID), user.getId());
-                    pref.commit();
+                    WagerocityPref pref = new WagerocityPref(getApplicationContext());
+                    pref.setFacebookID(user.getId());
+                    pref.setFirstName(user.getFirstName());
+                    pref.setLastName(user.getLastName());
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            progress.dismiss();
+
                             startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                             finish();
                         }

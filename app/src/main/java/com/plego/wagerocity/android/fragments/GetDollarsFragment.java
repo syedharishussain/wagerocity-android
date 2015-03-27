@@ -76,7 +76,8 @@ public class GetDollarsFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final User user = new WagerocityPref(getActivity()).user();
+        final WagerocityPref pref = new WagerocityPref(getActivity());
+        final User user = pref.user();
         final RestClient restClient = new RestClient();
 
         Button get2000DollarsButton = (Button) view.findViewById(R.id.button_get_dollars_2000);
@@ -87,6 +88,7 @@ public class GetDollarsFragment extends Fragment {
                 restClient.getApiService().buyCredits(user.getUserId(), (float) 2000.00, new Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
+                        pref.setUser(user);
 
                     }
 
@@ -111,7 +113,7 @@ public class GetDollarsFragment extends Fragment {
                 restClient.getApiService().buyCredits(user.getUserId(), (float) 15000.00, new Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
-
+                        pref.setUser(user);
                     }
 
                     @Override
@@ -135,7 +137,7 @@ public class GetDollarsFragment extends Fragment {
                 restClient.getApiService().buyCredits(user.getUserId(), (float) 100000.00, new Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
-
+                        pref.setUser(user);
                     }
 
                     @Override

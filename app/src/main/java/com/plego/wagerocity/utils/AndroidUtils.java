@@ -1,11 +1,16 @@
 package com.plego.wagerocity.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import android.util.Log;
+
+import junit.framework.Assert;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

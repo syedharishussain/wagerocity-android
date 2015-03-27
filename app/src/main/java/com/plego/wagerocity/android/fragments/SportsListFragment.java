@@ -5,15 +5,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.adapters.SportsListAdapter;
+import com.plego.wagerocity.android.model.SportsListObject;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,22 +76,30 @@ public class SportsListFragment extends Fragment {
 
         final ListView sportsListView = (ListView) view.findViewById(R.id.listview_sports_list);
 
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
+        SportsListAdapter sportsListAdapter = new SportsListAdapter(view.getContext(), getSportsListData());
+        sportsListView.setAdapter(sportsListAdapter);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
-                R.layout.layout_cell_sports_list, R.id.textview_cell_sports_list_name, values);
+        sportsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("Selected Sports", ((SportsListObject)parent.getItemAtPosition(position)).getSportsName());
+            }
+        });
+    }
 
-        sportsListView.setAdapter(adapter);
+    private ArrayList<SportsListObject> getSportsListData() {
+        ArrayList<SportsListObject> sportsListObjects = new ArrayList<SportsListObject>();
 
-//        sportsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//
-//            }
-//        });
+        sportsListObjects.add(new SportsListObject("NFL", R.drawable.nfl));
+        sportsListObjects.add(new SportsListObject("NCAA Football", R.drawable.ncaa_football));
+        sportsListObjects.add(new SportsListObject("MLB", R.drawable.mlb));
+        sportsListObjects.add(new SportsListObject("NBA", R.drawable.nba));
+        sportsListObjects.add(new SportsListObject("NCAA Basketball", R.drawable.ncaa_basketball));
+        sportsListObjects.add(new SportsListObject("NHL", R.drawable.nhl));
+        sportsListObjects.add(new SportsListObject("Soccer", R.drawable.soccer));
+        sportsListObjects.add(new SportsListObject("Tennis", R.drawable.tennis));
+
+        return sportsListObjects;
     }
 
     @Override
@@ -137,3 +149,4 @@ public class SportsListFragment extends Fragment {
     }
 
 }
+

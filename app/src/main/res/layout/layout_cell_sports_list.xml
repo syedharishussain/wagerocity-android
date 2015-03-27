@@ -13,11 +13,12 @@
 
         <ImageView
             android:id="@+id/imageview_cell_sports_list_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
-            android:background="@drawable/nba_basketball" />
+            />
+            <!--android:background="@drawable/nba_basketball"-->
 
 
         <TextView
@@ -27,6 +28,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
+            android:textIsSelectable="false"
             android:layout_toEndOf="@id/imageview_cell_sports_list_image"
             android:layout_toRightOf="@id/imageview_cell_sports_list_image"
             android:text="NFL FOOTBALL"

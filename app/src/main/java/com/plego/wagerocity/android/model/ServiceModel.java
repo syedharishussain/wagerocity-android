@@ -5,7 +5,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import retrofit.Callback;
+import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
 import retrofit.http.Query;
 
 
@@ -23,10 +27,19 @@ public interface ServiceModel {
     @GET("/getExperts")
     public void getExperts(Callback<ArrayList<ExpertPlayer>> callback);
 
-    @GET("/getUser?facebookID={facebookID}")
+    @GET("/getUser")
     public void getUser(@Query("facebookID") String facebookID, Callback <User> callback) ;
 
-//    @GET("/users/{user}/repos" "getUser?facebookID")
-//    List<Repo> listRepos(@Path("user") String user);
+    @Multipart
+    @POST("/createUser")
+    public void createUser(@Part("firstName") String firstName, @Part("lastName") String lastName, @Part("facebookID") String facebookID, Callback<User> callback);
+
+    @Multipart
+    @POST("/buyCredits")
+    public void buyCredits(@Part("userId") String userId, @Part("creditAmount") Float creditAmount, Callback<User> callback);
+
+    @Multipart
+    @POST("/consumeCredits")
+    public void consumeCredits(@Part("userId") String userId, @Part("debitAmount") Float debitAmount, Callback<User> callback);
 }
 

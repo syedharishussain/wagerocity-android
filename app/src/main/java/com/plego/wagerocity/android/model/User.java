@@ -26,7 +26,7 @@ public class User implements Parcelable {
     @Expose
     private String facebookUid;
     @Expose
-    private String score;
+    private Float score;
     @Expose
     private String address;
     @Expose
@@ -42,9 +42,9 @@ public class User implements Parcelable {
     @Expose
     private String overallrank;
     @Expose
-    private String credits;
+    private Float credits;
     @Expose
-    private String currentrecord;
+    private Float currentrecord;
 
     /**
      *
@@ -177,7 +177,7 @@ public class User implements Parcelable {
      * @return
      * The score
      */
-    public String getScore() {
+    public Float getScore() {
         return score;
     }
 
@@ -186,7 +186,7 @@ public class User implements Parcelable {
      * @param score
      * The score
      */
-    public void setScore(String score) {
+    public void setScore(Float score) {
         this.score = score;
     }
 
@@ -321,7 +321,7 @@ public class User implements Parcelable {
      * @return
      * The credits
      */
-    public String getCredits() {
+    public Float getCredits() {
         return credits;
     }
 
@@ -330,7 +330,7 @@ public class User implements Parcelable {
      * @param credits
      * The credits
      */
-    public void setCredits(String credits) {
+    public void setCredits(Float credits) {
         this.credits = credits;
     }
 
@@ -339,7 +339,7 @@ public class User implements Parcelable {
      * @return
      * The currentrecord
      */
-    public String getCurrentrecord() {
+    public Float getCurrentrecord() {
         return currentrecord;
     }
 
@@ -348,7 +348,7 @@ public class User implements Parcelable {
      * @param currentrecord
      * The currentrecord
      */
-    public void setCurrentrecord(String currentrecord) {
+    public void setCurrentrecord(Float currentrecord) {
         this.currentrecord = currentrecord;
     }
 
@@ -367,7 +367,7 @@ public class User implements Parcelable {
         dest.writeString(this.timezone);
         dest.writeString(this.creationDate);
         dest.writeString(this.facebookUid);
-        dest.writeString(this.score);
+        dest.writeFloat(this.score);
         dest.writeString(this.address);
         dest.writeString(this.city);
         dest.writeString(this.country);
@@ -375,8 +375,8 @@ public class User implements Parcelable {
         dest.writeString(this.birthdate);
         dest.writeString(this.state);
         dest.writeString(this.overallrank);
-        dest.writeString(this.credits);
-        dest.writeString(this.currentrecord);
+        dest.writeFloat(this.credits);
+        dest.writeFloat(this.currentrecord);
     }
 
     public User() {
@@ -390,7 +390,7 @@ public class User implements Parcelable {
         this.timezone = in.readString();
         this.creationDate = in.readString();
         this.facebookUid = in.readString();
-        this.score = in.readString();
+        this.score = in.readFloat();
         this.address = in.readString();
         this.city = in.readString();
         this.country = in.readString();
@@ -398,8 +398,8 @@ public class User implements Parcelable {
         this.birthdate = in.readString();
         this.state = in.readString();
         this.overallrank = in.readString();
-        this.credits = in.readString();
-        this.currentrecord = in.readString();
+        this.credits = in.readFloat();
+        this.currentrecord = in.readFloat();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

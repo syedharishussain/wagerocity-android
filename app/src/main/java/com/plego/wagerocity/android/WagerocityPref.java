@@ -3,7 +3,9 @@ package com.plego.wagerocity.android;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.plego.wagerocity.android.model.User;
 
 import roboguice.inject.ContextSingleton;
 
@@ -59,4 +61,17 @@ public class WagerocityPref {
         return getPref().getString("userLastName", null);
     }
 
+    public void setUser(User user) {
+        SharedPreferences.Editor pref = getPref().edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        pref.putString("userObject", json);
+        pref.commit();
+    }
+
+    public User user() {
+        Gson gson = new Gson();
+        String json = getPref().getString("userObject", null);
+        return (User)gson.fromJson(json, User.class);
+    }
 }

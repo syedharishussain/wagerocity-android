@@ -16,10 +16,16 @@ import com.facebook.model.GraphUser;
 import com.plego.wagerocity.R;
 import com.facebook.Session;
 import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.ServiceModel;
+import com.plego.wagerocity.android.model.User;
 import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.Arrays;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.http.Query;
 import roboguice.activity.RoboFragmentActivity;
 
 public class LoginActivity extends RoboFragmentActivity {
@@ -43,11 +49,11 @@ public class LoginActivity extends RoboFragmentActivity {
         // For scenarios where the main activity is launched and user
         // session is not null, the session state change notification
         // may not be triggered. Trigger it if it's open/closed.
-        Session session = Session.getActiveSession();
-        if (session != null &&
-                (session.isOpened() || session.isClosed()) ) {
-            onSessionStateChange(session, session.getState(), null);
-        }
+//        Session session = Session.getActiveSession();
+//        if (session != null &&
+//                (session.isOpened() || session.isClosed()) ) {
+//            onSessionStateChange(session, session.getState(), null);
+//        }
 
         uiHelper.onResume();
     }
@@ -85,24 +91,61 @@ public class LoginActivity extends RoboFragmentActivity {
 
             Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
-                public void onCompleted(GraphUser user, Response response) {
+                public void onCompleted(final GraphUser user, final Response response) {
                     progress.dismiss();
                     Log.e("FACEBOOK", "Response : " + response);
 
-                    WagerocityPref pref = new WagerocityPref(getApplicationContext());
+                    final WagerocityPref pref = new WagerocityPref(getApplicationContext());
                     pref.setFacebookID(user.getId());
                     pref.setFirstName(user.getFirstName());
                     pref.setLastName(user.getLastName());
 
-                    new Handler().postDelayed(new Runnable() {
+                    final RestClient restClient = new RestClient();
+                    restClient.getApiService().getUser(user.getId(), new Callback<User>() {
                         @Override
-                        public void run() {
+                        public void success(User user, retrofit.client.Response response) {
+                            pref.setUser(user);
 
-                            startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                            finish();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                                    finish();
+                                }
+                            }, 0);
+
                         }
-                    }, 0);
 
+                        @Override
+                        public void failure(RetrofitError error) {
+                            if (error.getResponse().getStatus() == 404) {
+                                restClient.getApiService().createUser(
+                                        user.getFirstName(),
+                                        user.getLastName(),
+                                        user.getId(),
+                                        new Callback<User>() {
+                                    @Override
+                                    public void success(User user, retrofit.client.Response response) {
+                                        pref.setUser(user);
+
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                                                finish();
+                                            }
+                                        }, 0);
+
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
             }).executeAsync();
 

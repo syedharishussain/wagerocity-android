@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.model.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,6 +74,13 @@ public class StatsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_stats, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        updateStats();
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -91,6 +103,19 @@ public class StatsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void updateStats () {
+        WagerocityPref pref = new WagerocityPref(getActivity());
+        User user = pref.user();
+        TextView availableCredit = (TextView) this.getView().findViewById(R.id.field_stats_available);
+        availableCredit.setText(user.getCredits().toString());
+
+        TextView rank = (TextView) this.getView().findViewById(R.id.field_stats_rank);
+        rank.setText(user.getOverallrank());
+
+        TextView record = (TextView) this.getView().findViewById(R.id.field_stats_record);
+        record.setText(user.getCurrentrecord().toString());
     }
 
     /**

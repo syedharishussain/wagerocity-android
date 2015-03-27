@@ -13,6 +13,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.User;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,11 +76,25 @@ public class GetDollarsFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final User user = new WagerocityPref(getActivity()).user();
+        final RestClient restClient = new RestClient();
+
         Button get2000DollarsButton = (Button) view.findViewById(R.id.button_get_dollars_2000);
         get2000DollarsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                restClient.getApiService().buyCredits(user.getUserId(), (float) 2000.00, new Callback<User>() {
+                    @Override
+                    public void success(User user, Response response) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
 
                 Toast.makeText(view.getContext(), "In App Purchase Not Implemented", Toast.LENGTH_LONG).show();
 
@@ -87,6 +108,18 @@ public class GetDollarsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                restClient.getApiService().buyCredits(user.getUserId(), (float) 15000.00, new Callback<User>() {
+                    @Override
+                    public void success(User user, Response response) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
                 Toast.makeText(view.getContext(), "In App Purchase Not Implemented", Toast.LENGTH_LONG).show();
 
                 Uri uri = Uri.parse("Open Game Fragment");
@@ -98,6 +131,18 @@ public class GetDollarsFragment extends Fragment {
         get100000DollarsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                restClient.getApiService().buyCredits(user.getUserId(), (float) 100000.00, new Callback<User>() {
+                    @Override
+                    public void success(User user, Response response) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
 
                 Toast.makeText(view.getContext(), "In App Purchase Not Implemented", Toast.LENGTH_LONG).show();
 

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,15 +75,6 @@ public class GamesListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         final ListView gamesListView = (ListView) view.findViewById(R.id.listview_games_list);
-
-//        ArrayList<String> gamesList = new ArrayList();
-//
-//        for (Game game: games) {
-//            gamesList.add(game.getTeamAName());
-//        }
-//
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
-//                R.layout.layout_cell_games_list, R.id.textview_cell_games_team_a, gamesList);
 
         GamesListAdapter gamesListAdapter = new GamesListAdapter(view.getContext(), games);
 

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.adapters.GamesListAdapter;
 import com.plego.wagerocity.android.fragments.DashboardFragment;
 import com.plego.wagerocity.android.fragments.ExpertsFragment;
 import com.plego.wagerocity.android.fragments.GamesListFragment;
@@ -42,7 +43,8 @@ public class DashboardActivity
         MyPoolsFragment.OnMyPoolsFragmentInteractionListener,
         ExpertsFragment.OnExpertsFragmentInteractionListener,
         SportsListFragment.OnSportsListFragmentInteractionListener,
-        GamesListFragment.OnGamesListFragmentInteractionListener {
+        GamesListFragment.OnGamesListFragmentInteractionListener,
+        GamesListAdapter.OnGamesListAdapterFragmentInteractionListener {
 
     ProgressDialog progress;
 
@@ -231,5 +233,12 @@ public class DashboardActivity
     @Override
     public void onGamesListFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onGamesListAdapterFragmentInteraction(Uri uri, Game game) {
+        if (uri.toString().equals(getString(R.string.uri_selected_game_for_betting))) {
+            Log.e("Select Game", game.getTeamAName());
+        }
     }
 }

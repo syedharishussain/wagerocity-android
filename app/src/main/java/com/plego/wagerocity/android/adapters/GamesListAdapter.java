@@ -1,6 +1,7 @@
 package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.fragments.GamesListFragment;
 import com.plego.wagerocity.android.model.Game;
 
 import java.util.List;
@@ -20,10 +22,18 @@ public class GamesListAdapter extends BaseAdapter {
 
     List<Game> games;
     Context context;
+    private OnGamesListAdapterFragmentInteractionListener mListener;
 
     public GamesListAdapter(Context context, List<Game> games) {
         this.games = games;
         this.context = context;
+
+        try {
+            mListener = (OnGamesListAdapterFragmentInteractionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnGamesListAdapterFragmentInteractionListener");
+        }
     }
 
     public int getCount() {
@@ -42,7 +52,7 @@ public class GamesListAdapter extends BaseAdapter {
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
         if (convertView == null) {
@@ -56,6 +66,18 @@ public class GamesListAdapter extends BaseAdapter {
 
             viewHolder.textViewTeamA = (TextView) convertView.findViewById(R.id.textview_cell_games_team_a);
             viewHolder.textViewTeamB = (TextView) convertView.findViewById(R.id.textview_cell_games_team_b);
+            viewHolder.button = (Button) convertView.findViewById(R.id.button_cell_games_list_bet);
+
+            viewHolder.button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Uri uri = Uri.parse(context.getString(R.string.uri_selected_game_for_betting));
+                    Game game = games.get(position);
+                    mListener.onGamesListAdapterFragmentInteraction(uri, game);
+
+                }
+            });
 
             convertView.setTag(viewHolder);
 
@@ -78,6 +100,11 @@ public class GamesListAdapter extends BaseAdapter {
         TextView textViewTeamB;
         Button button;
 
+    }
+
+    public interface OnGamesListAdapterFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onGamesListAdapterFragmentInteraction(Uri uri, Game game);
     }
 
 }

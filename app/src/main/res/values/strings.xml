@@ -27,6 +27,7 @@
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</string>
     <string name="PREF_PLEGO">plegoSharedPref</string>
     <string name="USER_FACEBOOK_ID">myFBUserID</string>
+    <string name="uri_selected_game_for_betting">Selected Game</string>
 
     <string-array name="leaderboard_filters">
         <item>All Leaderboards</item>

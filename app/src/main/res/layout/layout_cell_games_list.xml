@@ -63,7 +63,8 @@
             android:text="BET"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:textColor="#ffffffff" />
+            android:textColor="#ffffffff" 
+            />
 
         <TextView
             android:id="@+id/textview_cell_games_team_b"

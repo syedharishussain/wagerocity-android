@@ -70,11 +70,12 @@ public class SportsListAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    class ViewHolder
+    {
+        TextView textView;
+        ImageView imageView;
+
+    }
 }
 
-class ViewHolder
-{
-    TextView textView;
-    ImageView imageView;
-
-}

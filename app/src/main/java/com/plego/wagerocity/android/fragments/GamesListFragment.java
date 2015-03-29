@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.adapters.GamesListAdapter;
 import com.plego.wagerocity.android.model.Game;
 
 import java.util.ArrayList;
@@ -72,18 +73,20 @@ public class GamesListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final ListView leaderboardListView = (ListView) view.findViewById(R.id.listview_games_list);
+        final ListView gamesListView = (ListView) view.findViewById(R.id.listview_games_list);
 
-        ArrayList<String> playerNames = new ArrayList();
+//        ArrayList<String> gamesList = new ArrayList();
+//
+//        for (Game game: games) {
+//            gamesList.add(game.getTeamAName());
+//        }
+//
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
+//                R.layout.layout_cell_games_list, R.id.textview_cell_games_team_a, gamesList);
 
-        for (Game game: games) {
-            playerNames.add(game.getTeamAName());
-        }
+        GamesListAdapter gamesListAdapter = new GamesListAdapter(view.getContext(), games);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
-                R.layout.layout_cell_games_list, R.id.textview_cell_games_team_a, playerNames);
-
-        leaderboardListView.setAdapter(adapter);
+        gamesListView.setAdapter(gamesListAdapter);
 
 
     }

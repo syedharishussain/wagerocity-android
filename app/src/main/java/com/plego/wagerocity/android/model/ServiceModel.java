@@ -41,5 +41,9 @@ public interface ServiceModel {
     @Multipart
     @POST("/consumeCredits")
     public void consumeCredits(@Part("userId") String userId, @Part("debitAmount") Float debitAmount, Callback<User> callback);
+
+    @GET("/getGames")
+    public void getGames(@Query("leagueName") String leagueName, Callback <ArrayList<Game>> callback) ;
 }
+
 

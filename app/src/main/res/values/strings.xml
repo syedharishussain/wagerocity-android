@@ -22,7 +22,7 @@
     <string name="uri_open_experts_fragment">Open Experts Fragment</string>
     <string name="uri_open_get_dollars_fragment">Open Get Dollars Fragment</string>
     <string name="uri_open_sports_list_fragment">Open Sports List Fragment</string>
-
+    <string name="uri_open_games_list_fragment">Open Games List Fragment</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</string>
     <string name="PREF_PLEGO">plegoSharedPref</string>

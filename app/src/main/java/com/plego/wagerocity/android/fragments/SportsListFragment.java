@@ -10,14 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.adapters.SportsListAdapter;
+import com.plego.wagerocity.android.model.Game;
+import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.SportsListObject;
 
 import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,7 +87,23 @@ public class SportsListFragment extends Fragment {
         sportsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("Selected Sports", ((SportsListObject)parent.getItemAtPosition(position)).getSportsName());
+                Log.e("Selected Sports", ((SportsListObject) parent.getItemAtPosition(position)).getSportsName());
+
+                if (((SportsListObject) parent.getItemAtPosition(position)).getSportsName().equals("NHL")) {
+                    RestClient restClient = new RestClient();
+                    restClient.getApiService().getGames("NHL", new Callback<ArrayList<Game>>() {
+                        @Override
+                        public void success(ArrayList<Game> games, Response response) {
+                            Uri uri = Uri.parse(getString(R.string.uri_open_games_list_fragment));
+                            mListener.onSportsListFragmentInteraction(uri, games);
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
+                }
             }
         });
     }
@@ -107,13 +128,6 @@ public class SportsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sports_list, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onSportsListFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -145,7 +159,7 @@ public class SportsListFragment extends Fragment {
      */
     public interface OnSportsListFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onSportsListFragmentInteraction(Uri uri);
+        public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games);
     }
 
 }

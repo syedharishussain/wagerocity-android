@@ -1,22 +1,17 @@
 package com.plego.wagerocity.android.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.model.GraphUser;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.fragments.DashboardFragment;
 import com.plego.wagerocity.android.fragments.ExpertsFragment;
+import com.plego.wagerocity.android.fragments.GamesListFragment;
 import com.plego.wagerocity.android.fragments.GetDollarsFragment;
 import com.plego.wagerocity.android.fragments.LeaderBoardListFragment;
 import com.plego.wagerocity.android.fragments.MyPoolsFragment;
@@ -25,11 +20,11 @@ import com.plego.wagerocity.android.fragments.PoolsFragment;
 import com.plego.wagerocity.android.fragments.SportsListFragment;
 import com.plego.wagerocity.android.fragments.StatsFragment;
 import com.plego.wagerocity.android.model.ExpertPlayer;
+import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import retrofit.Callback;
@@ -46,7 +41,8 @@ public class DashboardActivity
         PoolsFragment.OnPoolsFragmentInteractionListener,
         MyPoolsFragment.OnMyPoolsFragmentInteractionListener,
         ExpertsFragment.OnExpertsFragmentInteractionListener,
-        SportsListFragment.OnSportsListFragmentInteractionListener {
+        SportsListFragment.OnSportsListFragmentInteractionListener,
+        GamesListFragment.OnGamesListFragmentInteractionListener {
 
     ProgressDialog progress;
 
@@ -226,7 +222,14 @@ public class DashboardActivity
     }
 
     @Override
-    public void onSportsListFragmentInteraction(Uri uri) {
+    public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games) {
+        if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
+            replaceFragment(GamesListFragment.newInstance(games));
+        }
+    }
+
+    @Override
+    public void onGamesListFragmentInteraction(Uri uri) {
 
     }
 }

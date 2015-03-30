@@ -164,3 +164,14 @@ public class SportsListFragment extends Fragment {
 
 }
 
+//"sports": [
+//        "nfl",
+//        "ncaaf",
+//        "mlb",
+//        "nba",
+//        "ncaab",
+//        "nhl",
+//        "soccer",
+//        "tennis"
+//        ],
+

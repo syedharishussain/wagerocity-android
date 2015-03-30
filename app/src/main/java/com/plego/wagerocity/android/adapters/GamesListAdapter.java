@@ -1,16 +1,21 @@
 package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.plego.wagerocity.R;
-import com.plego.wagerocity.android.fragments.GamesListFragment;
 import com.plego.wagerocity.android.model.Game;
 
 import java.util.List;
@@ -66,6 +71,9 @@ public class GamesListAdapter extends BaseAdapter {
 
             viewHolder.textViewTeamA = (TextView) convertView.findViewById(R.id.textview_cell_games_team_a);
             viewHolder.textViewTeamB = (TextView) convertView.findViewById(R.id.textview_cell_games_team_b);
+            viewHolder.textViewDate = (TextView) convertView.findViewById(R.id.textview_cell_games_date_time);
+            viewHolder.imageViewA = (ImageView) convertView.findViewById(R.id.imageview_cell_games_list_team_a_flag);
+            viewHolder.imageViewB = (ImageView) convertView.findViewById(R.id.imageview_cell_games_list_team_b_flag);
             viewHolder.button = (Button) convertView.findViewById(R.id.button_cell_games_list_bet);
 
             viewHolder.button.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +83,6 @@ public class GamesListAdapter extends BaseAdapter {
                     Uri uri = Uri.parse(context.getString(R.string.uri_selected_game_for_betting));
                     Game game = games.get(position);
                     mListener.onGamesListAdapterFragmentInteraction(uri, game);
-
                 }
             });
 
@@ -88,8 +95,18 @@ public class GamesListAdapter extends BaseAdapter {
         Game game = games.get(position);
 
         if (game != null) {
-            viewHolder.textViewTeamA.setText(game.getTeamAName());
-            viewHolder.textViewTeamB.setText(game.getTeamBName());
+            viewHolder.textViewTeamA.setText(game.getTeamAFullname());
+            viewHolder.textViewTeamB.setText(game.getTeamBFullname());
+            viewHolder.textViewDate.setText(game.getCstStartTime());
+
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true) // default
+                    .cacheOnDisk(true) // default
+                    .build();
+
+            ImageLoader.getInstance().displayImage(game.getTeamALogo(), viewHolder.imageViewA, options);
+            ImageLoader.getInstance().displayImage(game.getTeamBLogo(), viewHolder.imageViewB, options);
+
         }
 
         return convertView;
@@ -98,6 +115,9 @@ public class GamesListAdapter extends BaseAdapter {
     class ViewHolder {
         TextView textViewTeamA;
         TextView textViewTeamB;
+        TextView textViewDate;
+        ImageView imageViewA;
+        ImageView imageViewB;
         Button button;
 
     }

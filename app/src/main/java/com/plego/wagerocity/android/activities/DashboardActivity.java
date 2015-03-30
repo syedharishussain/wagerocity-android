@@ -26,6 +26,7 @@ import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.constants.StringConstants;
 
 import java.util.ArrayList;
 
@@ -79,7 +80,7 @@ public class DashboardActivity
         NavigationBarFragment navigationBarFragment = new NavigationBarFragment();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.fragment_container_navigation_bar, navigationBarFragment);
+        transaction.add(R.id.fragment_container_navigation_bar, navigationBarFragment, StringConstants.TAG_FRAG_NAVIGATION);
         transaction.commit();
     }
 
@@ -92,7 +93,7 @@ public class DashboardActivity
         StatsFragment statsFragment = new StatsFragment();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.fragment_container_stats, statsFragment);
+        transaction.add(R.id.fragment_container_stats, statsFragment, StringConstants.TAG_FRAG_STATS);
         transaction.commit();
     }
 
@@ -105,7 +106,7 @@ public class DashboardActivity
         DashboardFragment statsFragment = new DashboardFragment();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.fragment_container_dashboard, statsFragment);
+        transaction.add(R.id.fragment_container_dashboard, statsFragment, StringConstants.TAG_FRAG_DASHBOARD);
         transaction.commit();
     }
 
@@ -125,7 +126,7 @@ public class DashboardActivity
                 @Override
                 public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, retrofit.client.Response response) {
                     progress.dismiss();
-                    replaceFragment(LeaderBoardListFragment.newInstance(leaderboardPlayers));
+                    replaceFragment(LeaderBoardListFragment.newInstance(leaderboardPlayers), StringConstants.TAG_FRAG_LEADERBOARD_LIST);
                 }
 
                 @Override
@@ -146,7 +147,7 @@ public class DashboardActivity
                 @Override
                 public void success(ArrayList<Pool> pools, retrofit.client.Response response) {
                     progress.dismiss();
-                    replaceFragment(PoolsFragment.newInstance(pools));
+                    replaceFragment(PoolsFragment.newInstance(pools), StringConstants.TAG_FRAG_POOLS_LIST);
                 }
 
                 @Override
@@ -170,7 +171,7 @@ public class DashboardActivity
 
                     progress.dismiss();
 
-                    replaceFragment(ExpertsFragment.newInstance(expertPlayers));
+                    replaceFragment(ExpertsFragment.newInstance(expertPlayers), StringConstants.TAG_FRAG_EXPERTS_LIST);
                 }
 
                 @Override
@@ -183,17 +184,17 @@ public class DashboardActivity
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_sports_list_fragment))) {
-            replaceFragment(new SportsListFragment());
+            replaceFragment(new SportsListFragment(), StringConstants.TAG_FRAG_SPORTS_LIST);
         }
     }
 
     private void replaceGetDollarsFragment() {
-        replaceFragment(new GetDollarsFragment());
+        replaceFragment(new GetDollarsFragment(), StringConstants.TAG_FRAG_GET_DOLLARS);
     }
 
-    private void replaceFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment, String TAG) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container_dashboard, fragment);
+        transaction.replace(R.id.fragment_container_dashboard, fragment, TAG);
         transaction.addToBackStack(null);
         transaction.commit();
     }
@@ -211,7 +212,7 @@ public class DashboardActivity
     @Override
     public void onPoolsFragmentInteraction(Uri uri) {
         if (uri.toString().equals(getString(R.string.uri_open_my_pools_fragment))) {
-            replaceFragment(new MyPoolsFragment());
+            replaceFragment(new MyPoolsFragment(), StringConstants.TAG_FRAG_MY_POOLS_LIST);
         }
     }
 
@@ -228,7 +229,7 @@ public class DashboardActivity
     @Override
     public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games) {
         if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
-            replaceFragment(GamesListFragment.newInstance(games));
+            replaceFragment(GamesListFragment.newInstance(games), StringConstants.TAG_FRAG_GAMES_LIST);
         }
     }
 
@@ -241,6 +242,7 @@ public class DashboardActivity
     public void onGamesListAdapterFragmentInteraction(Uri uri, Game game) {
         if (uri.toString().equals(getString(R.string.uri_selected_game_for_betting))) {
             Log.e("Select Game", game.getTeamAName());
+            replaceFragment(BetOnGameFragment.newInstance(game), StringConstants.TAG_FRAG_BET_ON_GAME);
         }
     }
 

@@ -5,12 +5,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Game;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,6 +74,52 @@ public class BetOnGameFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        TextView teamNameA = (TextView) view.findViewById(R.id.textview_betongame_team_a_name);
+        teamNameA.setText(game.getTeamAFullname());
+
+        TextView teamNameB = (TextView) view.findViewById(R.id.textview_betongame_team_b_name);
+        teamNameB.setText(game.getTeamBFullname());
+
+        ImageView teamFlagA = (ImageView) view.findViewById(R.id.imageview_betongame_team_a_flag);
+        ImageView teamFlagB = (ImageView) view.findViewById(R.id.imageview_betongame_team_b_flag);
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true) // default
+                .cacheOnDisk(true) // default
+                .build();
+
+        ImageLoader.getInstance().displayImage(game.getTeamALogo(), teamFlagA, options);
+        ImageLoader.getInstance().displayImage(game.getTeamBLogo(), teamFlagB, options);
+
+        Button pointSpreadTeamA = (Button) view.findViewById(R.id.button_betongame_pointspread_team_a);
+        Button pointSpreadTeamB = (Button) view.findViewById(R.id.button_betongame_pointspread_team_b);
+
+        Button moneyLineTeamA = (Button) view.findViewById(R.id.button_betongame_money_line_team_a);
+        Button moneyLineTeamB = (Button) view.findViewById(R.id.button_betongame_money_line_team_b);
+
+        Button overTeamA = (Button) view.findViewById(R.id.button_betongame_over_team_a);
+        Button overTeamB = (Button) view.findViewById(R.id.button_betongame_over_team_b);
+
+//        Button underTeamA = (Button) view.findViewById(R.id.button_betongame_under_team_a);
+//        Button underTeamB = (Button) view.findViewById(R.id.button_betongame_under_team_b);
+
+        pointSpreadTeamA.setText(Html.fromHtml(game.getTeamAPointspread()));
+        pointSpreadTeamB.setText(Html.fromHtml(game.getTeamBPointspread()));
+
+        moneyLineTeamA.setText(Html.fromHtml(game.getTeamAMoneyline()));
+        moneyLineTeamB.setText(Html.fromHtml(game.getTeamBMoneyline()));
+
+//        overTeamA.setText(Html.fromHtml(game.getTeamAOverMoney()));
+//        overTeamB.setText(Html.fromHtml(game.getTeamBOverMoney()));
+
+        overTeamA.setText("-130 o");
+        overTeamB.setText("-105 u");
+
+//        underTeamA.setText(Html.fromHtml(game.getTeamAUnderMoney()));
+//        underTeamB.setText(Html.fromHtml(game.getTeamBUnderMoney()));
+
+
     }
 
     @Override

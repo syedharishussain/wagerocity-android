@@ -17,9 +17,14 @@ public class LeaderboardPlayer implements Parcelable{
     private String email;
     @Expose
     private String username;
-    @SerializedName("rak_current_record")
     @Expose
-    private String rakCurrentRecord;
+    private String points;
+    @SerializedName("image_url")
+    @Expose
+    private String imageUrl;
+    @SerializedName("win_percentage")
+    @Expose
+    private String winPercentage;
 
     /**
      *
@@ -96,19 +101,55 @@ public class LeaderboardPlayer implements Parcelable{
     /**
      *
      * @return
-     * The rakCurrentRecord
+     * The points
      */
-    public String getRakCurrentRecord() {
-        return rakCurrentRecord;
+    public String getPoints() {
+        return points;
     }
 
     /**
      *
-     * @param rakCurrentRecord
-     * The rak_current_record
+     * @param points
+     * The points
      */
-    public void setRakCurrentRecord(String rakCurrentRecord) {
-        this.rakCurrentRecord = rakCurrentRecord;
+    public void setPoints(String points) {
+        this.points = points;
+    }
+
+    /**
+     *
+     * @return
+     * The imageUrl
+     */
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    /**
+     *
+     * @param imageUrl
+     * The image_url
+     */
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    /**
+     *
+     * @return
+     * The winPercentage
+     */
+    public String getWinPercentage() {
+        return winPercentage;
+    }
+
+    /**
+     *
+     * @param winPercentage
+     * The win_percentage
+     */
+    public void setWinPercentage(String winPercentage) {
+        this.winPercentage = winPercentage;
     }
 
 
@@ -123,7 +164,9 @@ public class LeaderboardPlayer implements Parcelable{
         dest.writeString(this.displayname);
         dest.writeString(this.email);
         dest.writeString(this.username);
-        dest.writeString(this.rakCurrentRecord);
+        dest.writeString(this.points);
+        dest.writeString(this.imageUrl);
+        dest.writeString(this.winPercentage);
     }
 
     public LeaderboardPlayer() {
@@ -134,7 +177,9 @@ public class LeaderboardPlayer implements Parcelable{
         this.displayname = in.readString();
         this.email = in.readString();
         this.username = in.readString();
-        this.rakCurrentRecord = in.readString();
+        this.points = in.readString();
+        this.imageUrl = in.readString();
+        this.winPercentage = in.readString();
     }
 
     public static final Creator<LeaderboardPlayer> CREATOR = new Creator<LeaderboardPlayer>() {

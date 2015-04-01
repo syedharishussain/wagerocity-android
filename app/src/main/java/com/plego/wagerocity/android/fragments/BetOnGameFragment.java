@@ -1,15 +1,22 @@
 package com.plego.wagerocity.android.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,8 +24,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Game;
-
-import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,10 +36,11 @@ import org.w3c.dom.Text;
 public class BetOnGameFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARGS_GAME= "selected_game";
+    private static final String ARGS_GAME = "selected_game";
     private Game game;
 
     private OnBetOnGameFragmentInteractionListener mListener;
+    private TextWatcher betAmountTextWatcher, winAmountTextWatcher;
 
     /**
      * Use this factory method to create a new instance of
@@ -72,8 +78,10 @@ public class BetOnGameFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        final View view1 = view;
 
         TextView teamNameA = (TextView) view.findViewById(R.id.textview_betongame_team_a_name);
         teamNameA.setText(game.getTeamAFullname());
@@ -81,7 +89,7 @@ public class BetOnGameFragment extends Fragment {
         TextView teamNameB = (TextView) view.findViewById(R.id.textview_betongame_team_b_name);
         teamNameB.setText(game.getTeamBFullname());
 
-        ImageView teamFlagA = (ImageView) view.findViewById(R.id.imageview_betongame_team_a_flag);
+        final ImageView teamFlagA = (ImageView) view.findViewById(R.id.imageview_betongame_team_a_flag);
         ImageView teamFlagB = (ImageView) view.findViewById(R.id.imageview_betongame_team_b_flag);
 
         DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -101,9 +109,6 @@ public class BetOnGameFragment extends Fragment {
         Button overTeamA = (Button) view.findViewById(R.id.button_betongame_over_team_a);
         Button overTeamB = (Button) view.findViewById(R.id.button_betongame_over_team_b);
 
-//        Button underTeamA = (Button) view.findViewById(R.id.button_betongame_under_team_a);
-//        Button underTeamB = (Button) view.findViewById(R.id.button_betongame_under_team_b);
-
         pointSpreadTeamA.setText(Html.fromHtml(game.getTeamAPointspread()));
         pointSpreadTeamB.setText(Html.fromHtml(game.getTeamBPointspread()));
 
@@ -113,13 +118,123 @@ public class BetOnGameFragment extends Fragment {
 //        overTeamA.setText(Html.fromHtml(game.getTeamAOverMoney()));
 //        overTeamB.setText(Html.fromHtml(game.getTeamBOverMoney()));
 
+        // TODO delete this!
         overTeamA.setText("-130 o");
         overTeamB.setText("-105 u");
 
-//        underTeamA.setText(Html.fromHtml(game.getTeamAUnderMoney()));
-//        underTeamB.setText(Html.fromHtml(game.getTeamBUnderMoney()));
+        final String teamVsTeam = game.getTeamAFullname() + game.getTeamBFullname();
+
+        pointSpreadTeamA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                showBettingDialog(teamVsTeam, "Point Spread", game.getTeamAPointspread(), -110);
+
+            }
+        });
+
+        pointSpreadTeamB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBettingDialog(teamVsTeam, "Point Spread", game.getTeamBPointspread(), -110);
+            }
+        });
+
+        moneyLineTeamA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBettingDialog(teamVsTeam, "Moneyline", game.getTeamAMoneyline(), -110);
+            }
+        });
+
+        moneyLineTeamB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBettingDialog(teamVsTeam, "Moneyline", game.getTeamBMoneyline(), -110);
+            }
+        });
+
+        overTeamA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBettingDialog(teamVsTeam, "Over", game.getTeamAOverMoney(), -110);
+            }
+        });
+
+        overTeamB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBettingDialog(teamVsTeam, "Under", game.getTeamBUnderMoney(), -110);
+            }
+        });
+
+    }
+
+    private void showBettingDialog(String teamNames, String betType, final String betAmountString, long betAmount) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        View alertLayout = inflater.inflate(R.layout.layout_dialog_bet_on_game, null);
+
+        builder.setView(alertLayout);
+
+        final EditText betAmountEditText = (EditText) alertLayout.findViewById(R.id.edittext_dialog_betongame_credit_amount);
+        betAmountEditText.requestFocus();
 
 
+        final EditText winAmountEditText = (EditText) alertLayout.findViewById(R.id.edittext_dialog_betongame_to_win_amount);
+
+        betAmountTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String string = s.toString();
+                if (string.toString().length() > 0) {
+
+//                    winAmountEditText.removeTextChangedListener(winAmountTextWatcher);
+                    betAmountEditText.removeTextChangedListener(betAmountTextWatcher);
+                    winAmountEditText.setText(string.toString());
+                    betAmountEditText.addTextChangedListener(betAmountTextWatcher);
+                    Log.e("TextChanged", string.toString());
+                    Log.e("TextChanged Win", winAmountEditText.getText().toString());
+
+                }
+            }
+        };
+
+
+        betAmountEditText.addTextChangedListener(betAmountTextWatcher);
+
+
+
+
+        // Add action buttons
+        builder.setPositiveButton("Bet", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                Log.e("Dialog Output", betAmountEditText.getText().toString());
+
+
+            }
+        })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+
+        alertDialog.show();
     }
 
     @Override

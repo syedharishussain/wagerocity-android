@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
 import android.util.Log;
 
+import com.plego.wagerocity.android.fragments.StatsFragment;
 import com.plego.wagerocity.constants.StringConstants;
 
 import junit.framework.Assert;
@@ -45,5 +46,12 @@ public class AndroidUtils {
         return (Fragment) activity
                 .getSupportFragmentManager()
                 .findFragmentByTag(StringConstants.TAG_FRAG_STATS);
+    }
+
+    public static void updateStats (FragmentActivity activity) {
+        StatsFragment statsFragment = (StatsFragment) AndroidUtils.
+                getFragmentByTag(activity, StringConstants.TAG_FRAG_STATS);
+
+        statsFragment.updateStats();
     }
 }

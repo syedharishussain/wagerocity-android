@@ -16,6 +16,8 @@ import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.constants.StringConstants;
+import com.plego.wagerocity.utils.AndroidUtils;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -89,7 +91,7 @@ public class GetDollarsFragment extends Fragment {
                     @Override
                     public void success(User user, Response response) {
                         pref.setUser(user);
-
+                        AndroidUtils.updateStats(getActivity());
                     }
 
                     @Override
@@ -114,6 +116,7 @@ public class GetDollarsFragment extends Fragment {
                     @Override
                     public void success(User user, Response response) {
                         pref.setUser(user);
+                        AndroidUtils.updateStats(getActivity());
                     }
 
                     @Override
@@ -138,6 +141,7 @@ public class GetDollarsFragment extends Fragment {
                     @Override
                     public void success(User user, Response response) {
                         pref.setUser(user);
+                        AndroidUtils.updateStats(getActivity());
                     }
 
                     @Override

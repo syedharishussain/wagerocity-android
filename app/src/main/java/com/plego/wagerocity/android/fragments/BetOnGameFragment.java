@@ -266,10 +266,7 @@ public class BetOnGameFragment extends Fragment {
                                 Log.e("Credits Consumed", user.getCredits().toString());
                                 new WagerocityPref(getActivity()).setUser(user);
 
-                                StatsFragment statsFragment = (StatsFragment) AndroidUtils.
-                                        getFragmentByTag(getActivity(),StringConstants.TAG_FRAG_STATS);
-
-                                statsFragment.updateStats();
+                                AndroidUtils.updateStats(getActivity());
                             }
 
                             @Override

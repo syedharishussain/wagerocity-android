@@ -1,14 +1,17 @@
 package com.plego.wagerocity.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
 import android.util.Log;
+
+import com.plego.wagerocity.constants.StringConstants;
 
 import junit.framework.Assert;
 
@@ -36,5 +39,11 @@ public class AndroidUtils {
         catch (NoSuchAlgorithmException e) {
 
         }
+    }
+
+    public static Fragment getFragmentByTag (FragmentActivity activity, String TAG) {
+        return (Fragment) activity
+                .getSupportFragmentManager()
+                .findFragmentByTag(StringConstants.TAG_FRAG_STATS);
     }
 }

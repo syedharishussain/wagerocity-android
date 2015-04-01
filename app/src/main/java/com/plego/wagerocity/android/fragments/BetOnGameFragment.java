@@ -23,7 +23,16 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.Game;
+import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.constants.StringConstants;
+import com.plego.wagerocity.utils.AndroidUtils;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -128,7 +137,7 @@ public class BetOnGameFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                showBettingDialog(teamVsTeam, "Point Spread", game.getTeamAPointspread(), -110);
+                showBettingDialog(teamVsTeam, "Point Spread", game.getTeamAPointspread(), -125);
 
             }
         });
@@ -136,7 +145,7 @@ public class BetOnGameFragment extends Fragment {
         pointSpreadTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Point Spread", game.getTeamBPointspread(), -110);
+                showBettingDialog(teamVsTeam, "Point Spread", game.getTeamBPointspread(), 110);
             }
         });
 
@@ -170,7 +179,7 @@ public class BetOnGameFragment extends Fragment {
 
     }
 
-    private void showBettingDialog(String teamNames, String betType, final String betAmountString, long betAmount) {
+    private void showBettingDialog(String teamNames, String betType, final String betOddSting, final long betOddValue) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -203,10 +212,34 @@ public class BetOnGameFragment extends Fragment {
 
 //                    winAmountEditText.removeTextChangedListener(winAmountTextWatcher);
                     betAmountEditText.removeTextChangedListener(betAmountTextWatcher);
-                    winAmountEditText.setText(string.toString());
+
+                    long value = Long.parseLong(s.toString());
+
+                    double result = 0.0;
+
+                    if (betOddValue > 0) {
+
+                        double amountNeedToWinADollar = (double) Math.abs( betOddValue )/ (double) 100;
+
+                        double percentage = Math.abs( amountNeedToWinADollar - 1 ) / amountNeedToWinADollar ;
+
+                        double percentageBasedValue = value * percentage;
+
+                        result = value + percentageBasedValue;
+
+                    } else {
+                        double amountNeedToWinADollar = (double) Math.abs( betOddValue )/ (double) 100;
+
+                        double percentage = Math.abs( amountNeedToWinADollar - 1 ) / amountNeedToWinADollar ;
+
+                        double percentageBasedValue = value * percentage;
+
+                        result = value - percentageBasedValue;
+                    }
+
+                    winAmountEditText.setText(String.valueOf(result));
+
                     betAmountEditText.addTextChangedListener(betAmountTextWatcher);
-                    Log.e("TextChanged", string.toString());
-                    Log.e("TextChanged Win", winAmountEditText.getText().toString());
 
                 }
             }
@@ -223,6 +256,27 @@ public class BetOnGameFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 Log.e("Dialog Output", betAmountEditText.getText().toString());
+
+                RestClient restClient = new RestClient();
+                restClient.getApiService().consumeCredits(new WagerocityPref(getActivity()).user().getUserId().toString(),
+                        Float.parseFloat(betAmountEditText.getText().toString()),
+                        new Callback<User>() {
+                            @Override
+                            public void success(User user, Response response) {
+                                Log.e("Credits Consumed", user.getCredits().toString());
+                                new WagerocityPref(getActivity()).setUser(user);
+
+                                StatsFragment statsFragment = (StatsFragment) AndroidUtils.
+                                        getFragmentByTag(getActivity(),StringConstants.TAG_FRAG_STATS);
+
+                                statsFragment.updateStats();
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
 
 
             }

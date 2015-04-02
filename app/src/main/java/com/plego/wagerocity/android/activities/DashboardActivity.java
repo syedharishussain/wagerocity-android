@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.GamesListAdapter;
@@ -118,8 +119,11 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_leaderboards_list_fragment))) {
 
-            progress = ProgressDialog.show(this, "loading..",
-                    null , true);
+            final MaterialDialog progress = new MaterialDialog.Builder(this)
+                    .title(getString(R.string.loading))
+                    .content(getString(R.string.please_wait))
+                    .progress(true, 0)
+                    .show();
 
             RestClient restClient = new RestClient();
             restClient.getApiService().getLeaderboards(new Callback<ArrayList<LeaderboardPlayer>>() {
@@ -139,8 +143,11 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
 
-            progress = ProgressDialog.show(this, "loading..",
-                    null , true);
+            final MaterialDialog progress = new MaterialDialog.Builder(this)
+                    .title(getString(R.string.loading))
+                    .content(getString(R.string.please_wait))
+                    .progress(true, 0)
+                    .show();
 
             RestClient restClient = new RestClient();
             restClient.getApiService().getAllPools(new Callback<ArrayList<Pool>>() {
@@ -161,8 +168,11 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_experts_fragment))) {
 
-            progress = ProgressDialog.show(this, "loading..",
-                    null , true);
+            final MaterialDialog progress = new MaterialDialog.Builder(this)
+                    .title(getString(R.string.loading))
+                    .content(getString(R.string.please_wait))
+                    .progress(true, 0)
+                    .show();
 
             RestClient restClient = new RestClient();
             restClient.getApiService().getExperts(new Callback<ArrayList<ExpertPlayer>>() {

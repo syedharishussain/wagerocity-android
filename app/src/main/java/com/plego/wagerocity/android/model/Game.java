@@ -6,7 +6,10 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Game implements Parcelable{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Game implements Parcelable {
 
     @SerializedName("cst_start_time")
     @Expose
@@ -17,12 +20,14 @@ public class Game implements Parcelable{
     @SerializedName("team_B_number")
     @Expose
     private String teamBNumber;
-    @SerializedName("team_A_pointspread")
     @Expose
-    private String teamAPointspread;
-    @SerializedName("team_B_pointspread")
+    private List<String> sports = new ArrayList<String>();
+    @SerializedName("team_A_Odds")
     @Expose
-    private String teamBPointspread;
+    private List<Odd> teamAOdds = new ArrayList<>();
+    @SerializedName("team_B_Odds")
+    @Expose
+    private List<Odd> teamBOdds = new ArrayList<>();
     @SerializedName("team_A_name")
     @Expose
     private String teamAName;
@@ -47,36 +52,126 @@ public class Game implements Parcelable{
     @SerializedName("team_B_logo")
     @Expose
     private String teamBLogo;
-    @SerializedName("team_A_points")
-    @Expose
-    private String teamAPoints;
-    @SerializedName("team_B_points")
-    @Expose
-    private String teamBPoints;
-    @SerializedName("team_A_moneyline")
-    @Expose
-    private String teamAMoneyline;
-    @SerializedName("team_B_moneyline")
-    @Expose
-    private String teamBMoneyline;
-    @SerializedName("team_A_ML")
-    @Expose
-    private String teamAML;
-    @SerializedName("team_B_ML")
-    @Expose
-    private String teamBML;
-    @SerializedName("team_A_over_money")
-    @Expose
-    private String teamAOverMoney;
-    @SerializedName("team_B_over_money")
-    @Expose
-    private String teamBOverMoney;
-    @SerializedName("team_A_under_money")
-    @Expose
-    private String teamAUnderMoney;
-    @SerializedName("team_B_under_money")
-    @Expose
-    private String teamBUnderMoney;
+
+    public Double getPointSpreadA() {
+        return pointSpreadA;
+    }
+
+    public void setPointSpreadA(Double pointSpreadA) {
+        this.pointSpreadA = pointSpreadA;
+    }
+
+    public Double getPointSpreadB() {
+        return pointSpreadB;
+    }
+
+    public void setPointSpreadB(Double pointSpreadB) {
+        this.pointSpreadB = pointSpreadB;
+    }
+
+    public Double getMoneyLineA() {
+        return moneyLineA;
+    }
+
+    public void setMoneyLineA(Double moneyLineA) {
+        this.moneyLineA = moneyLineA;
+    }
+
+    public Double getMoneyLineB() {
+        return moneyLineB;
+    }
+
+    public void setMoneyLineB(Double moneyLineB) {
+        this.moneyLineB = moneyLineB;
+    }
+
+    public Double getOverA() {
+        return overA;
+    }
+
+    public void setOverA(Double overA) {
+        this.overA = overA;
+    }
+
+    public Double getUnderA() {
+        return underA;
+    }
+
+    public void setUnderA(Double underA) {
+        this.underA = underA;
+    }
+
+    public Double getOverB() {
+        return overB;
+    }
+
+    public void setOverB(Double overB) {
+        this.overB = overB;
+    }
+
+    public Double getUnderB() {
+        return underB;
+    }
+
+    public void setUnderB(Double underB) {
+        this.underB = underB;
+    }
+
+    public Double getPointA() {
+        return pointA;
+    }
+
+    public void setPointA(Double pointA) {
+        this.pointA = pointA;
+    }
+
+    public Double getPointB() {
+        return pointB;
+    }
+
+    public void setPointB(Double pointB) {
+        this.pointB = pointB;
+    }
+
+    public String getPointSpreadStringA() {
+        return pointSpreadStringA;
+    }
+
+    public void setPointSpreadStringA(String pointSpreadStringA) {
+        this.pointSpreadStringA = pointSpreadStringA;
+    }
+
+    public String getPointSpreadStringB() {
+        return pointSpreadStringB;
+    }
+
+    public void setPointSpreadStringB(String pointSpreadStringB) {
+        this.pointSpreadStringB = pointSpreadStringB;
+    }
+
+    private Double pointSpreadA = 0.0;
+
+    private Double pointSpreadB = 0.0;
+
+    private Double moneyLineA = 0.0;
+
+    private Double moneyLineB = 0.0;
+
+    private Double overA = 0.0;
+
+    private Double underA = 0.0;
+
+    private Double overB = 0.0;
+
+    private Double underB = 0.0;
+
+    private Double pointA = 0.0;
+
+    private Double pointB = 0.0;
+
+    private String pointSpreadStringA = "-";
+
+    private String pointSpreadStringB = "-";
 
     /**
      *
@@ -135,37 +230,55 @@ public class Game implements Parcelable{
     /**
      *
      * @return
-     * The teamAPointspread
+     * The sports
      */
-    public String getTeamAPointspread() {
-        return teamAPointspread;
+    public List<String> getSports() {
+        return sports;
     }
 
     /**
      *
-     * @param teamAPointspread
-     * The team_A_pointspread
+     * @param sports
+     * The sports
      */
-    public void setTeamAPointspread(String teamAPointspread) {
-        this.teamAPointspread = teamAPointspread;
+    public void setSports(List<String> sports) {
+        this.sports = sports;
     }
 
     /**
      *
      * @return
-     * The teamBPointspread
+     * The teamAOdds
      */
-    public String getTeamBPointspread() {
-        return teamBPointspread;
+    public List<Odd> getTeamAOdds() {
+        return teamAOdds;
     }
 
     /**
      *
-     * @param teamBPointspread
-     * The team_B_pointspread
+     * @param teamAOdds
+     * The team_A_Odds
      */
-    public void setTeamBPointspread(String teamBPointspread) {
-        this.teamBPointspread = teamBPointspread;
+    public void setTeamAOdds(List<Odd> teamAOdds) {
+        this.teamAOdds = teamAOdds;
+    }
+
+    /**
+     *
+     * @return
+     * The teamBOdds
+     */
+    public List<Odd> getTeamBOdds() {
+        return teamBOdds;
+    }
+
+    /**
+     *
+     * @param teamBOdds
+     * The team_B_Odds
+     */
+    public void setTeamBOdds(List<Odd> teamBOdds) {
+        this.teamBOdds = teamBOdds;
     }
 
     /**
@@ -210,7 +323,7 @@ public class Game implements Parcelable{
      * The teamAFullname
      */
     public String getTeamAFullname() {
-        return teamAFullname;
+        return teamAFullname.equals("") ? getTeamAName() : teamAFullname;
     }
 
     /**
@@ -228,7 +341,7 @@ public class Game implements Parcelable{
      * The teamBFullname
      */
     public String getTeamBFullname() {
-        return teamBFullname;
+        return teamBFullname.equals("") ? getTeamBName() : teamBFullname;
     }
 
     /**
@@ -312,187 +425,6 @@ public class Game implements Parcelable{
         this.teamBLogo = teamBLogo;
     }
 
-    /**
-     *
-     * @return
-     * The teamAPoints
-     */
-    public String getTeamAPoints() {
-        return teamAPoints;
-    }
-
-    /**
-     *
-     * @param teamAPoints
-     * The team_A_points
-     */
-    public void setTeamAPoints(String teamAPoints) {
-        this.teamAPoints = teamAPoints;
-    }
-
-    /**
-     *
-     * @return
-     * The teamBPoints
-     */
-    public String getTeamBPoints() {
-        return teamBPoints;
-    }
-
-    /**
-     *
-     * @param teamBPoints
-     * The team_B_points
-     */
-    public void setTeamBPoints(String teamBPoints) {
-        this.teamBPoints = teamBPoints;
-    }
-
-    /**
-     *
-     * @return
-     * The teamAMoneyline
-     */
-    public String getTeamAMoneyline() {
-        return teamAMoneyline;
-    }
-
-    /**
-     *
-     * @param teamAMoneyline
-     * The team_A_moneyline
-     */
-    public void setTeamAMoneyline(String teamAMoneyline) {
-        this.teamAMoneyline = teamAMoneyline;
-    }
-
-    /**
-     *
-     * @return
-     * The teamBMoneyline
-     */
-    public String getTeamBMoneyline() {
-        return teamBMoneyline;
-    }
-
-    /**
-     *
-     * @param teamBMoneyline
-     * The team_B_moneyline
-     */
-    public void setTeamBMoneyline(String teamBMoneyline) {
-        this.teamBMoneyline = teamBMoneyline;
-    }
-
-    /**
-     *
-     * @return
-     * The teamAML
-     */
-    public String getTeamAML() {
-        return teamAML;
-    }
-
-    /**
-     *
-     * @param teamAML
-     * The team_A_ML
-     */
-    public void setTeamAML(String teamAML) {
-        this.teamAML = teamAML;
-    }
-
-    /**
-     *
-     * @return
-     * The teamBML
-     */
-    public String getTeamBML() {
-        return teamBML;
-    }
-
-    /**
-     *
-     * @param teamBML
-     * The team_B_ML
-     */
-    public void setTeamBML(String teamBML) {
-        this.teamBML = teamBML;
-    }
-
-    /**
-     *
-     * @return
-     * The teamAOverMoney
-     */
-    public String getTeamAOverMoney() {
-        return teamAOverMoney;
-    }
-
-    /**
-     *
-     * @param teamAOverMoney
-     * The team_A_over_money
-     */
-    public void setTeamAOverMoney(String teamAOverMoney) {
-        this.teamAOverMoney = teamAOverMoney;
-    }
-
-    /**
-     *
-     * @return
-     * The teamBOverMoney
-     */
-    public String getTeamBOverMoney() {
-        return teamBOverMoney;
-    }
-
-    /**
-     *
-     * @param teamBOverMoney
-     * The team_B_over_money
-     */
-    public void setTeamBOverMoney(String teamBOverMoney) {
-        this.teamBOverMoney = teamBOverMoney;
-    }
-
-    /**
-     *
-     * @return
-     * The teamAUnderMoney
-     */
-    public String getTeamAUnderMoney() {
-        return teamAUnderMoney;
-    }
-
-    /**
-     *
-     * @param teamAUnderMoney
-     * The team_A_under_money
-     */
-    public void setTeamAUnderMoney(String teamAUnderMoney) {
-        this.teamAUnderMoney = teamAUnderMoney;
-    }
-
-    /**
-     *
-     * @return
-     * The teamBUnderMoney
-     */
-    public String getTeamBUnderMoney() {
-        return teamBUnderMoney;
-    }
-
-    /**
-     *
-     * @param teamBUnderMoney
-     * The team_B_under_money
-     */
-    public void setTeamBUnderMoney(String teamBUnderMoney) {
-        this.teamBUnderMoney = teamBUnderMoney;
-    }
-
-
     @Override
     public int describeContents() {
         return 0;
@@ -503,8 +435,9 @@ public class Game implements Parcelable{
         dest.writeString(this.cstStartTime);
         dest.writeString(this.teamANumber);
         dest.writeString(this.teamBNumber);
-        dest.writeString(this.teamAPointspread);
-        dest.writeString(this.teamBPointspread);
+        dest.writeList(this.sports);
+        dest.writeTypedList(teamAOdds);
+        dest.writeTypedList(teamBOdds);
         dest.writeString(this.teamAName);
         dest.writeString(this.teamBName);
         dest.writeString(this.teamAFullname);
@@ -513,16 +446,18 @@ public class Game implements Parcelable{
         dest.writeString(this.teamBNickname);
         dest.writeString(this.teamALogo);
         dest.writeString(this.teamBLogo);
-        dest.writeString(this.teamAPoints);
-        dest.writeString(this.teamBPoints);
-        dest.writeString(this.teamAMoneyline);
-        dest.writeString(this.teamBMoneyline);
-        dest.writeString(this.teamAML);
-        dest.writeString(this.teamBML);
-        dest.writeString(this.teamAOverMoney);
-        dest.writeString(this.teamBOverMoney);
-        dest.writeString(this.teamAUnderMoney);
-        dest.writeString(this.teamBUnderMoney);
+        dest.writeValue(this.pointSpreadA);
+        dest.writeValue(this.pointSpreadB);
+        dest.writeValue(this.moneyLineA);
+        dest.writeValue(this.moneyLineB);
+        dest.writeValue(this.overA);
+        dest.writeValue(this.underA);
+        dest.writeValue(this.overB);
+        dest.writeValue(this.underB);
+        dest.writeValue(this.pointA);
+        dest.writeValue(this.pointB);
+        dest.writeString(this.pointSpreadStringA);
+        dest.writeString(this.pointSpreadStringB);
     }
 
     public Game() {
@@ -532,8 +467,10 @@ public class Game implements Parcelable{
         this.cstStartTime = in.readString();
         this.teamANumber = in.readString();
         this.teamBNumber = in.readString();
-        this.teamAPointspread = in.readString();
-        this.teamBPointspread = in.readString();
+        this.sports = new ArrayList<String>();
+        in.readList(this.sports, List.class.getClassLoader());
+        in.readTypedList(teamAOdds, Odd.CREATOR);
+        in.readTypedList(teamBOdds, Odd.CREATOR);
         this.teamAName = in.readString();
         this.teamBName = in.readString();
         this.teamAFullname = in.readString();
@@ -542,16 +479,18 @@ public class Game implements Parcelable{
         this.teamBNickname = in.readString();
         this.teamALogo = in.readString();
         this.teamBLogo = in.readString();
-        this.teamAPoints = in.readString();
-        this.teamBPoints = in.readString();
-        this.teamAMoneyline = in.readString();
-        this.teamBMoneyline = in.readString();
-        this.teamAML = in.readString();
-        this.teamBML = in.readString();
-        this.teamAOverMoney = in.readString();
-        this.teamBOverMoney = in.readString();
-        this.teamAUnderMoney = in.readString();
-        this.teamBUnderMoney = in.readString();
+        this.pointSpreadA = (Double) in.readValue(Double.class.getClassLoader());
+        this.pointSpreadB = (Double) in.readValue(Double.class.getClassLoader());
+        this.moneyLineA = (Double) in.readValue(Double.class.getClassLoader());
+        this.moneyLineB = (Double) in.readValue(Double.class.getClassLoader());
+        this.overA = (Double) in.readValue(Double.class.getClassLoader());
+        this.underA = (Double) in.readValue(Double.class.getClassLoader());
+        this.overB = (Double) in.readValue(Double.class.getClassLoader());
+        this.underB = (Double) in.readValue(Double.class.getClassLoader());
+        this.pointA = (Double) in.readValue(Double.class.getClassLoader());
+        this.pointB = (Double) in.readValue(Double.class.getClassLoader());
+        this.pointSpreadStringA = in.readString();
+        this.pointSpreadStringB = in.readString();
     }
 
     public static final Creator<Game> CREATOR = new Creator<Game>() {
@@ -563,4 +502,61 @@ public class Game implements Parcelable{
             return new Game[size];
         }
     };
+
+    public void setBettingValues () {
+        for (Odd odd : getTeamAOdds()) {
+
+            pointA = odd.getPoints().doubleValue();
+
+            if (odd.getML().equals("")) {
+
+                overA = odd.getOverMoney().doubleValue();
+                underA = odd.getUnderMoney().doubleValue();
+
+            } else if (odd.getML().equals("false")) {
+
+                pointSpreadA = odd.getMoney().doubleValue();
+
+                if (pointA != 0) {
+                    pointSpreadStringA = Double.toString(pointA) + "(" + Double.toString(pointSpreadA) + ")";
+                } else {
+                    pointSpreadStringA = Double.toString(pointSpreadA);
+                }
+
+            } else if (odd.getML().equals("true")) {
+
+                moneyLineA = odd.getMoney().doubleValue();
+
+            }
+
+        }
+
+        for (Odd odd : getTeamBOdds()) {
+
+            pointB = odd.getPoints().doubleValue();
+
+            if (odd.getML().equals("")) {
+
+                overB = odd.getOverMoney().doubleValue();
+                underB = odd.getUnderMoney().doubleValue();
+
+            } else if (odd.getML().equals("false")) {
+
+                pointSpreadB = odd.getMoney().doubleValue();
+
+                if (pointB != 0) {
+                    pointSpreadStringB = Double.toString(pointB) + "(" + Double.toString(pointSpreadB) + ")";
+                } else {
+                    pointSpreadStringB = Double.toString(pointSpreadB);
+                }
+
+            } else if (odd.getML().equals("true")) {
+
+                moneyLineB = odd.getMoney().doubleValue();
+
+            }
+
+        }
+    }
 }
+

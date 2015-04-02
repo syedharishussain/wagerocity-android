@@ -8,10 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +23,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.Game;
+import com.plego.wagerocity.android.model.Odd;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.User;
-import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
+
+import org.w3c.dom.Text;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -49,7 +49,7 @@ public class BetOnGameFragment extends Fragment {
     private Game game;
 
     private OnBetOnGameFragmentInteractionListener mListener;
-    private TextWatcher betAmountTextWatcher, winAmountTextWatcher;
+    private TextWatcher betAmountTextWatcher;
 
     /**
      * Use this factory method to create a new instance of
@@ -76,6 +76,7 @@ public class BetOnGameFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             game = getArguments().getParcelable(ARGS_GAME);
+            game.setBettingValues();
         }
     }
 
@@ -101,9 +102,14 @@ public class BetOnGameFragment extends Fragment {
         final ImageView teamFlagA = (ImageView) view.findViewById(R.id.imageview_betongame_team_a_flag);
         ImageView teamFlagB = (ImageView) view.findViewById(R.id.imageview_betongame_team_b_flag);
 
+        TextView overUnder = (TextView) view.findViewById(R.id.textview_betongame_over_under);
+        overUnder.setText("Over\n| " + Double.toString(game.getPointA()) + " |\nUnder");
+
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // default
                 .cacheOnDisk(true) // default
+                .showImageOnFail(R.drawable.sports)
+                .showImageForEmptyUri(R.drawable.sports)
                 .build();
 
         ImageLoader.getInstance().displayImage(game.getTeamALogo(), teamFlagA, options);
@@ -118,18 +124,23 @@ public class BetOnGameFragment extends Fragment {
         Button overTeamA = (Button) view.findViewById(R.id.button_betongame_over_team_a);
         Button overTeamB = (Button) view.findViewById(R.id.button_betongame_over_team_b);
 
-        pointSpreadTeamA.setText(Html.fromHtml(game.getTeamAPointspread()));
-        pointSpreadTeamB.setText(Html.fromHtml(game.getTeamBPointspread()));
+        pointSpreadTeamA.setText(game.getPointSpreadStringA());
+        pointSpreadTeamB.setText(game.getPointSpreadStringB());
 
-        moneyLineTeamA.setText(Html.fromHtml(game.getTeamAMoneyline()));
-        moneyLineTeamB.setText(Html.fromHtml(game.getTeamBMoneyline()));
+        moneyLineTeamA.setText(Double.toString(game.getMoneyLineA()));
+        moneyLineTeamB.setText(Double.toString(game.getMoneyLineB()));
 
-//        overTeamA.setText(Html.fromHtml(game.getTeamAOverMoney()));
-//        overTeamB.setText(Html.fromHtml(game.getTeamBOverMoney()));
+        overTeamA.setText(Double.toString(game.getOverA()));
+        overTeamB.setText(Double.toString(game.getUnderA()));
 
-        // TODO delete this!
-        overTeamA.setText("-130 o");
-        overTeamB.setText("-105 u");
+        if (game.getMoneyLineA() == 0.0) moneyLineTeamA.setEnabled(false);
+        if (game.getMoneyLineB() == 0.0) moneyLineTeamB.setEnabled(false);
+
+        if (game.getPointSpreadA() == 0.0) pointSpreadTeamA.setEnabled(false);
+        if (game.getPointSpreadB() == 0.0) pointSpreadTeamB.setEnabled(false);
+
+        if (game.getOverA() == 0.0) overTeamA.setEnabled(false);
+        if (game.getUnderA() == 0.0) overTeamB.setEnabled(false);
 
         final String teamVsTeam = game.getTeamAFullname() + game.getTeamBFullname();
 
@@ -137,49 +148,48 @@ public class BetOnGameFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                showBettingDialog(teamVsTeam, "Point Spread", game.getTeamAPointspread(), -125);
+                showBettingDialog(teamVsTeam, "Point Spread", game.getPointSpreadStringA(), game.getPointSpreadA(), game.getPointA());
 
             }
         });
-
         pointSpreadTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Point Spread", game.getTeamBPointspread(), 110);
+                showBettingDialog(teamVsTeam, "Point Spread", game.getPointSpreadStringB(), game.getPointSpreadB(), game.getPointB());
             }
         });
 
         moneyLineTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Moneyline", game.getTeamAMoneyline(), -110);
+                showBettingDialog(teamVsTeam, "Moneyline", Double.toString(game.getMoneyLineA()), game.getMoneyLineA(), game.getPointA());
             }
         });
 
         moneyLineTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Moneyline", game.getTeamBMoneyline(), -110);
+                showBettingDialog(teamVsTeam, "Moneyline", Double.toString(game.getMoneyLineB()), game.getMoneyLineB(), game.getPointB());
             }
         });
 
         overTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Over", game.getTeamAOverMoney(), -110);
+                showBettingDialog(teamVsTeam, "Over", Double.toString(game.getOverA()), game.getOverA(), game.getPointA());
             }
         });
 
         overTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Under", game.getTeamBUnderMoney(), -110);
+                showBettingDialog(teamVsTeam, "Under", Double.toString(game.getUnderA()), game.getUnderA(), game.getPointA());
             }
         });
 
     }
 
-    private void showBettingDialog(String teamNames, String betType, final String betOddSting, final long betOddValue) {
+    private void showBettingDialog(String teamNames, String betType, final String betOddSting, final double betOddValue, double points) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -188,9 +198,17 @@ public class BetOnGameFragment extends Fragment {
 
         builder.setView(alertLayout);
 
+        final TextView teamNamesTextView = (TextView) alertLayout.findViewById(R.id.textview_dialog_betongame_team_names);
+        teamNamesTextView.setText(teamNames);
+
+        final TextView betTypetextView = (TextView) alertLayout.findViewById(R.id.textview_dialog_betongame_bet_type);
+        betTypetextView.setText(betType);
+
+        final TextView betTypeValuetextView = (TextView) alertLayout.findViewById(R.id.textview_dialog_betongame_bet_type_value);
+        betTypeValuetextView.setText(betOddSting);
+
         final EditText betAmountEditText = (EditText) alertLayout.findViewById(R.id.edittext_dialog_betongame_credit_amount);
         betAmountEditText.requestFocus();
-
 
         final EditText winAmountEditText = (EditText) alertLayout.findViewById(R.id.edittext_dialog_betongame_to_win_amount);
 
@@ -213,24 +231,24 @@ public class BetOnGameFragment extends Fragment {
 //                    winAmountEditText.removeTextChangedListener(winAmountTextWatcher);
                     betAmountEditText.removeTextChangedListener(betAmountTextWatcher);
 
-                    long value = Long.parseLong(s.toString());
+                    Double value = Double.parseDouble(s.toString());
 
                     double result = 0.0;
 
                     if (betOddValue > 0) {
 
-                        double amountNeedToWinADollar = (double) Math.abs( betOddValue )/ (double) 100;
+                        double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
 
-                        double percentage = Math.abs( amountNeedToWinADollar - 1 ) / amountNeedToWinADollar ;
+                        double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
 
                         double percentageBasedValue = value * percentage;
 
                         result = value + percentageBasedValue;
 
                     } else {
-                        double amountNeedToWinADollar = (double) Math.abs( betOddValue )/ (double) 100;
+                        double amountNeedToWinADollar = (double) Math.abs(betOddValue) / (double) 100;
 
-                        double percentage = Math.abs( amountNeedToWinADollar - 1 ) / amountNeedToWinADollar ;
+                        double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
 
                         double percentageBasedValue = value * percentage;
 
@@ -247,8 +265,6 @@ public class BetOnGameFragment extends Fragment {
 
 
         betAmountEditText.addTextChangedListener(betAmountTextWatcher);
-
-
 
 
         // Add action buttons

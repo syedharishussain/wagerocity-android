@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.adapters.SportsListAdapter;
 import com.plego.wagerocity.android.model.Game;
@@ -87,40 +88,50 @@ public class SportsListFragment extends Fragment {
         sportsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("Selected Sports", ((SportsListObject) parent.getItemAtPosition(position)).getSportsName());
+                final String sportsName = ((SportsListObject) parent.getItemAtPosition(position)).getSportsName();
 
-                if (((SportsListObject) parent.getItemAtPosition(position)).getSportsName().equals("NHL")) {
-                    RestClient restClient = new RestClient();
-                    restClient.getApiService().getGames("NHL", new Callback<ArrayList<Game>>() {
-                        @Override
-                        public void success(ArrayList<Game> games, Response response) {
+                Log.e("Selected Sports", sportsName);
+
+                final MaterialDialog progress = new MaterialDialog.Builder(getActivity())
+                        .title(getString(R.string.loading_games))
+                        .content(getString(R.string.please_wait))
+                        .progress(true, 0)
+                        .show();
+
+                RestClient restClient = new RestClient();
+                restClient.getApiService().getGames(getSportsNameForParam(sportsName), new Callback<ArrayList<Game>>() {
+                    @Override
+                    public void success(ArrayList<Game> games, Response response) {
+
+                        progress.dismiss();
+                        
+                        if (games.size() > 0) {
+
                             Uri uri = Uri.parse(getString(R.string.uri_open_games_list_fragment));
                             mListener.onSportsListFragmentInteraction(uri, games);
+                            
+                        } else {
+                            new MaterialDialog.Builder(getActivity())
+                                    .title(getString(R.string.no_games_found))
+                                    .content("There are no " + sportsName + " games going on for now. Please come back later")
+                                    .positiveText(getString(R.string.ok))
+                                    .show();
                         }
+                    }
 
-                        @Override
-                        public void failure(RetrofitError error) {
+                    @Override
+                    public void failure(RetrofitError error) {
+                        progress.dismiss();
 
-                        }
-                    });
-                }
+                        new MaterialDialog.Builder(getActivity())
+                                .title(getString(R.string.no_games_found))
+                                .content("There are no " + sportsName + " games going on for now. Please come back later")
+                                .positiveText(getString(R.string.ok))
+                                .show();
+                    }
+                });
             }
         });
-    }
-
-    private ArrayList<SportsListObject> getSportsListData() {
-        ArrayList<SportsListObject> sportsListObjects = new ArrayList<SportsListObject>();
-
-        sportsListObjects.add(new SportsListObject("NFL", R.drawable.nfl));
-        sportsListObjects.add(new SportsListObject("NCAA Football", R.drawable.ncaa_football));
-        sportsListObjects.add(new SportsListObject("MLB", R.drawable.mlb));
-        sportsListObjects.add(new SportsListObject("NBA", R.drawable.nba));
-        sportsListObjects.add(new SportsListObject("NCAA Basketball", R.drawable.ncaa_basketball));
-        sportsListObjects.add(new SportsListObject("NHL", R.drawable.nhl));
-        sportsListObjects.add(new SportsListObject("Soccer", R.drawable.soccer));
-        sportsListObjects.add(new SportsListObject("Tennis", R.drawable.tennis));
-
-        return sportsListObjects;
     }
 
     @Override
@@ -162,16 +173,43 @@ public class SportsListFragment extends Fragment {
         public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games);
     }
 
-}
+    private ArrayList<SportsListObject> getSportsListData() {
+        ArrayList<SportsListObject> sportsListObjects = new ArrayList<SportsListObject>();
 
-//"sports": [
-//        "nfl",
-//        "ncaaf",
-//        "mlb",
-//        "nba",
-//        "ncaab",
-//        "nhl",
-//        "soccer",
-//        "tennis"
-//        ],
+        sportsListObjects.add(new SportsListObject("NFL", R.drawable.nfl));
+        sportsListObjects.add(new SportsListObject("NCAA Football", R.drawable.ncaa_football));
+        sportsListObjects.add(new SportsListObject("MLB", R.drawable.mlb));
+        sportsListObjects.add(new SportsListObject("NBA", R.drawable.nba));
+        sportsListObjects.add(new SportsListObject("NCAA Basketball", R.drawable.ncaa_basketball));
+        sportsListObjects.add(new SportsListObject("NHL", R.drawable.nhl));
+        sportsListObjects.add(new SportsListObject("Soccer", R.drawable.soccer));
+        sportsListObjects.add(new SportsListObject("Tennis", R.drawable.tennis));
+
+        return sportsListObjects;
+    }
+
+    public String getSportsNameForParam (String sportsName) {
+
+        if (sportsName.equals("NFL")) {
+            return "nfl";
+        } else if (sportsName.equals("NCAA Football")) {
+            return "ncaaf";
+        } else if (sportsName.equals("MLB")) {
+            return "mlb";
+        } else if (sportsName.equals("NBA")) {
+            return "nba";
+        } else if (sportsName.equals("NCAA Basketball")) {
+            return "ncaab";
+        } else if (sportsName.equals("NHL")) {
+            return "nhl";
+        } else if (sportsName.equals("Soccer")) {
+            return "soccer";
+        } else if (sportsName.equals("Tennis")) {
+            return "tennis";
+        }
+
+        return "";
+    }
+
+}
 

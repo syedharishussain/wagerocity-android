@@ -233,8 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                >
+                android:layout_alignParentBottom="true">
 
                 <Button
                     android:id="@+id/button_betongame_over_team_a"
@@ -251,14 +250,16 @@
                     />
 
                 <TextView
+                    android:id="@+id/textview_betongame_over_under"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Over | 5 | Under"
+                    android:text="Over \n| 5 |\nUnder"
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:textSize="14sp"
-                    android:layout_alignTop="@id/button_betongame_over_team_a"
-                    android:layout_alignBottom="@id/button_betongame_over_team_a"
+                    android:minLines="3"
+                    android:maxLines="3"
+
                     />
 
                 <Button

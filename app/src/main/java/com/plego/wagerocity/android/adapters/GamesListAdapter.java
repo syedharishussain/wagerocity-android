@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -80,9 +81,21 @@ public class GamesListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    Uri uri = Uri.parse(context.getString(R.string.uri_selected_game_for_betting));
-                    Game game = games.get(position);
-                    mListener.onGamesListAdapterFragmentInteraction(uri, game);
+                    if (games.get(position).getTeamAOdds().size() > 0) {
+
+                        Uri uri = Uri.parse(context.getString(R.string.uri_selected_game_for_betting));
+                        Game game = games.get(position);
+                        mListener.onGamesListAdapterFragmentInteraction(uri, game);
+
+                    } else {
+
+                        new MaterialDialog.Builder(context)
+                                .title(context.getString(R.string.no_betting_information))
+                                .content(context.getString(R.string.no_betting_information_message))
+                                .positiveText(context.getString(R.string.ok))
+                                .show();
+
+                    }
                 }
             });
 
@@ -95,13 +108,15 @@ public class GamesListAdapter extends BaseAdapter {
         Game game = games.get(position);
 
         if (game != null) {
-            viewHolder.textViewTeamA.setText(game.getTeamAFullname());
+            viewHolder.textViewTeamA.setText( game.getTeamAFullname() );
             viewHolder.textViewTeamB.setText(game.getTeamBFullname());
             viewHolder.textViewDate.setText(game.getCstStartTime());
 
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // default
                     .cacheOnDisk(true) // default
+                    .showImageOnFail(R.drawable.sports)
+                    .showImageForEmptyUri(R.drawable.sports)
                     .build();
 
             ImageLoader.getInstance().displayImage(game.getTeamALogo(), viewHolder.imageViewA, options);

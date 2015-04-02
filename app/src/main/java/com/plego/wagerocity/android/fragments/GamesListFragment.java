@@ -80,7 +80,6 @@ public class GamesListFragment extends Fragment {
 
         gamesListView.setAdapter(gamesListAdapter);
 
-
     }
 
     @Override

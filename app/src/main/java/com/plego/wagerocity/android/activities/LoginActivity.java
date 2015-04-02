@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.SessionState;
@@ -32,7 +33,6 @@ public class LoginActivity extends RoboFragmentActivity {
 
     private static final String TAG = "LoginActivity";
     private UiLifecycleHelper uiHelper;
-    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +86,11 @@ public class LoginActivity extends RoboFragmentActivity {
         if (state.isOpened()) {
             Log.e(TAG, "Logged in...");
 
-            progress = ProgressDialog.show(this, "loading..",
-                    null , true);
+            final MaterialDialog progress = new MaterialDialog.Builder(this)
+                    .title(getString(R.string.loading))
+                    .content(getString(R.string.please_wait))
+                    .progress(true, 0)
+                    .show();
 
             Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override

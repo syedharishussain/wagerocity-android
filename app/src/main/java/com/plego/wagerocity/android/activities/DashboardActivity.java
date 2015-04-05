@@ -17,6 +17,7 @@ import com.plego.wagerocity.android.fragments.ExpertsFragment;
 import com.plego.wagerocity.android.fragments.GamesListFragment;
 import com.plego.wagerocity.android.fragments.GetDollarsFragment;
 import com.plego.wagerocity.android.fragments.LeaderBoardListFragment;
+import com.plego.wagerocity.android.fragments.MyPicksFragment;
 import com.plego.wagerocity.android.fragments.MyPoolsFragment;
 import com.plego.wagerocity.android.fragments.NavigationBarFragment;
 import com.plego.wagerocity.android.fragments.PoolsFragment;
@@ -25,6 +26,7 @@ import com.plego.wagerocity.android.fragments.StatsFragment;
 import com.plego.wagerocity.android.model.ExpertPlayer;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
+import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.constants.StringConstants;
@@ -33,6 +35,7 @@ import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 import roboguice.activity.RoboFragmentActivity;
 
 public class DashboardActivity
@@ -48,7 +51,8 @@ public class DashboardActivity
         SportsListFragment.OnSportsListFragmentInteractionListener,
         GamesListFragment.OnGamesListFragmentInteractionListener,
         GamesListAdapter.OnGamesListAdapterFragmentInteractionListener,
-        BetOnGameFragment.OnBetOnGameFragmentInteractionListener {
+        BetOnGameFragment.OnBetOnGameFragmentInteractionListener,
+        MyPicksFragment.OnMyPicksFragmentInteractionListener {
 
     ProgressDialog progress;
 
@@ -62,7 +66,7 @@ public class DashboardActivity
         addDashboardFragment();
 
         String facebokoID = new WagerocityPref(getApplicationContext()).facebookID();
-        if (facebokoID!= null) {
+        if (facebokoID != null) {
             Log.e("FACEBOOKID", facebokoID);
         }
 
@@ -187,10 +191,33 @@ public class DashboardActivity
                 @Override
                 public void failure(RetrofitError error) {
                     progress.dismiss();
-                    Log.e("getExperts", String.valueOf(error));
+
                 }
             });
 
+        }
+
+        if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
+            final MaterialDialog progress = new MaterialDialog.Builder(this)
+                    .title(getString(R.string.loading))
+                    .content(getString(R.string.please_wait))
+                    .progress(true, 0)
+                    .show();
+
+            RestClient restClient = new RestClient();
+            restClient.getApiService().getMyPicks(new WagerocityPref(this).user().getUserId(), new Callback<ArrayList<Pick>>() {
+                @Override
+                public void success(ArrayList<Pick> picks, Response response) {
+                    progress.dismiss();
+
+                    replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    progress.dismiss();
+                }
+            });
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_sports_list_fragment))) {
@@ -258,6 +285,11 @@ public class DashboardActivity
 
     @Override
     public void onBetOnGameFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onMyPicksFragmentInteraction(Uri uri) {
 
     }
 }

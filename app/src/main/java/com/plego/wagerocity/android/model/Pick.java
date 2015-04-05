@@ -1,11 +1,14 @@
 package com.plego.wagerocity.android.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class Pick {
+public class Pick implements Parcelable {
 
     @SerializedName("bet_id")
     @Expose
@@ -1105,4 +1108,135 @@ public class Pick {
         this.teamBLogo = teamBLogo;
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.betId);
+        dest.writeString(this.usrId);
+        dest.writeString(this.oddId);
+        dest.writeString(this.teamName);
+        dest.writeString(this.pos);
+        dest.writeString(this.oddType);
+        dest.writeString(this.matchDet);
+        dest.writeString(this.oddsVal);
+        dest.writeString(this.stake);
+        dest.writeString(this.betType);
+        dest.writeString(this.betParent);
+        dest.writeString(this.betCreated);
+        dest.writeString(this.betResult);
+        dest.writeString(this.betProcessed);
+        dest.writeString(this.poolId);
+        dest.writeString(this.matchId);
+        dest.writeString(this.teaserPoint);
+        dest.writeString(this.betOt);
+        dest.writeString(this.betDisOdds);
+        dest.writeString(this.leagueName);
+        dest.writeString(this.osBet);
+        dest.writeString(this.betOddVal);
+        dest.writeString(this.isPoolBet);
+        dest.writeString(this.id);
+        dest.writeString(this.subleagueId);
+        dest.writeString(this.scheduledTime);
+        dest.writeString(this.startTime);
+        dest.writeString(this.cstScheduledTime);
+        dest.writeString(this.cstStartTime);
+        dest.writeString(this.teamANumber);
+        dest.writeString(this.teamAName);
+        dest.writeString(this.teamANickname);
+        dest.writeString(this.teamAAbbr);
+        dest.writeString(this.teamAScore);
+        dest.writeString(this.teamAPeriod);
+        dest.writeString(this.teamBNumber);
+        dest.writeString(this.teamBName);
+        dest.writeString(this.teamBNickname);
+        dest.writeString(this.teamBAbbr);
+        dest.writeString(this.teamBScore);
+        dest.writeString(this.teamBPeriod);
+        dest.writeString(this.matPeriod);
+        dest.writeString(this.matTimer);
+        dest.writeString(this.matStatus);
+        dest.writeString(this.refId);
+        dest.writeString(this.matProcessed);
+        dest.writeString(this.matCreated);
+        dest.writeSerializable(this.odds);
+        dest.writeParcelable(this.User, 0);
+        dest.writeString(this.result);
+        dest.writeString(this.teamALogo);
+        dest.writeString(this.teamBLogo);
+        dest.writeParcelable(this.odd, 0);
+    }
+
+    public Pick() {
+    }
+
+    private Pick(Parcel in) {
+        this.betId = in.readString();
+        this.usrId = in.readString();
+        this.oddId = in.readString();
+        this.teamName = in.readString();
+        this.pos = in.readString();
+        this.oddType = in.readString();
+        this.matchDet = in.readString();
+        this.oddsVal = in.readString();
+        this.stake = in.readString();
+        this.betType = in.readString();
+        this.betParent = in.readString();
+        this.betCreated = in.readString();
+        this.betResult = in.readString();
+        this.betProcessed = in.readString();
+        this.poolId = in.readString();
+        this.matchId = in.readString();
+        this.teaserPoint = in.readString();
+        this.betOt = in.readString();
+        this.betDisOdds = in.readString();
+        this.leagueName = in.readString();
+        this.osBet = in.readString();
+        this.betOddVal = in.readString();
+        this.isPoolBet = in.readString();
+        this.id = in.readString();
+        this.subleagueId = in.readString();
+        this.scheduledTime = in.readString();
+        this.startTime = in.readString();
+        this.cstScheduledTime = in.readString();
+        this.cstStartTime = in.readString();
+        this.teamANumber = in.readString();
+        this.teamAName = in.readString();
+        this.teamANickname = in.readString();
+        this.teamAAbbr = in.readString();
+        this.teamAScore = in.readString();
+        this.teamAPeriod = in.readString();
+        this.teamBNumber = in.readString();
+        this.teamBName = in.readString();
+        this.teamBNickname = in.readString();
+        this.teamBAbbr = in.readString();
+        this.teamBScore = in.readString();
+        this.teamBPeriod = in.readString();
+        this.matPeriod = in.readString();
+        this.matTimer = in.readString();
+        this.matStatus = in.readString();
+        this.refId = in.readString();
+        this.matProcessed = in.readString();
+        this.matCreated = in.readString();
+        this.odds = (ArrayList<Odd>) in.readSerializable();
+        this.User = in.readParcelable(com.plego.wagerocity.android.model.User.class.getClassLoader());
+        this.result = in.readString();
+        this.teamALogo = in.readString();
+        this.teamBLogo = in.readString();
+        this.odd = in.readParcelable(Odd.class.getClassLoader());
+    }
+
+    public static final Creator<Pick> CREATOR = new Creator<Pick>() {
+        public Pick createFromParcel(Parcel source) {
+            return new Pick(source);
+        }
+
+        public Pick[] newArray(int size) {
+            return new Pick[size];
+        }
+    };
 }

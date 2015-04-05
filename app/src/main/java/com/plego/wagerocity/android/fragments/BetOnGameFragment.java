@@ -148,7 +148,7 @@ public class BetOnGameFragment extends Fragment {
         if (game.getOverA() == 0.0) overTeamA.setEnabled(false);
         if (game.getUnderA() == 0.0) overTeamB.setEnabled(false);
 
-        final String teamVsTeam = game.getTeamAFullname() + game.getTeamBFullname();
+        final String teamVsTeam = game.getTeamAFullname() + "vs" + game.getTeamBFullname();
 
         pointSpreadTeamA.setOnClickListener(new View.OnClickListener() {
             @Override

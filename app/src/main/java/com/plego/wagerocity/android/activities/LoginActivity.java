@@ -95,7 +95,6 @@ public class LoginActivity extends RoboFragmentActivity {
             Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
                 public void onCompleted(final GraphUser user, final Response response) {
-                    progress.dismiss();
                     Log.e("FACEBOOK", "Response : " + response);
 
                     final WagerocityPref pref = new WagerocityPref(getApplicationContext());
@@ -108,6 +107,8 @@ public class LoginActivity extends RoboFragmentActivity {
                         @Override
                         public void success(User user, retrofit.client.Response response) {
                             pref.setUser(user);
+
+                            progress.dismiss();
 
                             new Handler().postDelayed(new Runnable() {
                                 @Override

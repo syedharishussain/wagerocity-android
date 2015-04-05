@@ -63,5 +63,8 @@ public interface ServiceModel {
             @Part("bet_ot") String bet_ot,
             Callback<Response> callback
     );
+
+    @GET("/getMyPicks")
+    public void getMyPicks(@Query("userId") String userId, Callback<ArrayList<Pick>> callback);
 }
 

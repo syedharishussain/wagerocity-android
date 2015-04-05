@@ -148,7 +148,7 @@ public class BetOnGameFragment extends Fragment {
         if (game.getOverA() == 0.0) overTeamA.setEnabled(false);
         if (game.getUnderA() == 0.0) overTeamB.setEnabled(false);
 
-        final String teamVsTeam = game.getTeamAFullname() + "vs" + game.getTeamBFullname();
+        final String teamVsTeam = game.getTeamAFullname() + " vs " + game.getTeamBFullname();
 
         pointSpreadTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,13 +240,13 @@ public class BetOnGameFragment extends Fragment {
     }
 
     private void showBettingDialog(
-            String teamNames,
+            final String teamNames,
             String betTypeString,
             final String betOddSting,
             final double betOddValue,
             double points,
-            BetType betType,
-            Boolean isTeamA) {
+            final BetType betType,
+            final Boolean isTeamA) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -325,59 +325,62 @@ public class BetOnGameFragment extends Fragment {
 
         betAmountEditText.addTextChangedListener(betAmountTextWatcher);
 
-        Odd odd = getOddForBet(isTeamA, betType);
 
-        final String userID = new WagerocityPref(getActivity()).user().getUserId();
-        final String oddID = odd.getId();
-        String oddVal = "";
-        String position = "";
-        final String matchDetail = teamNames;
-        final String oddType = "ao";
-        final String stake = betAmountEditText.getText().toString();
-        final String matchId = odd.getTeamNumber();
-        final String teamName = game.getTeamNameFromTeamNumber(odd.getTeamNumber());
-        final String sportsName = game.getSportsName();
-        final String betTypeSPT = "single";
-        String bet_ot = "";
-
-
-        switch (betType) {
-            case BetTypePointSpread: {
-                oddVal = odd.getMoney().toString();
-                position = "-";
-                bet_ot = "3";
-                break;
-            }
-
-            case BetTypeMoneyLine: {
-                oddVal = odd.getMoney().toString();
-                position = "-";
-                bet_ot = "1";
-                break;
-            }
-
-            case BetTypeOver: {
-                oddVal = odd.getOverMoney().toString();
-                position = "over";
-                bet_ot = "4";
-                break;
-            }
-
-            case BetTypeUnder: {
-                oddVal = odd.getUnderMoney().toString();
-                position = "under";
-                break;
-            }
-
-        }
-
-        final String finalOddVal = oddVal;
-        final String finalPosition = position;
-
-        final String finalBet_ot = bet_ot;
         builder.setPositiveButton("Bet", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
+
+                Odd odd = getOddForBet(isTeamA, betType);
+
+                final String userID = new WagerocityPref(getActivity()).user().getUserId();
+                final String oddID = odd.getId();
+                String oddVal = "";
+                String position = "";
+                final String matchDetail = teamNames;
+                final String oddType = "ao";
+                final String stake = betAmountEditText.getText().toString();
+                final String matchId = odd.getTeamNumber();
+                final String teamName = game.getTeamNameFromTeamNumber(odd.getTeamNumber());
+                final String sportsName = game.getSportsName();
+                final String betTypeSPT = "single";
+                String bet_ot = "";
+
+
+                switch (betType) {
+                    case BetTypePointSpread: {
+                        oddVal = odd.getMoney().toString();
+                        position = "-";
+                        bet_ot = "3";
+                        break;
+                    }
+
+                    case BetTypeMoneyLine: {
+                        oddVal = odd.getMoney().toString();
+                        position = "-";
+                        bet_ot = "1";
+                        break;
+                    }
+
+                    case BetTypeOver: {
+                        oddVal = odd.getOverMoney().toString();
+                        position = "over";
+                        bet_ot = "4";
+                        break;
+                    }
+
+                    case BetTypeUnder: {
+                        oddVal = odd.getUnderMoney().toString();
+                        position = "under";
+                        break;
+                    }
+
+                }
+
+                final String finalOddVal = oddVal;
+                final String finalPosition = position;
+
+                final String finalBet_ot = bet_ot;
+
                 Log.e("Dialog Output", betAmountEditText.getText().toString());
 
                 RestClient restClient = new RestClient();

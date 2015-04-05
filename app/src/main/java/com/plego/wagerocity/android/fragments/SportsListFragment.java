@@ -18,6 +18,7 @@ import com.plego.wagerocity.android.adapters.SportsListAdapter;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.SportsListObject;
+import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
 
@@ -99,7 +100,7 @@ public class SportsListFragment extends Fragment {
                         .show();
 
                 RestClient restClient = new RestClient();
-                restClient.getApiService().getGames(getSportsNameForParam(sportsName), new Callback<ArrayList<Game>>() {
+                restClient.getApiService().getGames(AndroidUtils.getSportsNameForParam(sportsName), new Callback<ArrayList<Game>>() {
                     @Override
                     public void success(ArrayList<Game> games, Response response) {
 
@@ -108,7 +109,7 @@ public class SportsListFragment extends Fragment {
                         if (games.size() > 0) {
 
                             Uri uri = Uri.parse(getString(R.string.uri_open_games_list_fragment));
-                            mListener.onSportsListFragmentInteraction(uri, games);
+                            mListener.onSportsListFragmentInteraction(uri, games, AndroidUtils.getSportsNameForParam(sportsName));
                             
                         } else {
                             new MaterialDialog.Builder(getActivity())
@@ -170,7 +171,7 @@ public class SportsListFragment extends Fragment {
      */
     public interface OnSportsListFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games);
+        public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam);
     }
 
     private ArrayList<SportsListObject> getSportsListData() {
@@ -186,29 +187,6 @@ public class SportsListFragment extends Fragment {
         sportsListObjects.add(new SportsListObject("Tennis", R.drawable.tennis));
 
         return sportsListObjects;
-    }
-
-    public String getSportsNameForParam (String sportsName) {
-
-        if (sportsName.equals("NFL")) {
-            return "nfl";
-        } else if (sportsName.equals("NCAA Football")) {
-            return "ncaaf";
-        } else if (sportsName.equals("MLB")) {
-            return "mlb";
-        } else if (sportsName.equals("NBA")) {
-            return "nba";
-        } else if (sportsName.equals("NCAA Basketball")) {
-            return "ncaab";
-        } else if (sportsName.equals("NHL")) {
-            return "nhl";
-        } else if (sportsName.equals("Soccer")) {
-            return "soccer";
-        } else if (sportsName.equals("Tennis")) {
-            return "tennis";
-        }
-
-        return "";
     }
 
 }

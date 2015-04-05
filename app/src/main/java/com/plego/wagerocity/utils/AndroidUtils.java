@@ -54,4 +54,27 @@ public class AndroidUtils {
 
         statsFragment.updateStats();
     }
+
+    public static String getSportsNameForParam (String sportsName) {
+
+        if (sportsName.equals("NFL")) {
+            return "nfl";
+        } else if (sportsName.equals("NCAA Football")) {
+            return "ncaaf";
+        } else if (sportsName.equals("MLB")) {
+            return "mlb";
+        } else if (sportsName.equals("NBA")) {
+            return "nba";
+        } else if (sportsName.equals("NCAA Basketball")) {
+            return "ncaab";
+        } else if (sportsName.equals("NHL")) {
+            return "nhl";
+        } else if (sportsName.equals("Soccer")) {
+            return "soccer";
+        } else if (sportsName.equals("Tennis")) {
+            return "tennis";
+        }
+
+        return "";
+    }
 }

@@ -1,11 +1,9 @@
 package com.plego.wagerocity.android.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
+
 import retrofit.Callback;
-import retrofit.http.Body;
+import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
@@ -28,7 +26,7 @@ public interface ServiceModel {
     public void getExperts(Callback<ArrayList<ExpertPlayer>> callback);
 
     @GET("/getUser")
-    public void getUser(@Query("facebookID") String facebookID, Callback <User> callback) ;
+    public void getUser(@Query("facebookID") String facebookID, Callback<User> callback);
 
     @Multipart
     @POST("/createUser")
@@ -43,7 +41,25 @@ public interface ServiceModel {
     public void consumeCredits(@Part("userId") String userId, @Part("debitAmount") Float debitAmount, Callback<User> callback);
 
     @GET("/getGames")
-    public void getGames(@Query("leagueName") String leagueName, Callback <ArrayList<Game>> callback) ;
+    public void getGames(@Query("leagueName") String leagueName, Callback<ArrayList<Game>> callback);
+
+    @Multipart
+    @POST("/betOnGame")
+    public void betOnGames(
+            @Part("userID") String userID,
+            @Part("oddID") String oddID,
+            @Part("oddVal") String oddVal,
+            @Part("position") String position,
+            @Part("matchDetail") String matchDetail,
+            @Part("oddType") String oddType,
+            @Part("stake") String stake,
+            @Part("matchID") String matchID,
+            @Part("teamName") String teamName,
+            @Part("sportsName") String sportsName,
+            @Part("bet_type") String bet_type,
+            @Part("bet_ot") String bet_ot,
+            Callback<Response> callback
+    );
 }
 
 

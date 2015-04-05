@@ -149,6 +149,15 @@ public class Game implements Parcelable {
         this.pointSpreadStringB = pointSpreadStringB;
     }
 
+    public String getSportsName() {
+        return sportsName;
+    }
+
+    public void setSportsName(String sportsName) {
+        this.sportsName = sportsName;
+    }
+
+
     private Double pointSpreadA = 0.0;
 
     private Double pointSpreadB = 0.0;
@@ -172,6 +181,8 @@ public class Game implements Parcelable {
     private String pointSpreadStringA = "-";
 
     private String pointSpreadStringB = "-";
+
+    private String sportsName = "";
 
     /**
      *
@@ -458,6 +469,7 @@ public class Game implements Parcelable {
         dest.writeValue(this.pointB);
         dest.writeString(this.pointSpreadStringA);
         dest.writeString(this.pointSpreadStringB);
+        dest.writeString(this.sportsName);
     }
 
     public Game() {
@@ -491,6 +503,7 @@ public class Game implements Parcelable {
         this.pointB = (Double) in.readValue(Double.class.getClassLoader());
         this.pointSpreadStringA = in.readString();
         this.pointSpreadStringB = in.readString();
+        this.sportsName = in.readString();
     }
 
     public static final Creator<Game> CREATOR = new Creator<Game>() {
@@ -557,6 +570,10 @@ public class Game implements Parcelable {
             }
 
         }
+    }
+
+    public String getTeamNameFromTeamNumber (String teamNumber) {
+        return (getTeamANumber().equals(teamNumber)) ? getTeamAName() : getTeamBName();
     }
 }
 

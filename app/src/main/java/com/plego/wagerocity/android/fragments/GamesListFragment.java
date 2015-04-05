@@ -5,11 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.plego.wagerocity.R;
@@ -30,8 +28,10 @@ public class GamesListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARGS_GAMES_LIST = "games_list";
+    private static final String ARGS_SPORTS_NAME = "sports_name";
 
     private ArrayList<Game> games;
+    private String sportsName;
 
     private OnGamesListFragmentInteractionListener mListener;
 
@@ -43,10 +43,11 @@ public class GamesListFragment extends Fragment {
      * @return A new instance of fragment GamesListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GamesListFragment newInstance(ArrayList<Game> games) {
+    public static GamesListFragment newInstance(ArrayList<Game> games, String sportsName) {
         GamesListFragment fragment = new GamesListFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARGS_GAMES_LIST, games);
+        args.putString(ARGS_SPORTS_NAME, sportsName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,6 +61,7 @@ public class GamesListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             games = getArguments().getParcelableArrayList(ARGS_GAMES_LIST);
+            sportsName = getArguments().getString(ARGS_SPORTS_NAME);
         }
     }
 
@@ -76,7 +78,7 @@ public class GamesListFragment extends Fragment {
 
         final ListView gamesListView = (ListView) view.findViewById(R.id.listview_games_list);
 
-        GamesListAdapter gamesListAdapter = new GamesListAdapter(view.getContext(), games);
+        GamesListAdapter gamesListAdapter = new GamesListAdapter(view.getContext(), games, sportsName);
 
         gamesListView.setAdapter(gamesListAdapter);
 

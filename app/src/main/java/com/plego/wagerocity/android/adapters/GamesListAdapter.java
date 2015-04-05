@@ -27,12 +27,15 @@ import java.util.List;
 public class GamesListAdapter extends BaseAdapter {
 
     List<Game> games;
+    String sportsName;
     Context context;
+
     private OnGamesListAdapterFragmentInteractionListener mListener;
 
-    public GamesListAdapter(Context context, List<Game> games) {
+    public GamesListAdapter(Context context, List<Game> games, String sportsName) {
         this.games = games;
         this.context = context;
+        this.sportsName = sportsName;
 
         try {
             mListener = (OnGamesListAdapterFragmentInteractionListener) context;
@@ -85,6 +88,7 @@ public class GamesListAdapter extends BaseAdapter {
 
                         Uri uri = Uri.parse(context.getString(R.string.uri_selected_game_for_betting));
                         Game game = games.get(position);
+                        game.setSportsName(sportsName);
                         mListener.onGamesListAdapterFragmentInteraction(uri, game);
 
                     } else {

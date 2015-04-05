@@ -26,9 +26,8 @@ import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.Odd;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
-
-import org.w3c.dom.Text;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -50,6 +49,13 @@ public class BetOnGameFragment extends Fragment {
 
     private OnBetOnGameFragmentInteractionListener mListener;
     private TextWatcher betAmountTextWatcher;
+
+    public enum BetType {
+        BetTypePointSpread,
+        BetTypeMoneyLine,
+        BetTypeOver,
+        BetTypeUnder
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -148,48 +154,100 @@ public class BetOnGameFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                showBettingDialog(teamVsTeam, "Point Spread", game.getPointSpreadStringA(), game.getPointSpreadA(), game.getPointA());
+                showBettingDialog(
+                        teamVsTeam,
+                        "Point Spread",
+                        game.getPointSpreadStringA(),
+                        game.getPointSpreadA(),
+                        game.getPointA(),
+                        BetType.BetTypePointSpread,
+                        true);
 
             }
         });
+
         pointSpreadTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Point Spread", game.getPointSpreadStringB(), game.getPointSpreadB(), game.getPointB());
+                showBettingDialog(
+                        teamVsTeam,
+                        "Point Spread",
+                        game.getPointSpreadStringB(),
+                        game.getPointSpreadB(),
+                        game.getPointB(),
+                        BetType.BetTypePointSpread,
+                        false);
             }
         });
 
         moneyLineTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Moneyline", Double.toString(game.getMoneyLineA()), game.getMoneyLineA(), game.getPointA());
+                showBettingDialog(
+                        teamVsTeam,
+                        "Moneyline",
+                        Double.toString(game.getMoneyLineA()),
+                        game.getMoneyLineA(),
+                        game.getPointA(),
+                        BetType.BetTypeMoneyLine,
+                        true);
             }
         });
 
         moneyLineTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Moneyline", Double.toString(game.getMoneyLineB()), game.getMoneyLineB(), game.getPointB());
+                showBettingDialog(
+                        teamVsTeam,
+                        "Moneyline",
+                        Double.toString(game.getMoneyLineB()),
+                        game.getMoneyLineB(),
+                        game.getPointB(),
+                        BetType.BetTypeMoneyLine,
+                        false);
             }
         });
+
 
         overTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Over", Double.toString(game.getOverA()), game.getOverA(), game.getPointA());
+                showBettingDialog(
+                        teamVsTeam,
+                        "Over",
+                        Double.toString(game.getOverA()),
+                        game.getOverA(),
+                        game.getPointA(),
+                        BetType.BetTypeOver,
+                        true);
             }
         });
 
         overTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBettingDialog(teamVsTeam, "Under", Double.toString(game.getUnderA()), game.getUnderA(), game.getPointA());
+                showBettingDialog(
+                        teamVsTeam,
+                        "Under",
+                        Double.toString(game.getUnderA()),
+                        game.getUnderA(),
+                        game.getPointA(),
+                        BetType.BetTypeUnder,
+                        true);
             }
         });
 
     }
 
-    private void showBettingDialog(String teamNames, String betType, final String betOddSting, final double betOddValue, double points) {
+    private void showBettingDialog(
+            String teamNames,
+            String betTypeString,
+            final String betOddSting,
+            final double betOddValue,
+            double points,
+            BetType betType,
+            Boolean isTeamA) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -202,7 +260,7 @@ public class BetOnGameFragment extends Fragment {
         teamNamesTextView.setText(teamNames);
 
         final TextView betTypetextView = (TextView) alertLayout.findViewById(R.id.textview_dialog_betongame_bet_type);
-        betTypetextView.setText(betType);
+        betTypetextView.setText(betTypeString);
 
         final TextView betTypeValuetextView = (TextView) alertLayout.findViewById(R.id.textview_dialog_betongame_bet_type_value);
         betTypeValuetextView.setText(betOddSting);
@@ -211,6 +269,7 @@ public class BetOnGameFragment extends Fragment {
         betAmountEditText.requestFocus();
 
         final EditText winAmountEditText = (EditText) alertLayout.findViewById(R.id.edittext_dialog_betongame_to_win_amount);
+
 
         betAmountTextWatcher = new TextWatcher() {
             @Override
@@ -225,15 +284,15 @@ public class BetOnGameFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                double result = 0.0;
                 String string = s.toString();
+
                 if (string.toString().length() > 0) {
 
-//                    winAmountEditText.removeTextChangedListener(winAmountTextWatcher);
                     betAmountEditText.removeTextChangedListener(betAmountTextWatcher);
 
                     Double value = Double.parseDouble(s.toString());
-
-                    double result = 0.0;
 
                     if (betOddValue > 0) {
 
@@ -243,16 +302,16 @@ public class BetOnGameFragment extends Fragment {
 
                         double percentageBasedValue = value * percentage;
 
-                        result = value + percentageBasedValue;
+                        result = Math.ceil(value + percentageBasedValue);
 
                     } else {
-                        double amountNeedToWinADollar = (double) Math.abs(betOddValue) / (double) 100;
+                        double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
 
                         double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
 
                         double percentageBasedValue = value * percentage;
 
-                        result = value - percentageBasedValue;
+                        result = Math.ceil(value - percentageBasedValue);
                     }
 
                     winAmountEditText.setText(String.valueOf(result));
@@ -266,14 +325,90 @@ public class BetOnGameFragment extends Fragment {
 
         betAmountEditText.addTextChangedListener(betAmountTextWatcher);
 
+        Odd odd = getOddForBet(isTeamA, betType);
 
-        // Add action buttons
+        final String userID = new WagerocityPref(getActivity()).user().getUserId();
+        final String oddID = odd.getId();
+        String oddVal = "";
+        String position = "";
+        final String matchDetail = teamNames;
+        final String oddType = "ao";
+        final String stake = betAmountEditText.getText().toString();
+        final String matchId = odd.getTeamNumber();
+        final String teamName = game.getTeamNameFromTeamNumber(odd.getTeamNumber());
+        final String sportsName = game.getSportsName();
+        final String betTypeSPT = "single";
+        String bet_ot = "";
+
+
+        switch (betType) {
+            case BetTypePointSpread: {
+                oddVal = odd.getMoney().toString();
+                position = "-";
+                bet_ot = "3";
+                break;
+            }
+
+            case BetTypeMoneyLine: {
+                oddVal = odd.getMoney().toString();
+                position = "-";
+                bet_ot = "1";
+                break;
+            }
+
+            case BetTypeOver: {
+                oddVal = odd.getOverMoney().toString();
+                position = "over";
+                bet_ot = "4";
+                break;
+            }
+
+            case BetTypeUnder: {
+                oddVal = odd.getUnderMoney().toString();
+                position = "under";
+                break;
+            }
+
+        }
+
+        final String finalOddVal = oddVal;
+        final String finalPosition = position;
+
+        final String finalBet_ot = bet_ot;
         builder.setPositiveButton("Bet", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 Log.e("Dialog Output", betAmountEditText.getText().toString());
 
                 RestClient restClient = new RestClient();
+
+                restClient.getApiService().betOnGames(
+                        userID,
+                        oddID,
+                        finalOddVal,
+                        finalPosition,
+                        matchDetail,
+                        oddType,
+                        stake,
+                        matchId,
+                        teamName,
+                        sportsName,
+                        betTypeSPT,
+                        finalBet_ot,
+                        new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        }
+                );
+
+
                 restClient.getApiService().consumeCredits(new WagerocityPref(getActivity()).user().getUserId().toString(),
                         Float.parseFloat(betAmountEditText.getText().toString()),
                         new Callback<User>() {
@@ -335,5 +470,47 @@ public class BetOnGameFragment extends Fragment {
 
         public void onBetOnGameFragmentInteraction(Uri uri);
     }
+
+    private Odd getOddForBet(Boolean isTeamA, BetType betType) {
+        Odd odd = new Odd();
+        if (isTeamA) {
+            for (Odd oddA : game.getTeamAOdds()) {
+                if (oddA.getML().equals("") &&
+                        (betType == BetType.BetTypeOver || betType == BetType.BetTypeUnder)) {
+
+                    odd = oddA;
+
+                } else if (oddA.getML().equals("false") && betType == BetType.BetTypePointSpread) {
+
+                    odd = oddA;
+
+                } else if (oddA.getML().equals("true") && betType == BetType.BetTypeMoneyLine) {
+
+                    odd = oddA;
+
+                }
+            }
+        } else {
+            for (Odd oddB : game.getTeamAOdds()) {
+                if (oddB.getML().equals("") &&
+                        (betType == BetType.BetTypeOver || betType == BetType.BetTypeUnder)) {
+
+                    odd = oddB;
+
+                } else if (oddB.getML().equals("false") && betType == BetType.BetTypePointSpread) {
+
+                    odd = oddB;
+
+                } else if (oddB.getML().equals("true") && betType == BetType.BetTypeMoneyLine) {
+
+                    odd = oddB;
+
+                }
+            }
+        }
+
+        return odd;
+    }
+
 
 }

@@ -237,9 +237,9 @@ public class DashboardActivity
     }
 
     @Override
-    public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games) {
+    public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam) {
         if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
-            replaceFragment(GamesListFragment.newInstance(games), StringConstants.TAG_FRAG_GAMES_LIST);
+            replaceFragment(GamesListFragment.newInstance(games, sportsNameValueForParam), StringConstants.TAG_FRAG_GAMES_LIST);
         }
     }
 

@@ -22,8 +22,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class MyPicksFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARGS_MY_PICKS = "my_picks";
 
     private OnMyPicksFragmentInteractionListener mListener;
@@ -36,7 +35,6 @@ public class MyPicksFragment extends Fragment {
      * @param picks Parameter 1.
      * @return A new instance of fragment MyPicksFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MyPicksFragment newInstance(ArrayList<Pick> picks) {
         MyPicksFragment fragment = new MyPicksFragment();
         Bundle args = new Bundle();
@@ -99,7 +97,6 @@ public class MyPicksFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnMyPicksFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onMyPicksFragmentInteraction(Uri uri);
     }
 

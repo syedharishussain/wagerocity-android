@@ -24,10 +24,13 @@ import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.Odd;
+import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.User;
 import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
+
+import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -288,31 +291,33 @@ public class BetOnGameFragment extends Fragment {
                 double result = 0.0;
                 String string = s.toString();
 
-                if (string.toString().length() > 0) {
+                if (string.length() > 0) {
 
                     betAmountEditText.removeTextChangedListener(betAmountTextWatcher);
 
                     Double value = Double.parseDouble(s.toString());
 
-                    if (betOddValue > 0) {
+                    result = AndroidUtils.getToWinAmount(value, betOddValue);
 
-                        double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
-
-                        double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
-
-                        double percentageBasedValue = value * percentage;
-
-                        result = Math.ceil(value + percentageBasedValue);
-
-                    } else {
-                        double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
-
-                        double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
-
-                        double percentageBasedValue = value * percentage;
-
-                        result = Math.ceil(value - percentageBasedValue);
-                    }
+//                    if (betOddValue > 0) {
+//
+//                        double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
+//
+//                        double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
+//
+//                        double percentageBasedValue = value * percentage;
+//
+//                        result = Math.ceil(value + percentageBasedValue);
+//
+//                    } else {
+//                        double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
+//
+//                        double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
+//
+//                        double percentageBasedValue = value * percentage;
+//
+//                        result = Math.ceil(value - percentageBasedValue);
+//                    }
 
                     winAmountEditText.setText(String.valueOf(result));
 
@@ -398,10 +403,11 @@ public class BetOnGameFragment extends Fragment {
                         sportsName,
                         betTypeSPT,
                         finalBet_ot,
-                        new Callback<Response>() {
+                        new Callback<ArrayList<Pick>>() {
                             @Override
-                            public void success(Response response, Response response2) {
-
+                            public void success(ArrayList<Pick> picks, Response response) {
+                                Uri uri = Uri.parse(getString(R.string.uri_open_my_picks_fragment));
+                                mListener.onBetOnGameFragmentInteraction(uri, picks);
                             }
 
                             @Override
@@ -471,7 +477,7 @@ public class BetOnGameFragment extends Fragment {
      */
     public interface OnBetOnGameFragmentInteractionListener {
 
-        public void onBetOnGameFragmentInteraction(Uri uri);
+        public void onBetOnGameFragmentInteraction(Uri uri, ArrayList<Pick> picks);
     }
 
     private Odd getOddForBet(Boolean isTeamA, BetType betType) {

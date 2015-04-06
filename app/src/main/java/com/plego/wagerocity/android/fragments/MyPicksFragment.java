@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.adapters.MyPicksListAdapter;
 import com.plego.wagerocity.android.model.Pick;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class MyPicksFragment extends Fragment {
 
     private OnMyPicksFragmentInteractionListener mListener;
     private ArrayList<Pick> picks;
+
+
 
     /**
      * Use this factory method to create a new instance of
@@ -66,6 +70,11 @@ public class MyPicksFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final ListView myPicksListView = (ListView) view.findViewById(R.id.listview_my_picks);
+
+        MyPicksListAdapter myPicksListAdapter = new MyPicksListAdapter(view.getContext(), picks);
+
+        myPicksListView.setAdapter(myPicksListAdapter);
 
     }
 

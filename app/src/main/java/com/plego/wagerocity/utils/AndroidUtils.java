@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
 import android.util.Log;
 
+import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.fragments.StatsFragment;
 import com.plego.wagerocity.constants.StringConstants;
 
@@ -18,6 +19,8 @@ import junit.framework.Assert;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static java.lang.String.valueOf;
 
 /**
  * Created by haris on 11/02/15.
@@ -76,5 +79,59 @@ public class AndroidUtils {
         }
 
         return "";
+    }
+
+    public static int getDrawableFromLeagueName (String leagueName) {
+        if (leagueName.equals("NFL") || leagueName.toLowerCase().equals("nfl") || leagueName.toLowerCase().equals("nfl")) {
+            return R.drawable.nfl;
+        } else if (leagueName.equals("NCAA Football") || leagueName.toLowerCase().equals("ncaa football") || leagueName.toLowerCase().equals("ncaaf")) {
+            return R.drawable.ncaa_football;
+        } else if (leagueName.equals("MLB") || leagueName.toLowerCase().equals("mlb")) {
+            return R.drawable.mlb;
+        } else if (leagueName.equals("NBA") || leagueName.toLowerCase().equals("nba")) {
+            return R.drawable.nba;
+        } else if (leagueName.equals("NCAA Basketball") || leagueName.toLowerCase().equals("ncaa baseketball") || leagueName.toLowerCase().equals("ncaab")) {
+            return R.drawable.ncaa_basketball;
+        } else if (leagueName.equals("NHL") || leagueName.toLowerCase().equals("nhl")) {
+            return R.drawable.nhl;
+        } else if (leagueName.equals("Soccer") || leagueName.toLowerCase().equals("soccer")) {
+            return R.drawable.soccer;
+        } else if (leagueName.equals("Tennis") || leagueName.toLowerCase().equals("tennis")) {
+            return R.drawable.tennis;
+        }
+        return R.drawable.sports;
+    }
+
+    public static String getBetTypeFromBetOT (int betOT, String position) {
+        switch (betOT) {
+            case 1: return "MoneyLine";
+            case 3: return "PointSpread ";
+            case 4: return position.equals("over") ? "Over" : "Under";
+        }
+        return "";
+    }
+
+    public static int getToWinAmount (double value, double betOddValue) {
+        Double result;
+        if (betOddValue > 0) {
+
+            double amountNeedToWinADollar =  (double) 100 / Math.abs(betOddValue);
+
+            double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
+
+            double percentageBasedValue = value * percentage;
+
+            result = Math.ceil(value + percentageBasedValue);
+
+        } else {
+            double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
+
+            double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
+
+            double percentageBasedValue = value * percentage;
+
+            result = Math.ceil(value - percentageBasedValue);
+        }
+        return result.intValue();
     }
 }

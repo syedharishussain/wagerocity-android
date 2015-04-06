@@ -61,7 +61,7 @@ public interface ServiceModel {
             @Part("sportsName") String sportsName,
             @Part("bet_type") String bet_type,
             @Part("bet_ot") String bet_ot,
-            Callback<Response> callback
+            Callback<ArrayList<Pick>> callback
     );
 
     @GET("/getMyPicks")

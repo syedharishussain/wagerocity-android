@@ -284,8 +284,10 @@ public class DashboardActivity
     }
 
     @Override
-    public void onBetOnGameFragmentInteraction(Uri uri) {
-
+    public void onBetOnGameFragmentInteraction(Uri uri, ArrayList<Pick> picks) {
+        if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
+            replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+        }
     }
 
     @Override

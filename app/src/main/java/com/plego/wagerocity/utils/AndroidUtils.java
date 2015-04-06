@@ -27,38 +27,36 @@ import static java.lang.String.valueOf;
  */
 public class AndroidUtils {
 
-    public static void printFBKeyHash (Activity activity) {
+    public static void printFBKeyHash(Activity activity) {
         try {
             PackageInfo info = activity.getPackageManager().getPackageInfo(
-                    activity.getPackageName(), PackageManager.GET_SIGNATURES );
+                    activity.getPackageName(), PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance( "SHA" );
-                md.update( signature.toByteArray() );
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
                 Log.e("MY KEY HASH:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
-        }
-        catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e) {
 
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
 
         }
     }
 
-    public static Fragment getFragmentByTag (FragmentActivity activity, String TAG) {
+    public static Fragment getFragmentByTag(FragmentActivity activity, String TAG) {
         return (Fragment) activity
                 .getSupportFragmentManager()
                 .findFragmentByTag(StringConstants.TAG_FRAG_STATS);
     }
 
-    public static void updateStats (FragmentActivity activity) {
+    public static void updateStats(FragmentActivity activity) {
         StatsFragment statsFragment = (StatsFragment) AndroidUtils.
                 getFragmentByTag(activity, StringConstants.TAG_FRAG_STATS);
 
         statsFragment.updateStats();
     }
 
-    public static String getSportsNameForParam (String sportsName) {
+    public static String getSportsNameForParam(String sportsName) {
 
         if (sportsName.equals("NFL")) {
             return "nfl";
@@ -81,7 +79,10 @@ public class AndroidUtils {
         return "";
     }
 
-    public static int getDrawableFromLeagueName (String leagueName) {
+    public static int getDrawableFromLeagueName(String leagueName) {
+        if (leagueName == null) {
+            return R.drawable.sports;
+        }
         if (leagueName.equals("NFL") || leagueName.toLowerCase().equals("nfl") || leagueName.toLowerCase().equals("nfl")) {
             return R.drawable.nfl;
         } else if (leagueName.equals("NCAA Football") || leagueName.toLowerCase().equals("ncaa football") || leagueName.toLowerCase().equals("ncaaf")) {
@@ -98,24 +99,28 @@ public class AndroidUtils {
             return R.drawable.soccer;
         } else if (leagueName.equals("Tennis") || leagueName.toLowerCase().equals("tennis")) {
             return R.drawable.tennis;
+        } else {
+            return R.drawable.sports;
         }
-        return R.drawable.sports;
     }
 
-    public static String getBetTypeFromBetOT (int betOT, String position) {
+    public static String getBetTypeFromBetOT(int betOT, String position) {
         switch (betOT) {
-            case 1: return "MoneyLine";
-            case 3: return "PointSpread ";
-            case 4: return position.equals("over") ? "Over" : "Under";
+            case 1:
+                return "MoneyLine";
+            case 3:
+                return "PointSpread ";
+            case 4:
+                return position.equals("over") ? "Over" : "Under";
         }
         return "";
     }
 
-    public static int getToWinAmount (double value, double betOddValue) {
+    public static int getToWinAmount(double value, double betOddValue) {
         Double result;
         if (betOddValue > 0) {
 
-            double amountNeedToWinADollar =  (double) 100 / Math.abs(betOddValue);
+            double amountNeedToWinADollar = (double) 100 / Math.abs(betOddValue);
 
             double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
 

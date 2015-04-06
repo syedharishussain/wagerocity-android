@@ -500,7 +500,7 @@ public class BetOnGameFragment extends Fragment {
                 }
             }
         } else {
-            for (Odd oddB : game.getTeamAOdds()) {
+            for (Odd oddB : game.getTeamBOdds()) {
                 if (oddB.getML().equals("") &&
                         (betType == BetType.BetTypeOver || betType == BetType.BetTypeUnder)) {
 

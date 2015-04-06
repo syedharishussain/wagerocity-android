@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.plego.wagerocity.R;
 
@@ -62,6 +63,15 @@ public class NavigationBarFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Button getDollarsButton = (Button) view.findViewById(R.id.button_navigation_bar_get_dollars);
+        getDollarsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(getString(R.string.uri_open_get_dollars_fragment));
+                mListener.onNavigationBarFragmentInteraction(uri);
+            }
+        });
 
     }
 

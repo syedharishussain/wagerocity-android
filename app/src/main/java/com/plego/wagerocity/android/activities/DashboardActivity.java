@@ -89,11 +89,6 @@ public class DashboardActivity
         transaction.commit();
     }
 
-    @Override
-    public void onNavigationBarFragmentInteraction(Uri uri) {
-
-    }
-
     private void addStatsFragment() {
         StatsFragment statsFragment = new StatsFragment();
 
@@ -102,17 +97,24 @@ public class DashboardActivity
         transaction.commit();
     }
 
-    @Override
-    public void onStatsFragmentInteraction(Uri uri) {
-
-    }
-
     private void addDashboardFragment() {
         DashboardFragment statsFragment = new DashboardFragment();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container_dashboard, statsFragment, StringConstants.TAG_FRAG_DASHBOARD);
         transaction.commit();
+    }
+
+    @Override
+    public void onStatsFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onNavigationBarFragmentInteraction(Uri uri) {
+        if (uri.toString().equals(getString(R.string.uri_open_get_dollars_fragment))) {
+            replaceGetDollarsFragment();
+        }
     }
 
     @Override
@@ -179,7 +181,7 @@ public class DashboardActivity
                     .show();
 
             RestClient restClient = new RestClient();
-            restClient.getApiService().getExperts(new Callback<ArrayList<ExpertPlayer>>() {
+            restClient.getApiService().getExperts(new WagerocityPref(this).user().getUserId(), new Callback<ArrayList<ExpertPlayer>>() {
                 @Override
                 public void success(ArrayList<ExpertPlayer> expertPlayers, retrofit.client.Response response) {
 

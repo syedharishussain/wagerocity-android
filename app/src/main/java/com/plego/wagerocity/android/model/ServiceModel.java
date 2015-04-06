@@ -26,7 +26,7 @@ public interface ServiceModel {
     public void getLeaderboards(Callback<ArrayList<LeaderboardPlayer>> callback);
 
     @GET("/getExperts")
-    public void getExperts(Callback<ArrayList<ExpertPlayer>> callback);
+    public void getExperts(@Query("userId") String userId, Callback<ArrayList<ExpertPlayer>> callback);
 
     @GET("/getUser")
     public void getUser(@Query("facebookID") String facebookID, Callback<User> callback);

@@ -8,13 +8,95 @@ import com.google.gson.annotations.SerializedName;
 
 public class ExpertPlayer implements Parcelable {
 
+    @SerializedName("user_id")
+    @Expose
+    private String userId;
+    @Expose
+    private String description;
+    @SerializedName("is_follow")
+    @Expose
+    private Boolean isFollow;
+    @Expose
+    private String status;
     @Expose
     private String displayname;
-    @SerializedName("creation_ip")
-    @Expose
-    private String creationIp;
     @Expose
     private String username;
+    @SerializedName("image_url")
+    @Expose
+    private String imageUrl;
+
+    /**
+     *
+     * @return
+     * The userId
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     *
+     * @param userId
+     * The user_id
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    /**
+     *
+     * @return
+     * The description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     *
+     * @param description
+     * The description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     *
+     * @return
+     * The isFollow
+     */
+    public Boolean getIsFollow() {
+        return isFollow;
+    }
+
+    /**
+     *
+     * @param isFollow
+     * The is_follow
+     */
+    public void setIsFollow(Boolean isFollow) {
+        this.isFollow = isFollow;
+    }
+
+    /**
+     *
+     * @return
+     * The status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     *
+     * @param status
+     * The status
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     /**
      *
@@ -37,24 +119,6 @@ public class ExpertPlayer implements Parcelable {
     /**
      *
      * @return
-     * The creationIp
-     */
-    public String getCreationIp() {
-        return creationIp;
-    }
-
-    /**
-     *
-     * @param creationIp
-     * The creation_ip
-     */
-    public void setCreationIp(String creationIp) {
-        this.creationIp = creationIp;
-    }
-
-    /**
-     *
-     * @return
      * The username
      */
     public String getUsername() {
@@ -70,31 +134,24 @@ public class ExpertPlayer implements Parcelable {
         this.username = username;
     }
 
+    /**
+     *
+     * @return
+     * The imageUrl
+     */
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
+    /**
+     *
+     * @param imageUrl
+     * The image_url
+     */
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeString(displayname);
-//        dest.writeString(username);
-//        dest.writeString(creationIp);
-//    }
-//
-//    public static final Creator<ExpertPlayer> CREATOR = new Creator<ExpertPlayer>() {
-//        @Override
-//        public ExpertPlayer createFromParcel(Parcel source) {
-//            return null;
-//        }
-//
-//        @Override
-//        public ExpertPlayer[] newArray(int size) {
-//            return new ExpertPlayer[0];
-//        }
-//    };
 
     @Override
     public int describeContents() {
@@ -103,18 +160,26 @@ public class ExpertPlayer implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.userId);
+        dest.writeString(this.description);
+        dest.writeValue(this.isFollow);
+        dest.writeString(this.status);
         dest.writeString(this.displayname);
-        dest.writeString(this.creationIp);
         dest.writeString(this.username);
+        dest.writeString(this.imageUrl);
     }
 
     public ExpertPlayer() {
     }
 
     private ExpertPlayer(Parcel in) {
+        this.userId = in.readString();
+        this.description = in.readString();
+        this.isFollow = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.status = in.readString();
         this.displayname = in.readString();
-        this.creationIp = in.readString();
         this.username = in.readString();
+        this.imageUrl = in.readString();
     }
 
     public static final Creator<ExpertPlayer> CREATOR = new Creator<ExpertPlayer>() {

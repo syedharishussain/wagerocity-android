@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
     >
 
     <RelativeLayout
@@ -12,31 +14,35 @@
         android:layout_marginBottom="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:id="@+id/imageview_expert_user"
             android:background="@drawable/user1"
             android:layout_marginLeft="20dp"
             />
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:id="@+id/textview_experts_cell_user_name"
             android:text="Saad Yusuf"
             android:layout_toRightOf="@id/imageview_expert_user"
             android:layout_toEndOf="@id/imageview_expert_user"
-            android:layout_marginLeft="20dp"
+            android:minLines="2"
+            android:maxLines="2"
+            android:layout_marginLeft="10dp"
             android:textSize="10pt"
             />
 
         <Button
-            android:id="@+id/button_experts_cell_follow_unfollow"
+            android:id="@+id/button_experts_cell_Picks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/blue_button_small"
-            android:text="FOLLOW"
+            android:text="PICKS"
             android:textColor="#ffffff"
-
+            android:gravity="center"
+            android:layout_alignTop="@id/imageview_expert_user"
+            android:layout_alignBottom="@id/imageview_expert_user"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -48,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/imageview_expert_user"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:text="@string/lorem_ipsum"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"

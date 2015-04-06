@@ -19,8 +19,8 @@
 
         <ImageView
             android:id="@+id/imageview_leaderboard_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:background="@drawable/user1"
             android:layout_marginLeft="10dp"
             />
@@ -67,7 +67,7 @@
                 android:id="@+id/button_leaderboard_user_buy_picks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="BUY PICKS"
+                android:text="PICKS"
                 android:background="#00ffffff"
                 android:textColor="#ffffffff"
                 android:layout_centerVertical="true"

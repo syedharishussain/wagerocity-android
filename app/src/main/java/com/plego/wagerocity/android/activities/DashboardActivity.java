@@ -1,13 +1,12 @@
 package com.plego.wagerocity.android.activities;
 
-import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.GamesListAdapter;
@@ -33,6 +32,7 @@ import com.plego.wagerocity.constants.StringConstants;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -54,7 +54,7 @@ public class DashboardActivity
         BetOnGameFragment.OnBetOnGameFragmentInteractionListener,
         MyPicksFragment.OnMyPicksFragmentInteractionListener {
 
-    ProgressDialog progress;
+    SweetAlertDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,23 +125,23 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_leaderboards_list_fragment))) {
 
-            final MaterialDialog progress = new MaterialDialog.Builder(this)
-                    .title(getString(R.string.loading))
-                    .content(getString(R.string.please_wait))
-                    .progress(true, 0)
-                    .show();
+            pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Loading");
+            pDialog.setCancelable(false);
+            pDialog.show();
 
             RestClient restClient = new RestClient();
             restClient.getApiService().getLeaderboards(new Callback<ArrayList<LeaderboardPlayer>>() {
                 @Override
                 public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, retrofit.client.Response response) {
-                    progress.dismiss();
+                    pDialog.dismiss();
                     replaceFragment(LeaderBoardListFragment.newInstance(leaderboardPlayers), StringConstants.TAG_FRAG_LEADERBOARD_LIST);
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    progress.dismiss();
+                    pDialog.dismiss();
                     Log.e("getLeaderboards", String.valueOf(error));
                 }
             });
@@ -149,23 +149,23 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
 
-            final MaterialDialog progress = new MaterialDialog.Builder(this)
-                    .title(getString(R.string.loading))
-                    .content(getString(R.string.please_wait))
-                    .progress(true, 0)
-                    .show();
+            pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Loading");
+            pDialog.setCancelable(false);
+            pDialog.show();
 
             RestClient restClient = new RestClient();
             restClient.getApiService().getAllPools(new Callback<ArrayList<Pool>>() {
                 @Override
                 public void success(ArrayList<Pool> pools, retrofit.client.Response response) {
-                    progress.dismiss();
+                    pDialog.dismiss();
                     replaceFragment(PoolsFragment.newInstance(pools), StringConstants.TAG_FRAG_POOLS_LIST);
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    progress.dismiss();
+                    pDialog.dismiss();
                     Log.e("getAllPools", String.valueOf(error));
                 }
 
@@ -174,25 +174,25 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_experts_fragment))) {
 
-            final MaterialDialog progress = new MaterialDialog.Builder(this)
-                    .title(getString(R.string.loading))
-                    .content(getString(R.string.please_wait))
-                    .progress(true, 0)
-                    .show();
+            pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Loading");
+            pDialog.setCancelable(false);
+            pDialog.show();
 
             RestClient restClient = new RestClient();
             restClient.getApiService().getExperts(new WagerocityPref(this).user().getUserId(), new Callback<ArrayList<ExpertPlayer>>() {
                 @Override
                 public void success(ArrayList<ExpertPlayer> expertPlayers, retrofit.client.Response response) {
 
-                    progress.dismiss();
+                    pDialog.dismiss();
 
                     replaceFragment(ExpertsFragment.newInstance(expertPlayers), StringConstants.TAG_FRAG_EXPERTS_LIST);
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    progress.dismiss();
+                    pDialog.dismiss();
 
                 }
             });
@@ -200,24 +200,24 @@ public class DashboardActivity
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
-            final MaterialDialog progress = new MaterialDialog.Builder(this)
-                    .title(getString(R.string.loading))
-                    .content(getString(R.string.please_wait))
-                    .progress(true, 0)
-                    .show();
+            pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Loading");
+            pDialog.setCancelable(false);
+            pDialog.show();
 
             RestClient restClient = new RestClient();
             restClient.getApiService().getMyPicks(new WagerocityPref(this).user().getUserId(), new Callback<ArrayList<Pick>>() {
                 @Override
                 public void success(ArrayList<Pick> picks, Response response) {
-                    progress.dismiss();
+                    pDialog.dismiss();
 
                     replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    progress.dismiss();
+                    pDialog.dismiss();
                 }
             });
         }

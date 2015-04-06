@@ -1,14 +1,11 @@
 package com.plego.wagerocity.android.activities;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.SessionState;
@@ -18,21 +15,18 @@ import com.plego.wagerocity.R;
 import com.facebook.Session;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.RestClient;
-import com.plego.wagerocity.android.model.ServiceModel;
 import com.plego.wagerocity.android.model.User;
 import com.plego.wagerocity.utils.AndroidUtils;
-
-import java.util.Arrays;
-
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
-import retrofit.http.Query;
 import roboguice.activity.RoboFragmentActivity;
 
 public class LoginActivity extends RoboFragmentActivity {
 
     private static final String TAG = "LoginActivity";
     private UiLifecycleHelper uiHelper;
+    SweetAlertDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +80,11 @@ public class LoginActivity extends RoboFragmentActivity {
         if (state.isOpened()) {
             Log.e(TAG, "Logged in...");
 
-            final MaterialDialog progress = new MaterialDialog.Builder(this)
-                    .title(getString(R.string.loading))
-                    .content(getString(R.string.please_wait))
-                    .progress(true, 0)
-                    .show();
+            pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Loading");
+            pDialog.setCancelable(false);
+            pDialog.show();
 
             Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
@@ -108,11 +102,10 @@ public class LoginActivity extends RoboFragmentActivity {
                         public void success(User user, retrofit.client.Response response) {
                             pref.setUser(user);
 
-                            progress.dismiss();
-
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+                                    pDialog.dismiss();
                                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                                     finish();
                                 }

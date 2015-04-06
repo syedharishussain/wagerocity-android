@@ -66,5 +66,13 @@ public interface ServiceModel {
 
     @GET("/getMyPicks")
     public void getMyPicks(@Query("userId") String userId, Callback<ArrayList<Pick>> callback);
+
+    @Multipart
+    @POST("/followExpert")
+    public void followExpert(@Part("userId") String userId, @Part("expertID") String expertID, Callback<Response> callback);
+
+    @Multipart
+    @POST("/unfollowExpert")
+    public void unfollowExpert(@Part("userId") String userId, @Part("expertID") String expertID, Callback<Response> callback);
 }
 

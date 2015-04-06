@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.adapters.ExpertPlayerListAdapter;
 import com.plego.wagerocity.android.model.ExpertPlayer;
 
 import java.util.ArrayList;
@@ -64,32 +65,9 @@ public class ExpertsFragment extends Fragment {
 
         final ListView expertsListView = (ListView) view.findViewById(R.id.listview_experts);
 
-        ArrayList<String> playerNames = new ArrayList();
+        ExpertPlayerListAdapter expertPlayerListAdapter = new ExpertPlayerListAdapter(this.expertPlayers, view.getContext());
 
-        for (ExpertPlayer expertPlayer: expertPlayers) {
-            playerNames.add(expertPlayer.getUsername());
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
-                R.layout.layout_cell_experts, R.id.textview_experts_cell_user_name, playerNames);
-
-        expertsListView.setAdapter(adapter);
-
-        expertsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // ListView Clicked item index
-                int itemPosition = position;
-
-                // ListView Clicked item value
-                String itemValue = (String) expertsListView.getItemAtPosition(position);
-
-                // Show Alert
-                Toast.makeText(view.getContext(),
-                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
+        expertsListView.setAdapter(expertPlayerListAdapter);
     }
 
     @Override

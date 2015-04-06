@@ -1,6 +1,7 @@
 package com.plego.wagerocity.android.fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.adapters.SportsListAdapter;
 import com.plego.wagerocity.android.model.Game;
@@ -22,6 +22,7 @@ import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -93,18 +94,19 @@ public class SportsListFragment extends Fragment {
 
                 Log.e("Selected Sports", sportsName);
 
-                final MaterialDialog progress = new MaterialDialog.Builder(getActivity())
-                        .title(getString(R.string.loading_games))
-                        .content(getString(R.string.please_wait))
-                        .progress(true, 0)
-                        .show();
+                final SweetAlertDialog pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
+                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                pDialog.setTitleText(getString(R.string.loading_games));
+                pDialog.setContentText(getString(R.string.please_wait));
+                pDialog.setCancelable(false);
+                pDialog.show();
 
                 RestClient restClient = new RestClient();
                 restClient.getApiService().getGames(AndroidUtils.getSportsNameForParam(sportsName), new Callback<ArrayList<Game>>() {
                     @Override
                     public void success(ArrayList<Game> games, Response response) {
 
-                        progress.dismiss();
+                        pDialog.dismiss();
                         
                         if (games.size() > 0) {
 
@@ -112,23 +114,26 @@ public class SportsListFragment extends Fragment {
                             mListener.onSportsListFragmentInteraction(uri, games, AndroidUtils.getSportsNameForParam(sportsName));
                             
                         } else {
-                            new MaterialDialog.Builder(getActivity())
-                                    .title(getString(R.string.no_games_found))
-                                    .content("There are no " + sportsName + " games going on for now. Please come back later")
-                                    .positiveText(getString(R.string.ok))
-                                    .show();
+
+                            SweetAlertDialog pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE);
+                            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                            pDialog.setTitleText(getString(R.string.no_games_found));
+                            pDialog.setContentText("There are no " + sportsName + " games going on for now. Please come back later");
+                            pDialog.setCancelable(true);
+                            pDialog.show();
                         }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        progress.dismiss();
+                        pDialog.dismiss();
 
-                        new MaterialDialog.Builder(getActivity())
-                                .title(getString(R.string.no_games_found))
-                                .content("There are no " + sportsName + " games going on for now. Please come back later")
-                                .positiveText(getString(R.string.ok))
-                                .show();
+                        SweetAlertDialog pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE);
+                        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                        pDialog.setTitleText(getString(R.string.no_games_found));
+                        pDialog.setContentText("There are no " + sportsName + " games going on for now. Please come back later");
+                        pDialog.setCancelable(true);
+                        pDialog.show();
                     }
                 });
             }

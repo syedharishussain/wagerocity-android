@@ -50,6 +50,7 @@ public class ExpertPlayer implements Parcelable {
      * The description
      */
     public String getDescription() {
+        if (description == null) return "";
         return description;
     }
 
@@ -104,7 +105,9 @@ public class ExpertPlayer implements Parcelable {
      * The displayname
      */
     public String getDisplayname() {
-        return displayname;
+        if (displayname == null && username == null) return "";
+        else if (displayname == null && username != null) return username;
+        else return displayname;
     }
 
     /**

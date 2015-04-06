@@ -2,6 +2,7 @@ package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +12,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Game;
 
 import java.util.List;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by haris on 29/03/15.
@@ -93,11 +93,12 @@ public class GamesListAdapter extends BaseAdapter {
 
                     } else {
 
-                        new MaterialDialog.Builder(context)
-                                .title(context.getString(R.string.no_betting_information))
-                                .content(context.getString(R.string.no_betting_information_message))
-                                .positiveText(context.getString(R.string.ok))
-                                .show();
+                        SweetAlertDialog pDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+                        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                        pDialog.setTitleText(context.getString(R.string.no_betting_information));
+                        pDialog.setContentText(context.getString(R.string.no_betting_information_message));
+                        pDialog.setCancelable(true);
+                        pDialog.show();
 
                     }
                 }

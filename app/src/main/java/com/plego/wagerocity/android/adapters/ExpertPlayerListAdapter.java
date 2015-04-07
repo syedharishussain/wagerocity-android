@@ -1,6 +1,8 @@
 package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +15,36 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.ExpertPlayer;
+import com.plego.wagerocity.android.model.Pick;
+import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by haris on 06/04/15.
  */
 public class ExpertPlayerListAdapter extends BaseAdapter {
 
+    private OnExpertPlayerListAdapterFragmentInteractionListener mListner;
     private ArrayList<ExpertPlayer> expertPlayers;
     private Context context;
 
     public ExpertPlayerListAdapter(ArrayList<ExpertPlayer> expertPlayers, Context context) {
         this.expertPlayers = expertPlayers;
         this.context = context;
+
+        try {
+            mListner = (OnExpertPlayerListAdapterFragmentInteractionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnGamesListAdapterFragmentInteractionListener");
+        }
     }
 
     @Override
@@ -45,7 +63,7 @@ public class ExpertPlayerListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
         if (convertView == null) {
@@ -66,6 +84,33 @@ public class ExpertPlayerListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
+                    ExpertPlayer player = expertPlayers.get(position);
+
+                    final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                            "Loading",
+                            null,
+                            SweetAlertDialog.PROGRESS_TYPE,
+                            context
+                    );
+
+                    RestClient restClient = new RestClient();
+                    restClient.getApiService().getMyPicks(player.getUserId(), new Callback<ArrayList<Pick>>() {
+                        @Override
+                        public void success(ArrayList<Pick> picks, Response response) {
+                            pDialog.dismiss();
+
+                            Uri uri = Uri.parse(context.getString(R.string.uri_open_my_picks_fragment));
+                            mListner.onExpertPlayerListAdapterFragmentInteraction(uri, picks);
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            pDialog.dismiss();
+
+                            AndroidUtils.showErrorDialog(error, context);
+
+                        }
+                    });
 
                 }
             });
@@ -83,8 +128,8 @@ public class ExpertPlayerListAdapter extends BaseAdapter {
             viewHolder.textViewDisc.setText(expertPlayer.getDescription());
 
             DisplayImageOptions options = new DisplayImageOptions.Builder()
-                    .cacheInMemory(true) // default
-                    .cacheOnDisk(true) // default
+                    .cacheInMemory(true)    // default
+                    .cacheOnDisk(true)      // default
                     .showImageOnFail(R.drawable.user1)
                     .showImageForEmptyUri(R.drawable.user1)
                     .build();
@@ -102,5 +147,10 @@ public class ExpertPlayerListAdapter extends BaseAdapter {
         ImageView imageViewUserImage;
         Button button;
 
+    }
+
+    public interface OnExpertPlayerListAdapterFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onExpertPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks);
     }
 }

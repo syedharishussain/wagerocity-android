@@ -74,5 +74,18 @@ public interface ServiceModel {
     @Multipart
     @POST("/unfollowExpert")
     public void unfollowExpert(@Part("userId") String userId, @Part("expertID") String expertID, Callback<Response> callback);
+
+    @Multipart
+    @POST("/joinPool")
+    public void joinPool(@Part("userId") String userId, @Part("poolId") String poolId, Callback<ArrayList<Pool>> callback);
+
+    @Multipart
+    @POST("/unjoinPool")
+    public void unjoinPool(@Part("userId") String userId, @Part("poolId") String poolId, Callback<ArrayList<Pool>> callback);
+
+    @GET("/getMyPools")
+    public void getMyPools(@Query("userId") String userId, Callback<ArrayList<Pool>> callback);
+
+
 }
 

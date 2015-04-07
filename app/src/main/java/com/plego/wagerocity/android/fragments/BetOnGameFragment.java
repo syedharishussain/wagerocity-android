@@ -32,6 +32,7 @@ import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -388,6 +389,13 @@ public class BetOnGameFragment extends Fragment {
 
                 Log.e("Dialog Output", betAmountEditText.getText().toString());
 
+                final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                        getString(R.string.loading),
+                        null,
+                        SweetAlertDialog.PROGRESS_TYPE,
+                        getActivity()
+                );
+
                 RestClient restClient = new RestClient();
 
                 restClient.getApiService().betOnGames(
@@ -406,13 +414,15 @@ public class BetOnGameFragment extends Fragment {
                         new Callback<ArrayList<Pick>>() {
                             @Override
                             public void success(ArrayList<Pick> picks, Response response) {
+                                pDialog.dismiss();
                                 Uri uri = Uri.parse(getString(R.string.uri_open_my_picks_fragment));
                                 mListener.onBetOnGameFragmentInteraction(uri, picks);
                             }
 
                             @Override
                             public void failure(RetrofitError error) {
-
+                                pDialog.dismiss();
+                                AndroidUtils.showErrorDialog(error, getActivity());
                             }
                         }
                 );

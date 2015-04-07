@@ -1,10 +1,12 @@
 package com.plego.wagerocity.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,6 +21,9 @@ import junit.framework.Assert;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.RetrofitError;
 
 import static java.lang.String.valueOf;
 
@@ -138,5 +143,38 @@ public class AndroidUtils {
             result = Math.ceil(value - percentageBasedValue);
         }
         return result.intValue();
+    }
+
+    public static void showErrorDialog (RetrofitError error, Context context) {
+
+        Boolean isTimedOut = (error.getKind() == RetrofitError.Kind.NETWORK);
+        String errorTitle = isTimedOut ? "Error!" : "Error!";
+        String errorMessage = isTimedOut ?
+                "Fetching results taking too much time. Please try again later." :
+                (error.getLocalizedMessage() != null) ?
+                        error.getLocalizedMessage() :
+                        (error.getMessage() != null)  ?
+                                error.getMessage() :
+                                "Something went wrong! Please try again later" ;
+
+        SweetAlertDialog errorDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+        errorDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        errorDialog.setTitleText(errorTitle);
+        errorDialog.setContentText(errorMessage);
+        errorDialog.setCancelable(true);
+        errorDialog.show();
+
+    }
+
+    public static SweetAlertDialog showDialog (String title, String message, int dialogType, Context context) {
+        SweetAlertDialog pDialog = new SweetAlertDialog(context, dialogType);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText(title);
+        if ( message != null ) pDialog.setContentText(message);
+        else pDialog.setContentText(context.getString(R.string.please_wait)) ;
+        pDialog.setCancelable(true);
+        pDialog.show();
+
+        return pDialog;
     }
 }

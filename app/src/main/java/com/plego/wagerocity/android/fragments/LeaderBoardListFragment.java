@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.adapters.LeaderboardPlayersListAdapter;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
 
 import java.util.ArrayList;
@@ -84,32 +85,9 @@ public class LeaderBoardListFragment extends Fragment {
 
         final ListView leaderboardListView = (ListView) view.findViewById(R.id.listview_leaderboards);
 
-        ArrayList<String> playerNames = new ArrayList();
+        LeaderboardPlayersListAdapter leaderboardPlayersListAdapter = new LeaderboardPlayersListAdapter(this.leaderboardPlayers, getActivity());
 
-        for (LeaderboardPlayer leaderboardPlayer : leaderboardPlayers) {
-            playerNames.add(leaderboardPlayer.getUsername());
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
-                R.layout.layout_cell_leaderboard_users, R.id.textview_leaderboard_user_name, playerNames);
-
-        leaderboardListView.setAdapter(adapter);
-
-        leaderboardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // ListView Clicked item index
-                int itemPosition     = position;
-
-                // ListView Clicked item value
-                String  itemValue    = (String) leaderboardListView.getItemAtPosition(position);
-
-                // Show Alert
-                Toast.makeText(view.getContext(),
-                        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
+        leaderboardListView.setAdapter(leaderboardPlayersListAdapter);
 
     }
 

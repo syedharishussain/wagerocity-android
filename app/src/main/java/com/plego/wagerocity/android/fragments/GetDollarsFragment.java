@@ -19,6 +19,7 @@ import com.plego.wagerocity.android.model.User;
 import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -35,11 +36,6 @@ public class GetDollarsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnGetDollarsFragmentInteractionListener mListener;
 
@@ -56,7 +52,6 @@ public class GetDollarsFragment extends Fragment {
         GetDollarsFragment fragment = new GetDollarsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,8 +64,7 @@ public class GetDollarsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+//            mParam1 = getArguments().getString(ARG_PARAM1);
         }
     }
 
@@ -78,32 +72,12 @@ public class GetDollarsFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final WagerocityPref pref = new WagerocityPref(getActivity());
-        final User user = pref.user();
-        final RestClient restClient = new RestClient();
-
         Button get2000DollarsButton = (Button) view.findViewById(R.id.button_get_dollars_2000);
         get2000DollarsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                restClient.getApiService().buyCredits(user.getUserId(), (float) 2000.00, new Callback<User>() {
-                    @Override
-                    public void success(User user, Response response) {
-                        pref.setUser(user);
-                        AndroidUtils.updateStats(getActivity());
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-
-                Toast.makeText(view.getContext(), "In App Purchase Not Implemented", Toast.LENGTH_LONG).show();
-
-                Uri uri = Uri.parse("Open Game Fragment");
-                mListener.onGetDollarsFragmentInteraction(uri);
+                buyCreditsAPI((float)2000.0);
             }
         });
 
@@ -112,23 +86,7 @@ public class GetDollarsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                restClient.getApiService().buyCredits(user.getUserId(), (float) 15000.00, new Callback<User>() {
-                    @Override
-                    public void success(User user, Response response) {
-                        pref.setUser(user);
-                        AndroidUtils.updateStats(getActivity());
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-
-                Toast.makeText(view.getContext(), "In App Purchase Not Implemented", Toast.LENGTH_LONG).show();
-
-                Uri uri = Uri.parse("Open Game Fragment");
-                mListener.onGetDollarsFragmentInteraction(uri);
+                buyCreditsAPI((float)15000.0);
             }
         });
 
@@ -137,23 +95,7 @@ public class GetDollarsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                restClient.getApiService().buyCredits(user.getUserId(), (float) 100000.00, new Callback<User>() {
-                    @Override
-                    public void success(User user, Response response) {
-                        pref.setUser(user);
-                        AndroidUtils.updateStats(getActivity());
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-
-                Toast.makeText(view.getContext(), "In App Purchase Not Implemented", Toast.LENGTH_LONG).show();
-
-                Uri uri = Uri.parse("Open Game Fragment");
-                mListener.onGetDollarsFragmentInteraction(uri);
+                buyCreditsAPI((float)100000.0);
             }
         });
     }
@@ -187,6 +129,34 @@ public class GetDollarsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void buyCreditsAPI (Float credits) {
+
+        final WagerocityPref pref = new WagerocityPref(getActivity());
+        final User user = pref.user();
+
+        final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                getString(R.string.loading),
+                null,
+                SweetAlertDialog.PROGRESS_TYPE,
+                getActivity()
+        );
+
+        new RestClient().getApiService().buyCredits(user.getUserId(), credits, new Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                pDialog.dismiss();
+                pref.setUser(user);
+                AndroidUtils.updateStats(getActivity());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                pDialog.dismiss();
+                AndroidUtils.showErrorDialog(error, getActivity());
+            }
+        });
     }
 
     /**

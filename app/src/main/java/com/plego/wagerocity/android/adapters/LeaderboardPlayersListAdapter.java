@@ -1,6 +1,7 @@
 package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,20 +16,36 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.ExpertPlayer;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
+import com.plego.wagerocity.android.model.Pick;
+import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by haris on 06/04/15.
  */
 public class LeaderboardPlayersListAdapter extends BaseAdapter {
 
+    private OnLeaderboardPlayerListAdapterFragmentInteractionListener mListner;
     private ArrayList<LeaderboardPlayer> leaderboardPlayers;
     private Context context;
 
     public LeaderboardPlayersListAdapter (ArrayList<LeaderboardPlayer> leaderboardPlayers, Context context) {
         this.leaderboardPlayers = leaderboardPlayers;
         this.context = context;
+
+        try {
+            mListner = (OnLeaderboardPlayerListAdapterFragmentInteractionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnGamesListAdapterFragmentInteractionListener");
+        }
     }
 
     @Override
@@ -47,7 +64,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
         if (convertView == null) {
@@ -68,6 +85,33 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
+                    LeaderboardPlayer player = leaderboardPlayers.get(position);
+
+                    final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                            "Loading",
+                            null,
+                            SweetAlertDialog.PROGRESS_TYPE,
+                            context
+                    );
+
+                    RestClient restClient = new RestClient();
+                    restClient.getApiService().getMyPicks(player.getUsrId(), new Callback<ArrayList<Pick>>() {
+                        @Override
+                        public void success(ArrayList<Pick> picks, Response response) {
+
+                            pDialog.dismiss();
+
+                            Uri uri = Uri.parse(context.getString(R.string.uri_open_my_picks_fragment));
+                            mListner.onLeaderboardPlayerListAdapterFragmentInteraction(uri, picks);
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            pDialog.dismiss();
+
+                            AndroidUtils.showErrorDialog(error, context);
+                        }
+                    });
 
                 }
             });
@@ -104,6 +148,11 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
         ImageView imageViewUserImage;
         Button button;
 
+    }
+
+    public interface OnLeaderboardPlayerListAdapterFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onLeaderboardPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks);
     }
 
 }

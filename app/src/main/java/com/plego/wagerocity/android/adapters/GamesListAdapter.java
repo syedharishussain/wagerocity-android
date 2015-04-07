@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Game;
+import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.List;
 
@@ -93,12 +94,12 @@ public class GamesListAdapter extends BaseAdapter {
 
                     } else {
 
-                        SweetAlertDialog pDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
-                        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-                        pDialog.setTitleText(context.getString(R.string.no_betting_information));
-                        pDialog.setContentText(context.getString(R.string.no_betting_information_message));
-                        pDialog.setCancelable(true);
-                        pDialog.show();
+                        AndroidUtils.showDialog(
+                                context.getString(R.string.no_betting_information),
+                                context.getString(R.string.no_betting_information_message),
+                                SweetAlertDialog.ERROR_TYPE,
+                                context
+                                );
 
                     }
                 }

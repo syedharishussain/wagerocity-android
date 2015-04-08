@@ -86,6 +86,5 @@ public interface ServiceModel {
     @GET("/getMyPools")
     public void getMyPools(@Query("userId") String userId, Callback<ArrayList<Pool>> callback);
 
-
 }
 

@@ -12,6 +12,7 @@ import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.ExpertPlayerListAdapter;
 import com.plego.wagerocity.android.adapters.GamesListAdapter;
 import com.plego.wagerocity.android.adapters.LeaderboardPlayersListAdapter;
+import com.plego.wagerocity.android.adapters.PoolsListAdapter;
 import com.plego.wagerocity.android.fragments.BetOnGameFragment;
 import com.plego.wagerocity.android.fragments.DashboardFragment;
 import com.plego.wagerocity.android.fragments.ExpertsFragment;
@@ -57,7 +58,8 @@ public class DashboardActivity
         BetOnGameFragment.OnBetOnGameFragmentInteractionListener,
         MyPicksFragment.OnMyPicksFragmentInteractionListener,
         LeaderboardPlayersListAdapter.OnLeaderboardPlayerListAdapterFragmentInteractionListener,
-        ExpertPlayerListAdapter.OnExpertPlayerListAdapterFragmentInteractionListener {
+        ExpertPlayerListAdapter.OnExpertPlayerListAdapterFragmentInteractionListener,
+        PoolsListAdapter.OnPoolsListAdapterFragmentInteractionListener {
 
     SweetAlertDialog pDialog;
 
@@ -134,7 +136,7 @@ public class DashboardActivity
                     getString(R.string.loading),
                     null,
                     SweetAlertDialog.PROGRESS_TYPE,
-                    this
+                    DashboardActivity.this
             );
 
             RestClient restClient = new RestClient();
@@ -162,7 +164,7 @@ public class DashboardActivity
                     getString(R.string.loading),
                     null,
                     SweetAlertDialog.PROGRESS_TYPE,
-                    this
+                     DashboardActivity.this
             );
 
             RestClient restClient = new RestClient();
@@ -178,7 +180,7 @@ public class DashboardActivity
                     pDialog.dismiss();
                     Log.e("getAllPools", String.valueOf(error));
 
-                    AndroidUtils.showErrorDialog(error, getApplicationContext());
+                    AndroidUtils.showErrorDialog(error, DashboardActivity.this);
                 }
 
             });
@@ -190,7 +192,7 @@ public class DashboardActivity
                     getString(R.string.loading),
                     null,
                     SweetAlertDialog.PROGRESS_TYPE,
-                    this
+                      DashboardActivity.this
             );
 
             RestClient restClient = new RestClient();
@@ -207,7 +209,7 @@ public class DashboardActivity
                 public void failure(RetrofitError error) {
                     pDialog.dismiss();
 
-                    AndroidUtils.showErrorDialog(error, getApplicationContext());
+                    AndroidUtils.showErrorDialog(error, DashboardActivity.this);
 
                 }
             });
@@ -220,7 +222,7 @@ public class DashboardActivity
                     getString(R.string.loading),
                     null,
                     SweetAlertDialog.PROGRESS_TYPE,
-                    this
+                     DashboardActivity.this
             );
 
             RestClient restClient = new RestClient();
@@ -236,7 +238,7 @@ public class DashboardActivity
                 public void failure(RetrofitError error) {
                     pDialog.dismiss();
 
-                    AndroidUtils.showErrorDialog(error, getApplicationContext());
+                    AndroidUtils.showErrorDialog(error, DashboardActivity.this);
                 }
             });
         }
@@ -268,9 +270,9 @@ public class DashboardActivity
     }
 
     @Override
-    public void onPoolsFragmentInteraction(Uri uri) {
+    public void onPoolsFragmentInteraction(Uri uri, ArrayList<Pool> pools) {
         if (uri.toString().equals(getString(R.string.uri_open_my_pools_fragment))) {
-            replaceFragment(new MyPoolsFragment(), StringConstants.TAG_FRAG_MY_POOLS_LIST);
+            replaceFragment(MyPoolsFragment.newInstance(pools), StringConstants.TAG_FRAG_MY_POOLS_LIST);
         }
     }
 
@@ -328,5 +330,10 @@ public class DashboardActivity
         if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
             replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
         }
+    }
+
+    @Override
+    public void onPoolsListAdapterFragmentInteraction(Uri uri, ArrayList<Pool> pools) {
+
     }
 }

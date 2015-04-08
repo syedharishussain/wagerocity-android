@@ -26,6 +26,7 @@ public class LoginActivity extends RoboFragmentActivity {
 
     private static final String TAG = "LoginActivity";
     private UiLifecycleHelper uiHelper;
+    SweetAlertDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +80,11 @@ public class LoginActivity extends RoboFragmentActivity {
         if (state.isOpened()) {
             Log.e(TAG, "Logged in...");
 
-            final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+            pDialog = AndroidUtils.showDialog(
                     "Loading",
                     null,
                     SweetAlertDialog.PROGRESS_TYPE,
-                    this
+                    LoginActivity.this
             );
 
             Request.newMeRequest(session, new Request.GraphUserCallback() {

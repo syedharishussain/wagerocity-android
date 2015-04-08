@@ -15,9 +15,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.adapters.PoolsListAdapter;
 import com.plego.wagerocity.android.model.Pool;
+import com.plego.wagerocity.android.model.RestClient;
 
 import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,43 +71,31 @@ public class PoolsFragment extends Fragment {
         showMyPoolsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse(getString(R.string.uri_open_my_pools_fragment));
-                mListener.onPoolsFragmentInteraction(uri);
+
+                RestClient restClient = new RestClient();
+                restClient.getApiService().getMyPools(new WagerocityPref(getActivity()).user().getUserId(), new Callback<ArrayList<Pool>>() {
+                    @Override
+                    public void success(ArrayList<Pool> pools, Response response) {
+
+                        Uri uri = Uri.parse(getString(R.string.uri_open_my_pools_fragment));
+                        mListener.onPoolsFragmentInteraction(uri, pools);
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
             }
         });
 
         final ListView poolsListView = (ListView) view.findViewById(R.id.listview_pools);
 
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
+        PoolsListAdapter poolsListAdapter = new PoolsListAdapter(pools, getActivity(), false);
 
-        ArrayList<String> poolNames = new ArrayList();
-
-        for (Pool pool : pools) {
-            poolNames.add(pool.getName());
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
-                R.layout.layout_cell_pools, R.id.textview_pools_cell_name, poolNames);
-
-        poolsListView.setAdapter(adapter);
-
-        poolsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // ListView Clicked item index
-                int itemPosition = position;
-
-                // ListView Clicked item value
-                String itemValue = (String) poolsListView.getItemAtPosition(position);
-
-                // Show Alert
-                Toast.makeText(view.getContext(),
-                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
+        poolsListView.setAdapter(poolsListAdapter);
 
     }
 
@@ -119,13 +114,6 @@ public class PoolsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_pools, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onPoolsFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -157,7 +145,7 @@ public class PoolsFragment extends Fragment {
      */
     public interface OnPoolsFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onPoolsFragmentInteraction(Uri uri);
+        public void onPoolsFragmentInteraction(Uri uri, ArrayList<Pool> pools);
     }
 
 }

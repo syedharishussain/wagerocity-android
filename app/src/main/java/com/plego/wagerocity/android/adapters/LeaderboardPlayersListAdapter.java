@@ -77,6 +77,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.layout_cell_leaderboard_users, parent, false);
 
             viewHolder.textViewPlayerName = (TextView) convertView.findViewById(R.id.textview_leaderboard_user_name);
+            viewHolder.textViewPlayeRank = (TextView) convertView.findViewById(R.id.textView_leaderboard_cell_rank);
             viewHolder.textViewUserStats = (TextView) convertView.findViewById(R.id.textview_leaderboard_user_stats);
             viewHolder.imageViewUserImage = (ImageView) convertView.findViewById(R.id.imageview_leaderboard_user);
             viewHolder.button = (Button) convertView.findViewById(R.id.button_leaderboard_user_buy_picks);
@@ -125,8 +126,10 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
         LeaderboardPlayer leaderboardPlayer = this.leaderboardPlayers.get(position);
 
         if (leaderboardPlayer != null) {
+            Integer rank = position + 1;
             viewHolder.textViewPlayerName.setText(leaderboardPlayer.getDisplayname());
             viewHolder.textViewUserStats.setText(leaderboardPlayer.getWinPercentage() + " | " + "$" + leaderboardPlayer.getPoints());
+            viewHolder.textViewPlayeRank.setText(rank.toString());
 
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // default
@@ -144,6 +147,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
 
     class ViewHolder {
         TextView textViewPlayerName;
+        TextView textViewPlayeRank;
         TextView textViewUserStats;
         ImageView imageViewUserImage;
         Button button;

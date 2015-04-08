@@ -14,6 +14,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.adapters.PoolsListAdapter;
+import com.plego.wagerocity.android.model.Pool;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,12 +30,9 @@ import com.plego.wagerocity.R;
 public class MyPoolsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARGS_MY_POOLS = "args_pool";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ArrayList<Pool> pools;
 
     private OnMyPoolsFragmentInteractionListener mListener;
 
@@ -39,16 +40,14 @@ public class MyPoolsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param pools Parameter 1.
      * @return A new instance of fragment MyPoolsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyPoolsFragment newInstance(String param1, String param2) {
+    public static MyPoolsFragment newInstance(ArrayList<Pool> pools) {
         MyPoolsFragment fragment = new MyPoolsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelableArrayList(ARGS_MY_POOLS, pools);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,30 +62,9 @@ public class MyPoolsFragment extends Fragment {
 
         final ListView poolsListView = (ListView) view.findViewById(R.id.listview_my_pools);
 
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
+        PoolsListAdapter poolsListAdapter = new PoolsListAdapter(pools, getActivity(), true);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
-                R.layout.layout_cell_pools, R.id.textview_pools_cell_name, values);
-
-        poolsListView.setAdapter(adapter);
-
-        poolsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // ListView Clicked item index
-                int itemPosition = position;
-
-                // ListView Clicked item value
-                String itemValue = (String) poolsListView.getItemAtPosition(position);
-
-                // Show Alert
-                Toast.makeText(view.getContext(),
-                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
+        poolsListView.setAdapter(poolsListAdapter);
 
     }
 
@@ -94,8 +72,7 @@ public class MyPoolsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            pools = getArguments().getParcelableArrayList(ARGS_MY_POOLS);
         }
     }
 

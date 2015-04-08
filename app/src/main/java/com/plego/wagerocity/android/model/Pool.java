@@ -69,7 +69,7 @@ public class Pool implements Parcelable {
     @Expose
     private String isPaid;
     @Expose
-    private Integer amount;
+    private String amount;
     @SerializedName("min_people")
     @Expose
     private String minPeople;
@@ -475,7 +475,7 @@ public class Pool implements Parcelable {
      * @return
      * The amount
      */
-    public Object getAmount() {
+    public String getAmount() {
         return amount;
     }
 
@@ -484,7 +484,7 @@ public class Pool implements Parcelable {
      * @param amount
      * The amount
      */
-    public void setAmount(Integer amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
@@ -566,7 +566,7 @@ public class Pool implements Parcelable {
         this.dateTime = in.readString();
         this.joinedMembers = in.readString();
         this.isPaid = in.readString();
-        this.amount = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.amount = in.readString();
         this.minPeople = in.readString();
     }
 

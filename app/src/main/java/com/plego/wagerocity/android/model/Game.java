@@ -49,12 +49,46 @@ public class Game implements Parcelable {
     @SerializedName("team_A_logo")
     @Expose
     private String teamALogo;
+
     @SerializedName("team_B_logo")
     @Expose
     private String teamBLogo;
 
+    @Expose
+    private String leagueName;
+
+    @SerializedName("user_info")
+    @Expose
     private User user;
+
+    @SerializedName("bet_info")
+    @Expose
     private Bet bet;
+
+    public String getLeagueName() {
+        return leagueName;
+    }
+
+    public void setLeagueName(String leagueName) {
+        this.leagueName = leagueName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Bet getBet() {
+        return bet;
+    }
+
+    public void setBet(Bet bet) {
+        this.bet = bet;
+    }
+
 
     public String getSportsName() {
         return sportsName;
@@ -343,6 +377,7 @@ public class Game implements Parcelable {
         dest.writeString(this.teamALogo);
         dest.writeString(this.teamBLogo);
         dest.writeString(this.sportsName);
+        dest.writeString(this.leagueName);
     }
 
     public Game() {
@@ -367,6 +402,7 @@ public class Game implements Parcelable {
         this.teamALogo = in.readString();
         this.teamBLogo = in.readString();
         this.sportsName = in.readString();
+        this.leagueName = in.readString();
     }
 
     public static final Creator<Game> CREATOR = new Creator<Game>() {

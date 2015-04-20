@@ -41,17 +41,17 @@
 
         </LinearLayout>
 
-        <!--<TextView-->
-            <!--android:id="@+id/textview_player_games_bet_result"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Won"-->
-            <!--android:layout_alignTop="@+id/linearlayout_player_games_team_b"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginTop="47dp"-->
-            <!--android:textSize="20dp"-->
-            <!---->
-            <!--/>-->
+        <Button
+            android:id="@+id/button_player_games_show_bet"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Buy Bet"
+            android:background="@drawable/blue_button_small"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            />
 
         <LinearLayout
             android:id="@+id/linearlayout_player_games_team_b"

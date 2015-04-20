@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.ExpertPlayer;
+import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
 import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.RestClient;
@@ -36,7 +38,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
     private ArrayList<LeaderboardPlayer> leaderboardPlayers;
     private Context context;
 
-    public LeaderboardPlayersListAdapter (ArrayList<LeaderboardPlayer> leaderboardPlayers, Context context) {
+    public LeaderboardPlayersListAdapter(ArrayList<LeaderboardPlayer> leaderboardPlayers, Context context) {
         this.leaderboardPlayers = leaderboardPlayers;
         this.context = context;
 
@@ -96,23 +98,24 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
                     );
 
                     RestClient restClient = new RestClient();
-                    restClient.getApiService().getMyPicks(player.getUsrId(), new Callback<ArrayList<Pick>>() {
-                        @Override
-                        public void success(ArrayList<Pick> picks, Response response) {
 
-                            pDialog.dismiss();
+                    restClient.getApiService().getGamesOfPlayer(
+                            "638",// player.getUsrId(),
+                            new WagerocityPref(context).user().getUserId(),
+                            new Callback<ArrayList<Game>>() {
+                                @Override
+                                public void success(ArrayList<Game> games, Response response) {
+                                    pDialog.dismiss();
+                                    Uri uri = Uri.parse(context.getString(R.string.uri_open_picks_of_player_fragment));
+                                    mListner.onLeaderboardPlayerListAdapterFragmentInteraction(uri, games);
+                                }
 
-                            Uri uri = Uri.parse(context.getString(R.string.uri_open_my_picks_fragment));
-                            mListner.onLeaderboardPlayerListAdapterFragmentInteraction(uri, picks);
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            pDialog.dismiss();
-
-                            AndroidUtils.showErrorDialog(error, context);
-                        }
-                    });
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    pDialog.dismiss();
+                                    AndroidUtils.showErrorDialog(error, context);
+                                }
+                            });
 
                 }
             });
@@ -156,7 +159,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
 
     public interface OnLeaderboardPlayerListAdapterFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onLeaderboardPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks);
+        public void onLeaderboardPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Game> games);
     }
 
 }

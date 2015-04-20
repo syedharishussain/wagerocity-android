@@ -1,6 +1,5 @@
 package com.plego.wagerocity.android.activities;
 
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +21,7 @@ import com.plego.wagerocity.android.fragments.LeaderBoardListFragment;
 import com.plego.wagerocity.android.fragments.MyPicksFragment;
 import com.plego.wagerocity.android.fragments.MyPoolsFragment;
 import com.plego.wagerocity.android.fragments.NavigationBarFragment;
+import com.plego.wagerocity.android.fragments.PicksOfPlayerFragment;
 import com.plego.wagerocity.android.fragments.PoolsFragment;
 import com.plego.wagerocity.android.fragments.SettingsFragment;
 import com.plego.wagerocity.android.fragments.SportsListFragment;
@@ -61,7 +61,8 @@ public class DashboardActivity
         LeaderboardPlayersListAdapter.OnLeaderboardPlayerListAdapterFragmentInteractionListener,
         ExpertPlayerListAdapter.OnExpertPlayerListAdapterFragmentInteractionListener,
         PoolsListAdapter.OnPoolsListAdapterFragmentInteractionListener,
-SettingsFragment.OnSettingFragmentInteractionListener{
+        SettingsFragment.OnSettingFragmentInteractionListener,
+        PicksOfPlayerFragment.OnPicksOfPlayerFragmentInteractionListener {
 
     SweetAlertDialog pDialog;
 
@@ -163,11 +164,11 @@ SettingsFragment.OnSettingFragmentInteractionListener{
 
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
 
-             pDialog = AndroidUtils.showDialog(
+            pDialog = AndroidUtils.showDialog(
                     getString(R.string.loading),
                     null,
                     SweetAlertDialog.PROGRESS_TYPE,
-                     DashboardActivity.this
+                    DashboardActivity.this
             );
 
             RestClient restClient = new RestClient();
@@ -191,11 +192,11 @@ SettingsFragment.OnSettingFragmentInteractionListener{
 
         if (uri.toString().equals(getString(R.string.uri_open_experts_fragment))) {
 
-              pDialog = AndroidUtils.showDialog(
+            pDialog = AndroidUtils.showDialog(
                     getString(R.string.loading),
                     null,
                     SweetAlertDialog.PROGRESS_TYPE,
-                      DashboardActivity.this
+                    DashboardActivity.this
             );
 
             RestClient restClient = new RestClient();
@@ -221,11 +222,11 @@ SettingsFragment.OnSettingFragmentInteractionListener{
 
         if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
 
-             pDialog = AndroidUtils.showDialog(
+            pDialog = AndroidUtils.showDialog(
                     getString(R.string.loading),
                     null,
                     SweetAlertDialog.PROGRESS_TYPE,
-                     DashboardActivity.this
+                    DashboardActivity.this
             );
 
             RestClient restClient = new RestClient();
@@ -326,9 +327,9 @@ SettingsFragment.OnSettingFragmentInteractionListener{
     }
 
     @Override
-    public void onLeaderboardPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks) {
-        if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
-            replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+    public void onLeaderboardPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Game> games) {
+        if (uri.toString().equals(getString(R.string.uri_open_picks_of_player_fragment))) {
+            replaceFragment(PicksOfPlayerFragment.newInstance(games), StringConstants.TAG_FRAG_PICKS_OF_PLAYER);
         }
     }
 
@@ -346,6 +347,11 @@ SettingsFragment.OnSettingFragmentInteractionListener{
 
     @Override
     public void onSettingFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onPicksOfPlayerFragmentInteraction(Uri uri) {
 
     }
 }

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearlayout_player_games_team_a"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageview_player_games_team_a_flag"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#c8ffffff" />
+
+            <TextView
+                android:id="@+id/textview_player_games_team_a_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:minLines="2"
+                android:maxLines="2"
+                android:scrollHorizontally="false"
+                android:text="California"
+                android:textIsSelectable="false"
+                android:textSize="8pt" />
+
+        </LinearLayout>
+
+        <!--<TextView-->
+            <!--android:id="@+id/textview_player_games_bet_result"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Won"-->
+            <!--android:layout_alignTop="@+id/linearlayout_player_games_team_b"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginTop="47dp"-->
+            <!--android:textSize="20dp"-->
+            <!---->
+            <!--/>-->
+
+        <LinearLayout
+            android:id="@+id/linearlayout_player_games_team_b"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageview_player_games_team_b_flag"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#c8ffffff" />
+
+            <TextView
+                android:id="@+id/textview_player_games_team_b_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:minLines="2"
+                android:maxLines="2"
+                android:scrollHorizontally="false"
+                android:text="California"
+                android:textIsSelectable="false"
+                android:textSize="8pt" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageview_player_games_separator_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearlayout_player_games_team_a"
+            android:background="@drawable/seperator" />
+
+        <RelativeLayout
+            android:id="@+id/relativelayout_player_games_point_spread"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageview_player_games_separator_1"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textview_player_games_pointspread_team_a"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="-7 1/2 (+125)"
+                android:textColor="#ffffff"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/textview_player_games_pointspread_team_a"
+                android:layout_alignTop="@id/textview_player_games_pointspread_team_a"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="Point Spread"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textview_player_games_pointspread_team_b"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="right"
+                android:text="+125"
+                android:textColor="#ffffff"
+
+                />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imageview_player_games_separator_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativelayout_player_games_point_spread"
+            android:background="@drawable/seperator" />
+
+        <RelativeLayout
+            android:id="@+id/relativelayout_player_games_money_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageview_player_games_separator_2"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textview_player_games_money_line_team_a"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="+125"
+                android:textColor="#ffffff"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/textview_player_games_money_line_team_a"
+                android:layout_alignTop="@id/textview_player_games_money_line_team_a"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="Money Line"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textview_player_games_money_line_team_b"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="+125"
+                android:gravity="right"
+                android:textColor="#ffffff"
+
+                />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imageview_player_games_separator_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativelayout_player_games_money_line"
+            android:background="@drawable/seperator" />
+
+        <RelativeLayout
+            android:id="@+id/relativelayout_player_games_over_under"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/imageview_player_games_separator_3"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textview_player_games_over_team_a"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="+125"
+                android:textColor="#ffffff"
+
+                />
+
+            <TextView
+                android:id="@+id/textview_player_games_over_under"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:maxLines="3"
+                android:minLines="3"
+                android:text="Over \n| 5 |\nUnder"
+                android:textSize="14sp"
+
+                />
+
+            <TextView
+                android:id="@+id/textview_player_games_over_team_b"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="+125"
+                android:gravity="right"
+                android:textColor="#ffffff"
+                />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

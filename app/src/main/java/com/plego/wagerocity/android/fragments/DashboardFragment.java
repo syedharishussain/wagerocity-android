@@ -126,6 +126,15 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        Button getSettingButton = (Button) view.findViewById(R.id.button_get_settings);
+        getSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("Test", getString(R.string.uri_open_setting_fragment));
+                Uri uri = Uri.parse(getString(R.string.uri_open_setting_fragment));
+                mListener.onDashboardFragmentInteraction(uri);
+            }
+        });
     }
 
     @Override

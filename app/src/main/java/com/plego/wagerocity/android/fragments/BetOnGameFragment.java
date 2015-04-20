@@ -86,7 +86,6 @@ public class BetOnGameFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             game = getArguments().getParcelable(ARGS_GAME);
-            game.setBettingValues();
         }
     }
 
@@ -113,7 +112,7 @@ public class BetOnGameFragment extends Fragment {
         ImageView teamFlagB = (ImageView) view.findViewById(R.id.imageview_betongame_team_b_flag);
 
         TextView overUnder = (TextView) view.findViewById(R.id.textview_betongame_over_under);
-        overUnder.setText("Over\n| " + Double.toString(game.getPointA()) + " |\nUnder");
+        overUnder.setText("Over\n| " + game.getTeamAOdd().getTotalMid() + " |\nUnder");
 
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true) // default
@@ -134,23 +133,23 @@ public class BetOnGameFragment extends Fragment {
         Button overTeamA = (Button) view.findViewById(R.id.button_betongame_over_team_a);
         Button overTeamB = (Button) view.findViewById(R.id.button_betongame_over_team_b);
 
-        pointSpreadTeamA.setText(game.getPointSpreadStringA());
-        pointSpreadTeamB.setText(game.getPointSpreadStringB());
+        pointSpreadTeamA.setText(game.getTeamAOdd().getPointSpreadString());
+        pointSpreadTeamB.setText(game.getTeamBOdd().getPointSpreadString());
 
-        moneyLineTeamA.setText(Double.toString(game.getMoneyLineA()));
-        moneyLineTeamB.setText(Double.toString(game.getMoneyLineB()));
+        moneyLineTeamA.setText(AndroidUtils.getSignedOddValue(game.getTeamAOdd().getMoney()));
+        moneyLineTeamB.setText(AndroidUtils.getSignedOddValue(game.getTeamBOdd().getMoney()));
 
-        overTeamA.setText(Double.toString(game.getOverA()));
-        overTeamB.setText(Double.toString(game.getUnderA()));
+        overTeamA.setText(AndroidUtils.getSignedOddValue(game.getTeamAOdd().getOver()));
+        overTeamB.setText(AndroidUtils.getSignedOddValue(game.getTeamAOdd().getUnder()));
 
-        if (game.getMoneyLineA() == 0.0) moneyLineTeamA.setEnabled(false);
-        if (game.getMoneyLineB() == 0.0) moneyLineTeamB.setEnabled(false);
+        if (Double.parseDouble(game.getTeamAOdd().getMoney()) == 0.0) moneyLineTeamA.setEnabled(false);
+        if (Double.parseDouble(game.getTeamBOdd().getMoney()) == 0.0) moneyLineTeamB.setEnabled(false);
 
-        if (game.getPointSpreadA() == 0.0) pointSpreadTeamA.setEnabled(false);
-        if (game.getPointSpreadB() == 0.0) pointSpreadTeamB.setEnabled(false);
+        if (Double.parseDouble(game.getTeamAOdd().getPoint()) == 0.0) pointSpreadTeamA.setEnabled(false);
+        if (Double.parseDouble(game.getTeamBOdd().getPoint()) == 0.0) pointSpreadTeamB.setEnabled(false);
 
-        if (game.getOverA() == 0.0) overTeamA.setEnabled(false);
-        if (game.getUnderA() == 0.0) overTeamB.setEnabled(false);
+        if (Double.parseDouble(game.getTeamAOdd().getOver()) == 0.0) overTeamA.setEnabled(false);
+        if (Double.parseDouble(game.getTeamAOdd().getUnder()) == 0.0) overTeamB.setEnabled(false);
 
         final String teamVsTeam = game.getTeamAFullname() + " vs " + game.getTeamBFullname();
 
@@ -161,9 +160,8 @@ public class BetOnGameFragment extends Fragment {
                 showBettingDialog(
                         teamVsTeam,
                         "Point Spread",
-                        game.getPointSpreadStringA(),
-                        game.getPointSpreadA(),
-                        game.getPointA(),
+                        game.getTeamAOdd().getPointSpreadString(),
+                        Double.parseDouble(game.getTeamAOdd().getPoint()),
                         BetType.BetTypePointSpread,
                         true);
 
@@ -176,9 +174,8 @@ public class BetOnGameFragment extends Fragment {
                 showBettingDialog(
                         teamVsTeam,
                         "Point Spread",
-                        game.getPointSpreadStringB(),
-                        game.getPointSpreadB(),
-                        game.getPointB(),
+                        game.getTeamBOdd().getPointSpreadString(),
+                        Double.parseDouble(game.getTeamBOdd().getPoint()),
                         BetType.BetTypePointSpread,
                         false);
             }
@@ -190,9 +187,8 @@ public class BetOnGameFragment extends Fragment {
                 showBettingDialog(
                         teamVsTeam,
                         "Moneyline",
-                        Double.toString(game.getMoneyLineA()),
-                        game.getMoneyLineA(),
-                        game.getPointA(),
+                        AndroidUtils.getSignedOddValue(game.getTeamAOdd().getMoney()),
+                        Double.parseDouble(game.getTeamAOdd().getMoney()),
                         BetType.BetTypeMoneyLine,
                         true);
             }
@@ -204,9 +200,8 @@ public class BetOnGameFragment extends Fragment {
                 showBettingDialog(
                         teamVsTeam,
                         "Moneyline",
-                        Double.toString(game.getMoneyLineB()),
-                        game.getMoneyLineB(),
-                        game.getPointB(),
+                        AndroidUtils.getSignedOddValue(game.getTeamBOdd().getMoney()),
+                        Double.parseDouble(game.getTeamBOdd().getMoney()),
                         BetType.BetTypeMoneyLine,
                         false);
             }
@@ -219,9 +214,8 @@ public class BetOnGameFragment extends Fragment {
                 showBettingDialog(
                         teamVsTeam,
                         "Over",
-                        Double.toString(game.getOverA()),
-                        game.getOverA(),
-                        game.getPointA(),
+                        AndroidUtils.getSignedOddValue(game.getTeamAOdd().getOver()),
+                        Double.parseDouble(game.getTeamAOdd().getOver()),
                         BetType.BetTypeOver,
                         true);
             }
@@ -233,9 +227,8 @@ public class BetOnGameFragment extends Fragment {
                 showBettingDialog(
                         teamVsTeam,
                         "Under",
-                        Double.toString(game.getUnderA()),
-                        game.getUnderA(),
-                        game.getPointA(),
+                        AndroidUtils.getSignedOddValue(game.getTeamAOdd().getUnder()),
+                        Double.parseDouble(game.getTeamAOdd().getUnder()),
                         BetType.BetTypeUnder,
                         true);
             }
@@ -248,7 +241,6 @@ public class BetOnGameFragment extends Fragment {
             String betTypeString,
             final String betOddSting,
             final double betOddValue,
-            double points,
             final BetType betType,
             final Boolean isTeamA) {
 
@@ -300,26 +292,6 @@ public class BetOnGameFragment extends Fragment {
 
                     result = AndroidUtils.getToWinAmount(value, betOddValue);
 
-//                    if (betOddValue > 0) {
-//
-//                        double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
-//
-//                        double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
-//
-//                        double percentageBasedValue = value * percentage;
-//
-//                        result = Math.ceil(value + percentageBasedValue);
-//
-//                    } else {
-//                        double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
-//
-//                        double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
-//
-//                        double percentageBasedValue = value * percentage;
-//
-//                        result = Math.ceil(value - percentageBasedValue);
-//                    }
-
                     winAmountEditText.setText(String.valueOf(result));
 
                     betAmountEditText.addTextChangedListener(betAmountTextWatcher);
@@ -336,7 +308,7 @@ public class BetOnGameFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int id) {
 
-                Odd odd = getOddForBet(isTeamA, betType);
+                Odd odd = (isTeamA) ? game.getTeamAOdd() : game.getTeamBOdd();
 
                 final String userID = new WagerocityPref(getActivity()).user().getUserId();
                 final String oddID = odd.getId();
@@ -345,8 +317,8 @@ public class BetOnGameFragment extends Fragment {
                 final String matchDetail = teamNames;
                 final String oddType = "ao";
                 final String stake = betAmountEditText.getText().toString();
-                final String matchId = odd.getTeamNumber();
-                final String teamName = game.getTeamNameFromTeamNumber(odd.getTeamNumber());
+                final String matchId = (isTeamA) ? game.getTeamANumber() : game.getTeamBNumber();
+                final String teamName = game.getTeamNameFromTeamNumber((isTeamA) ? game.getTeamANumber() : game.getTeamBNumber());
                 final String sportsName = game.getSportsName();
                 final String betTypeSPT = "single";
                 String bet_ot = "";
@@ -368,14 +340,14 @@ public class BetOnGameFragment extends Fragment {
                     }
 
                     case BetTypeOver: {
-                        oddVal = odd.getOverMoney().toString();
+                        oddVal = game.getTeamAOdd().getOver();
                         position = "over";
                         bet_ot = "4";
                         break;
                     }
 
                     case BetTypeUnder: {
-                        oddVal = odd.getUnderMoney().toString();
+                        oddVal = game.getTeamAOdd().getUnder();
                         position = "under";
                         break;
                     }
@@ -489,47 +461,5 @@ public class BetOnGameFragment extends Fragment {
 
         public void onBetOnGameFragmentInteraction(Uri uri, ArrayList<Pick> picks);
     }
-
-    private Odd getOddForBet(Boolean isTeamA, BetType betType) {
-        Odd odd = new Odd();
-        if (isTeamA) {
-            for (Odd oddA : game.getTeamAOdds()) {
-                if (oddA.getML().equals("") &&
-                        (betType == BetType.BetTypeOver || betType == BetType.BetTypeUnder)) {
-
-                    odd = oddA;
-
-                } else if (oddA.getML().equals("false") && betType == BetType.BetTypePointSpread) {
-
-                    odd = oddA;
-
-                } else if (oddA.getML().equals("true") && betType == BetType.BetTypeMoneyLine) {
-
-                    odd = oddA;
-
-                }
-            }
-        } else {
-            for (Odd oddB : game.getTeamBOdds()) {
-                if (oddB.getML().equals("") &&
-                        (betType == BetType.BetTypeOver || betType == BetType.BetTypeUnder)) {
-
-                    odd = oddB;
-
-                } else if (oddB.getML().equals("false") && betType == BetType.BetTypePointSpread) {
-
-                    odd = oddB;
-
-                } else if (oddB.getML().equals("true") && betType == BetType.BetTypeMoneyLine) {
-
-                    odd = oddB;
-
-                }
-            }
-        }
-
-        return odd;
-    }
-
 
 }

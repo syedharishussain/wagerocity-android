@@ -20,10 +20,10 @@ import retrofit.http.Query;
 public interface ServiceModel {
 
     @GET("/getAllPools")
-    public void getAllPools(Callback<ArrayList<Pool>> callback);
+    public void getAllPools(@Query("userId") String userId, Callback<ArrayList<Pool>> callback);
 
     @GET("/getLeaderboards")
-    public void getLeaderboards(Callback<ArrayList<LeaderboardPlayer>> callback);
+    public void getLeaderboards(@Query("userId") String userId, Callback<ArrayList<LeaderboardPlayer>> callback);
 
     @GET("/getExperts")
     public void getExperts(@Query("userId") String userId, Callback<ArrayList<ExpertPlayer>> callback);
@@ -85,6 +85,9 @@ public interface ServiceModel {
 
     @GET("/getMyPools")
     public void getMyPools(@Query("userId") String userId, Callback<ArrayList<Pool>> callback);
+
+    @GET("/getGamesOfPlayer")
+    public void getGamesOfPlayer(@Query("playerID") String playerID, @Query("userID") String userID, Callback<ArrayList<Game>> callback);
 
 }
 

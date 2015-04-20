@@ -10,8 +10,8 @@ import retrofit.converter.GsonConverter;
  */
 public class RestClient {
 
-    private static final String BASE_URL = "http://plego.info/wagerocity_api_v1/api_v1";
-//    private static final String BASE_URL = "https://www.wagerocity.com/api_v1";
+//    private static final String BASE_URL = "http://plego.info/wagerocity_api_v1/api_v1";
+    private static final String BASE_URL = "http://api.wagerocity.com";
     private ServiceModel apiService;
 
     public RestClient()

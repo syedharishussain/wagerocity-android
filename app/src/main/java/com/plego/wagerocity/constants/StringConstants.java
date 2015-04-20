@@ -17,6 +17,7 @@ public class StringConstants {
     public static final String TAG_FRAG_STATS = "tag-fragment-stats";
     public static final String TAG_FRAG_GET_DOLLARS = "tag-fragment-get-dollars";
     public static final String TAG_FRAG_MY_PICKS = "tag-fragment-my-picks";
+    public static final String TAG_FRAG_SETTING = "tag-fragment-setting";
 
 
 

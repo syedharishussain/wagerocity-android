@@ -85,23 +85,23 @@ public class GamesListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    if (games.get(position).getTeamAOdds().size() > 0) {
+//                    if (games.get(position).getTeamAOdds().size() > 0) {
 
                         Uri uri = Uri.parse(context.getString(R.string.uri_selected_game_for_betting));
                         Game game = games.get(position);
                         game.setSportsName(sportsName);
                         mListener.onGamesListAdapterFragmentInteraction(uri, game);
 
-                    } else {
-
-                        AndroidUtils.showDialog(
-                                context.getString(R.string.no_betting_information),
-                                context.getString(R.string.no_betting_information_message),
-                                SweetAlertDialog.ERROR_TYPE,
-                                context
-                                );
-
-                    }
+//                    } else {
+//
+//                        AndroidUtils.showDialog(
+//                                context.getString(R.string.no_betting_information),
+//                                context.getString(R.string.no_betting_information_message),
+//                                SweetAlertDialog.ERROR_TYPE,
+//                                context
+//                                );
+//
+//                    }
                 }
             });
 

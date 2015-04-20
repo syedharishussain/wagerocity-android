@@ -23,6 +23,7 @@ import com.plego.wagerocity.android.fragments.MyPicksFragment;
 import com.plego.wagerocity.android.fragments.MyPoolsFragment;
 import com.plego.wagerocity.android.fragments.NavigationBarFragment;
 import com.plego.wagerocity.android.fragments.PoolsFragment;
+import com.plego.wagerocity.android.fragments.SettingsFragment;
 import com.plego.wagerocity.android.fragments.SportsListFragment;
 import com.plego.wagerocity.android.fragments.StatsFragment;
 import com.plego.wagerocity.android.model.ExpertPlayer;
@@ -59,7 +60,8 @@ public class DashboardActivity
         MyPicksFragment.OnMyPicksFragmentInteractionListener,
         LeaderboardPlayersListAdapter.OnLeaderboardPlayerListAdapterFragmentInteractionListener,
         ExpertPlayerListAdapter.OnExpertPlayerListAdapterFragmentInteractionListener,
-        PoolsListAdapter.OnPoolsListAdapterFragmentInteractionListener {
+        PoolsListAdapter.OnPoolsListAdapterFragmentInteractionListener,
+SettingsFragment.OnSettingFragmentInteractionListener{
 
     SweetAlertDialog pDialog;
 
@@ -140,7 +142,7 @@ public class DashboardActivity
             );
 
             RestClient restClient = new RestClient();
-            restClient.getApiService().getLeaderboards(new Callback<ArrayList<LeaderboardPlayer>>() {
+            restClient.getApiService().getLeaderboards(new WagerocityPref(this).user().getUserId(), new Callback<ArrayList<LeaderboardPlayer>>() {
                 @Override
                 public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, retrofit.client.Response response) {
                     pDialog.dismiss();
@@ -150,6 +152,7 @@ public class DashboardActivity
                 @Override
                 public void failure(RetrofitError error) {
                     pDialog.dismiss();
+
                     Log.e("getLeaderboards", String.valueOf(error));
 
                     AndroidUtils.showErrorDialog(error, getApplicationContext());
@@ -168,7 +171,7 @@ public class DashboardActivity
             );
 
             RestClient restClient = new RestClient();
-            restClient.getApiService().getAllPools(new Callback<ArrayList<Pool>>() {
+            restClient.getApiService().getAllPools(new WagerocityPref(this).user().getUserId(), new Callback<ArrayList<Pool>>() {
                 @Override
                 public void success(ArrayList<Pool> pools, retrofit.client.Response response) {
                     pDialog.dismiss();
@@ -245,6 +248,10 @@ public class DashboardActivity
 
         if (uri.toString().equals(getString(R.string.uri_open_sports_list_fragment))) {
             replaceFragment(new SportsListFragment(), StringConstants.TAG_FRAG_SPORTS_LIST);
+        }
+
+        if (uri.toString().equals(getString(R.string.uri_open_setting_fragment))) {
+            replaceFragment(new SettingsFragment(), StringConstants.TAG_FRAG_SETTING);
         }
     }
 
@@ -334,6 +341,11 @@ public class DashboardActivity
 
     @Override
     public void onPoolsListAdapterFragmentInteraction(Uri uri, ArrayList<Pool> pools) {
+
+    }
+
+    @Override
+    public void onSettingFragmentInteraction(Uri uri) {
 
     }
 }

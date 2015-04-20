@@ -112,7 +112,7 @@ public class StatsFragment extends Fragment {
         availableCredit.setText(user.getCredits().toString());
 
         TextView rank = (TextView) this.getView().findViewById(R.id.field_stats_rank);
-        rank.setText(user.getOverallrank());
+        rank.setText(user.getOverallrank().equals("") ? "-" : user.getOverallrank());
 
         TextView record = (TextView) this.getView().findViewById(R.id.field_stats_record);
         record.setText(user.getCurrentrecord().toString());

@@ -92,6 +92,14 @@ public class LoginActivity extends RoboFragmentActivity {
                 public void onCompleted(final GraphUser user, final Response response) {
                     Log.e("FACEBOOK", "Response : " + response);
 
+                    // Todo if else for user object == null
+
+                    if (user != null) {
+
+                    } else {
+
+                    }
+
                     final WagerocityPref pref = new WagerocityPref(getApplicationContext());
                     pref.setFacebookID(user.getId());
                     pref.setFirstName(user.getFirstName());

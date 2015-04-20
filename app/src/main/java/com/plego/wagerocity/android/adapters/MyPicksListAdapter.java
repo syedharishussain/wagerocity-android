@@ -65,7 +65,7 @@ public class MyPicksListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.layout_cell_my_picks_list, parent, false);
 
             viewHolder.textViewTeamA = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_team_a_name);
-            viewHolder.textViewTeamB = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_team_b_name);
+//            viewHolder.textViewTeamB = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_team_b_name);
             viewHolder.textViewDate = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_date_time);
 
             viewHolder.textViewTeamName = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_team_name);
@@ -90,8 +90,8 @@ public class MyPicksListAdapter extends BaseAdapter {
         if (pick != null) {
 
 
-            viewHolder.textViewTeamA.setText( pick.getTeamAName() );
-            viewHolder.textViewTeamB.setText( pick.getTeamBName() );
+            viewHolder.textViewTeamA.setText( pick.getMatchDet() );
+//            viewHolder.textViewTeamB.setText( pick.getTeamBName() );
             viewHolder.textViewDate.setText( pick.getStartTime() );
 
             viewHolder.textViewTeamName.setText( pick.getTeamName() );

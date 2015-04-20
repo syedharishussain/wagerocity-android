@@ -5,38 +5,40 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.plego.wagerocity.utils.AndroidUtils;
 
 public class Odd implements Parcelable {
 
     @Expose
     private String id;
-    @SerializedName("sportsbook_id")
+    @SerializedName("point_id")
     @Expose
-    private String sportsbookId;
-    @SerializedName("team_number")
+    private String pointId;
     @Expose
-    private String teamNumber;
-    @SerializedName("line_type")
+    private String point;
+    @SerializedName("point_mid")
     @Expose
-    private String lineType;
+    private String pointMid;
+    @SerializedName("total_id")
     @Expose
-    private Integer points;
-    @SerializedName("time_stamp")
+    private String totalId;
     @Expose
-    private String timeStamp;
-    @SerializedName("event_number")
+    private String over;
     @Expose
-    private String eventNumber;
+    private String under;
+    @SerializedName("total_mid")
     @Expose
-    private Integer money;
+    private String totalMid;
+    @SerializedName("money_id")
     @Expose
-    private String ML;
-    @SerializedName("over_money")
+    private String moneyId;
     @Expose
-    private Integer overMoney;
-    @SerializedName("under_money")
-    @Expose
-    private Integer underMoney;
+    private String money;
+
+    public String getPointSpreadString() {
+        return getPointMid() + " (" + AndroidUtils.getSignedOddValue( getPoint() ) + ")"  ;
+    }
+
 
     /**
      *
@@ -56,112 +58,193 @@ public class Odd implements Parcelable {
         this.id = id;
     }
 
-    /**
-     *
-     * @return
-     * The sportsbookId
-     */
-    public String getSportsbookId() {
-        return sportsbookId;
-    }
-
-    /**
-     *
-     * @param sportsbookId
-     * The sportsbook_id
-     */
-    public void setSportsbookId(String sportsbookId) {
-        this.sportsbookId = sportsbookId;
+    public Odd withId(String id) {
+        this.id = id;
+        return this;
     }
 
     /**
      *
      * @return
-     * The teamNumber
+     * The pointId
      */
-    public String getTeamNumber() {
-        return teamNumber;
+    public String getPointId() {
+        return pointId;
     }
 
     /**
      *
-     * @param teamNumber
-     * The team_number
+     * @param pointId
+     * The point_id
      */
-    public void setTeamNumber(String teamNumber) {
-        this.teamNumber = teamNumber;
+    public void setPointId(String pointId) {
+        this.pointId = pointId;
     }
 
-    /**
-     *
-     * @return
-     * The lineType
-     */
-    public String getLineType() {
-        return lineType;
-    }
-
-    /**
-     *
-     * @param lineType
-     * The line_type
-     */
-    public void setLineType(String lineType) {
-        this.lineType = lineType;
+    public Odd withPointId(String pointId) {
+        this.pointId = pointId;
+        return this;
     }
 
     /**
      *
      * @return
-     * The points
+     * The point
      */
-    public Integer getPoints() {
-        return points;
+    public String getPoint() {
+        return point;
     }
 
     /**
      *
-     * @param points
-     * The points
+     * @param point
+     * The point
      */
-    public void setPoints(Integer points) {
-        this.points = points;
+    public void setPoint(String point) {
+        this.point = point;
     }
 
-    /**
-     *
-     * @return
-     * The timeStamp
-     */
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
-    /**
-     *
-     * @param timeStamp
-     * The time_stamp
-     */
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public Odd withPoint(String point) {
+        this.point = point;
+        return this;
     }
 
     /**
      *
      * @return
-     * The eventNumber
+     * The pointMid
      */
-    public String getEventNumber() {
-        return eventNumber;
+    public String getPointMid() {
+        return pointMid;
     }
 
     /**
      *
-     * @param eventNumber
-     * The event_number
+     * @param pointMid
+     * The point_mid
      */
-    public void setEventNumber(String eventNumber) {
-        this.eventNumber = eventNumber;
+    public void setPointMid(String pointMid) {
+        this.pointMid = pointMid;
+    }
+
+    public Odd withPointMid(String pointMid) {
+        this.pointMid = pointMid;
+        return this;
+    }
+
+    /**
+     *
+     * @return
+     * The totalId
+     */
+    public String getTotalId() {
+        return totalId;
+    }
+
+    /**
+     *
+     * @param totalId
+     * The total_id
+     */
+    public void setTotalId(String totalId) {
+        this.totalId = totalId;
+    }
+
+    public Odd withTotalId(String totalId) {
+        this.totalId = totalId;
+        return this;
+    }
+
+    /**
+     *
+     * @return
+     * The over
+     */
+    public String getOver() {
+        return over;
+    }
+
+    /**
+     *
+     * @param over
+     * The over
+     */
+    public void setOver(String over) {
+        this.over = over;
+    }
+
+    public Odd withOver(String over) {
+        this.over = over;
+        return this;
+    }
+
+    /**
+     *
+     * @return
+     * The under
+     */
+    public String getUnder() {
+        return under;
+    }
+
+    /**
+     *
+     * @param under
+     * The under
+     */
+    public void setUnder(String under) {
+        this.under = under;
+    }
+
+    public Odd withUnder(String under) {
+        this.under = under;
+        return this;
+    }
+
+    /**
+     *
+     * @return
+     * The totalMid
+     */
+    public String getTotalMid() {
+        return totalMid;
+    }
+
+    /**
+     *
+     * @param totalMid
+     * The total_mid
+     */
+    public void setTotalMid(String totalMid) {
+        this.totalMid = totalMid;
+    }
+
+    public Odd withTotalMid(String totalMid) {
+        this.totalMid = totalMid;
+        return this;
+    }
+
+    /**
+     *
+     * @return
+     * The moneyId
+     */
+    public String getMoneyId() {
+        return moneyId;
+    }
+
+    /**
+     *
+     * @param moneyId
+     * The money_id
+     */
+    public void setMoneyId(String moneyId) {
+        this.moneyId = moneyId;
+    }
+
+    public Odd withMoneyId(String moneyId) {
+        this.moneyId = moneyId;
+        return this;
     }
 
     /**
@@ -169,7 +252,7 @@ public class Odd implements Parcelable {
      * @return
      * The money
      */
-    public Integer getMoney() {
+    public String getMoney() {
         return money;
     }
 
@@ -178,62 +261,13 @@ public class Odd implements Parcelable {
      * @param money
      * The money
      */
-    public void setMoney(Integer money) {
+    public void setMoney(String money) {
         this.money = money;
     }
 
-    /**
-     *
-     * @return
-     * The ML
-     */
-    public String getML() {
-        return ML;
-    }
-
-    /**
-     *
-     * @param ML
-     * The ML
-     */
-    public void setML(String ML) {
-        this.ML = ML;
-    }
-
-    /**
-     *
-     * @return
-     * The overMoney
-     */
-    public Integer getOverMoney() {
-        return overMoney;
-    }
-
-    /**
-     *
-     * @param overMoney
-     * The over_money
-     */
-    public void setOverMoney(Integer overMoney) {
-        this.overMoney = overMoney;
-    }
-
-    /**
-     *
-     * @return
-     * The underMoney
-     */
-    public Integer getUnderMoney() {
-        return underMoney;
-    }
-
-    /**
-     *
-     * @param underMoney
-     * The under_money
-     */
-    public void setUnderMoney(Integer underMoney) {
-        this.underMoney = underMoney;
+    public Odd withMoney(String money) {
+        this.money = money;
+        return this;
     }
 
 
@@ -245,16 +279,15 @@ public class Odd implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
-        dest.writeString(this.sportsbookId);
-        dest.writeString(this.teamNumber);
-        dest.writeString(this.lineType);
-        dest.writeValue(this.points);
-        dest.writeString(this.timeStamp);
-        dest.writeString(this.eventNumber);
-        dest.writeValue(this.money);
-        dest.writeString(this.ML);
-        dest.writeValue(this.overMoney);
-        dest.writeValue(this.underMoney);
+        dest.writeString(this.pointId);
+        dest.writeString(this.point);
+        dest.writeString(this.pointMid);
+        dest.writeString(this.totalId);
+        dest.writeString(this.over);
+        dest.writeString(this.under);
+        dest.writeString(this.totalMid);
+        dest.writeString(this.moneyId);
+        dest.writeString(this.money);
     }
 
     public Odd() {
@@ -262,16 +295,15 @@ public class Odd implements Parcelable {
 
     private Odd(Parcel in) {
         this.id = in.readString();
-        this.sportsbookId = in.readString();
-        this.teamNumber = in.readString();
-        this.lineType = in.readString();
-        this.points = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.timeStamp = in.readString();
-        this.eventNumber = in.readString();
-        this.money = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.ML = in.readString();
-        this.overMoney = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.underMoney = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.pointId = in.readString();
+        this.point = in.readString();
+        this.pointMid = in.readString();
+        this.totalId = in.readString();
+        this.over = in.readString();
+        this.under = in.readString();
+        this.totalMid = in.readString();
+        this.moneyId = in.readString();
+        this.money = in.readString();
     }
 
     public static final Creator<Odd> CREATOR = new Creator<Odd>() {

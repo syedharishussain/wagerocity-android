@@ -177,4 +177,14 @@ public class AndroidUtils {
 
         return pDialog;
     }
+
+    public static String getSignedOddValue (String string) {
+
+        if (Double.parseDouble(string) > 0) {
+            return "+"+string;
+        } else {
+            return string;
+        }
+
+    }
 }

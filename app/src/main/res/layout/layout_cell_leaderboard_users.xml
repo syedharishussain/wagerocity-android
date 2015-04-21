@@ -26,7 +26,6 @@
             android:id="@+id/imageview_leaderboard_user"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:background="@drawable/user1"
             android:layout_marginLeft="10dp"
             />
 

@@ -65,6 +65,19 @@ public class Game implements Parcelable {
     @Expose
     private Bet bet;
 
+    @SerializedName("is_purchased")
+    @Expose
+    private Boolean isPurchased;
+
+
+    public Boolean getIsPurchased() {
+        return isPurchased;
+    }
+
+    public void setIsPurchased(Boolean isPurchased) {
+        this.isPurchased = isPurchased;
+    }
+
     public String getLeagueName() {
         return leagueName;
     }

@@ -11,6 +11,7 @@ import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.ExpertPlayerListAdapter;
 import com.plego.wagerocity.android.adapters.GamesListAdapter;
 import com.plego.wagerocity.android.adapters.LeaderboardPlayersListAdapter;
+import com.plego.wagerocity.android.adapters.PicksOfPlayerAdapter;
 import com.plego.wagerocity.android.adapters.PoolsListAdapter;
 import com.plego.wagerocity.android.fragments.BetOnGameFragment;
 import com.plego.wagerocity.android.fragments.DashboardFragment;
@@ -62,7 +63,8 @@ public class DashboardActivity
         ExpertPlayerListAdapter.OnExpertPlayerListAdapterFragmentInteractionListener,
         PoolsListAdapter.OnPoolsListAdapterFragmentInteractionListener,
         SettingsFragment.OnSettingFragmentInteractionListener,
-        PicksOfPlayerFragment.OnPicksOfPlayerFragmentInteractionListener {
+        PicksOfPlayerFragment.OnPicksOfPlayerFragmentInteractionListener,
+        PicksOfPlayerAdapter.OnPicksOfPlayerAdapterListAdapterFragmentInteractionListener {
 
     SweetAlertDialog pDialog;
 
@@ -334,9 +336,9 @@ public class DashboardActivity
     }
 
     @Override
-    public void onExpertPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks) {
-        if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
-            replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+    public void onExpertPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Game> games) {
+        if (uri.toString().equals(getString(R.string.uri_open_picks_of_player_fragment))) {
+            replaceFragment(PicksOfPlayerFragment.newInstance(games), StringConstants.TAG_FRAG_PICKS_OF_PLAYER);
         }
     }
 
@@ -353,5 +355,12 @@ public class DashboardActivity
     @Override
     public void onPicksOfPlayerFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onPicksOfPlayerAdapterListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks) {
+        if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
+            replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+        }
     }
 }

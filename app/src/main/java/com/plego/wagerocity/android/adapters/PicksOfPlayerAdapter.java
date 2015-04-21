@@ -13,10 +13,13 @@ import android.widget.TextView;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
+import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.utils.AndroidUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by haris on 21/04/15.
@@ -30,6 +33,13 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
     public PicksOfPlayerAdapter(ArrayList<Game> games, Context context) {
         this.games = games;
         this.context = context;
+
+        try {
+            mListner = (OnPicksOfPlayerAdapterListAdapterFragmentInteractionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnGamesListAdapterFragmentInteractionListener");
+        }
     }
 
     class ViewHolder {
@@ -69,6 +79,8 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
+        final Game game = games.get(position);
+
         if (convertView == null) {
 
             viewHolder = new ViewHolder();
@@ -95,20 +107,58 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
 
             viewHolder.button = (Button) convertView.findViewById(R.id.button_player_games_show_bet);
 
-            viewHolder.button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            if (game.getIsPurchased()) {
+                viewHolder.button.setText("Show Bet");
+                viewHolder.button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ArrayList arrayList = new ArrayList();
+                        arrayList.add(createPickObject(game));
 
-                }
-            });
+                        Uri uri = Uri.parse(context.getString(R.string.uri_open_picks_of_player_fragment));
+                        mListner.onPicksOfPlayerAdapterListAdapterFragmentInteraction(uri, arrayList);
+                    }
+                });
+            } else {
+                viewHolder.button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Buy Pick?")
+                                .setContentText("You can buy this pick with $5!")
+                                .setCancelText("Cancel")
+                                .setConfirmText("Yes, Do It!")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog dialog) {
+                                        dialog.dismiss();
+                                        ArrayList<Pick> arrayList = new ArrayList<>();
+                                        arrayList.add(createPickObject(game));
+
+                                        Uri uri = Uri.parse(context.getString(R.string.uri_open_my_picks_fragment));
+                                        mListner.onPicksOfPlayerAdapterListAdapterFragmentInteraction(uri, arrayList);
+                                    }
+                                })
+                                .showCancelButton(true)
+                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.cancel();
+                                    }
+                                })
+                                .show();
+
+
+                    }
+                });
+            }
 
             convertView.setTag(viewHolder);
 
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
-        Game game = games.get(position);
 
 
         if (game != null) {
@@ -143,10 +193,24 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
         return convertView;
     }
 
+    private Pick createPickObject(Game game) {
+        Pick pick = new Pick();
 
+        pick.setTeamName(game.getBet().getTeamName());
+        pick.setStartTime(game.getCstStartTime());
+        pick.setMatchDet(game.getBet().getMatchDet());
+        pick.setBetOt(game.getBet().getBetOt());
+        pick.setPos(game.getBet().getPos());
+        pick.setOddsVal(game.getBet().getOddsVal());
+        pick.setStake(game.getBet().getStake());
+        pick.setBetResult(game.getBet().getBetResult());
+        pick.setTeamALogo(game.getTeamALogo());
+        pick.setTeamBLogo(game.getTeamBLogo());
+
+        return pick;
+    }
 
     public interface OnPicksOfPlayerAdapterListAdapterFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onPicksOfPlayerAdapterListAdapterFragmentInteraction(Uri uri, ArrayList<Game> games);
+        public void onPicksOfPlayerAdapterListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks);
     }
 }

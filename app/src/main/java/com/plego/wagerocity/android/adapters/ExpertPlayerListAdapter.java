@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.ExpertPlayer;
+import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.utils.AndroidUtils;
@@ -94,23 +96,24 @@ public class ExpertPlayerListAdapter extends BaseAdapter {
                     );
 
                     RestClient restClient = new RestClient();
-                    restClient.getApiService().getMyPicks(player.getUserId(), new Callback<ArrayList<Pick>>() {
-                        @Override
-                        public void success(ArrayList<Pick> picks, Response response) {
-                            pDialog.dismiss();
 
-                            Uri uri = Uri.parse(context.getString(R.string.uri_open_my_picks_fragment));
-                            mListner.onExpertPlayerListAdapterFragmentInteraction(uri, picks);
-                        }
+                    restClient.getApiService().getGamesOfPlayer(
+                            "273",// player.getUsrId(),
+                            new WagerocityPref(context).user().getUserId(),
+                            new Callback<ArrayList<Game>>() {
+                                @Override
+                                public void success(ArrayList<Game> games, Response response) {
+                                    pDialog.dismiss();
+                                    Uri uri = Uri.parse(context.getString(R.string.uri_open_picks_of_player_fragment));
+                                    mListner.onExpertPlayerListAdapterFragmentInteraction(uri, games);
+                                }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                            pDialog.dismiss();
-
-                            AndroidUtils.showErrorDialog(error, context);
-
-                        }
-                    });
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    pDialog.dismiss();
+                                    AndroidUtils.showErrorDialog(error, context);
+                                }
+                            });
 
                 }
             });
@@ -151,6 +154,6 @@ public class ExpertPlayerListAdapter extends BaseAdapter {
 
     public interface OnExpertPlayerListAdapterFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onExpertPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks);
+        public void onExpertPlayerListAdapterFragmentInteraction(Uri uri, ArrayList<Game> games);
     }
 }

@@ -100,7 +100,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
                     RestClient restClient = new RestClient();
 
                     restClient.getApiService().getGamesOfPlayer(
-                            "273",// player.getUsrId(),
+                            player.getUsrId(),
                             new WagerocityPref(context).user().getUserId(),
                             new Callback<ArrayList<Game>>() {
                                 @Override

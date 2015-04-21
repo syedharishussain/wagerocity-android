@@ -152,6 +152,7 @@ public class AndroidUtils {
         String errorMessage = isTimedOut ?
                 "Fetching results taking too much time. Please try again later." :
                 (error.getLocalizedMessage() != null) ?
+                        (error.getLocalizedMessage().equals("404 Not Found")) ? "No Records Found." :
                         error.getLocalizedMessage() :
                         (error.getMessage() != null)  ?
                                 error.getMessage() :

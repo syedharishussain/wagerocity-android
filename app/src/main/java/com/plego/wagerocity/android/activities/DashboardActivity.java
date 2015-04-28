@@ -11,6 +11,7 @@ import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.ExpertPlayerListAdapter;
 import com.plego.wagerocity.android.adapters.GamesListAdapter;
 import com.plego.wagerocity.android.adapters.LeaderboardPlayersListAdapter;
+import com.plego.wagerocity.android.adapters.MyPoolsListAdapter;
 import com.plego.wagerocity.android.adapters.PicksOfPlayerAdapter;
 import com.plego.wagerocity.android.adapters.PoolsListAdapter;
 import com.plego.wagerocity.android.fragments.BetOnGameFragment;
@@ -30,6 +31,7 @@ import com.plego.wagerocity.android.fragments.StatsFragment;
 import com.plego.wagerocity.android.model.ExpertPlayer;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
+import com.plego.wagerocity.android.model.MyPool;
 import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
@@ -64,7 +66,8 @@ public class DashboardActivity
         PoolsListAdapter.OnPoolsListAdapterFragmentInteractionListener,
         SettingsFragment.OnSettingFragmentInteractionListener,
         PicksOfPlayerFragment.OnPicksOfPlayerFragmentInteractionListener,
-        PicksOfPlayerAdapter.OnPicksOfPlayerAdapterListAdapterFragmentInteractionListener {
+        PicksOfPlayerAdapter.OnPicksOfPlayerAdapterListAdapterFragmentInteractionListener,
+        MyPoolsListAdapter.OnMyPoolsListAdapterFragmentInteractionListener {
 
     SweetAlertDialog pDialog;
 
@@ -280,7 +283,7 @@ public class DashboardActivity
     }
 
     @Override
-    public void onPoolsFragmentInteraction(Uri uri, ArrayList<Pool> pools) {
+    public void onPoolsFragmentInteraction(Uri uri, ArrayList<MyPool> pools) {
         if (uri.toString().equals(getString(R.string.uri_open_my_pools_fragment))) {
             replaceFragment(MyPoolsFragment.newInstance(pools), StringConstants.TAG_FRAG_MY_POOLS_LIST);
         }
@@ -343,7 +346,7 @@ public class DashboardActivity
     }
 
     @Override
-    public void onPoolsListAdapterFragmentInteraction(Uri uri, ArrayList<Pool> pools) {
+    public void onPoolsListAdapterFragmentInteraction(Uri uri, ArrayList<MyPool> pools) {
 
     }
 
@@ -361,6 +364,18 @@ public class DashboardActivity
     public void onPicksOfPlayerAdapterListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks) {
         if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
             replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+        }
+    }
+
+    @Override
+    public void onMyPoolsListAdapterFragmentInteraction(Uri uri, MyPool pool) {
+
+    }
+
+    @Override
+    public void onMyPoolOpenGames(Uri uri, ArrayList<Game> games, String leagueName) {
+        if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
+            replaceFragment(GamesListFragment.newInstance(games, leagueName), StringConstants.TAG_FRAG_GAMES_LIST);
         }
     }
 }

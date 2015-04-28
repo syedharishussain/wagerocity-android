@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.model.MyPool;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.utils.AndroidUtils;
@@ -113,26 +114,23 @@ public class PoolsListAdapter extends BaseAdapter {
                     });
 
 
-
-
-                    restClient.getApiService().getMyPools(new WagerocityPref(context).user().getUserId(), new Callback<ArrayList<Pool>>() {
+                    restClient.getApiService().getMyPools(new WagerocityPref(context).user().getUserId(), new Callback<ArrayList<MyPool>>() {
                         @Override
-                        public void success(ArrayList<Pool> pools, Response response) {
+                        public void success(ArrayList<MyPool> myPools, Response response) {
+
                             pDialog.dismiss();
 
                             Uri uri = Uri.parse(context.getString(R.string.uri_open_my_picks_fragment));
-                            mListner.onPoolsListAdapterFragmentInteraction(uri, pools);
+                            mListner.onPoolsListAdapterFragmentInteraction(uri, myPools);
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
+
                             pDialog.dismiss();
-
                             AndroidUtils.showErrorDialog(error, context);
-
                         }
                     });
-
                 }
             });
 
@@ -169,6 +167,6 @@ public class PoolsListAdapter extends BaseAdapter {
 
     public interface OnPoolsListAdapterFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onPoolsListAdapterFragmentInteraction(Uri uri, ArrayList<Pool> pools);
+        public void onPoolsListAdapterFragmentInteraction(Uri uri, ArrayList<MyPool> pools);
     }
 }

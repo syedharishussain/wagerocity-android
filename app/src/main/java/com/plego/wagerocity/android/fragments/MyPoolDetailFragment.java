@@ -8,73 +8,52 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.plego.wagerocity.R;
-import com.plego.wagerocity.android.adapters.MyPoolsListAdapter;
-import com.plego.wagerocity.android.adapters.PoolsListAdapter;
 import com.plego.wagerocity.android.model.MyPool;
-import com.plego.wagerocity.android.model.Pool;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link com.plego.wagerocity.android.fragments.MyPoolsFragment.OnMyPoolsFragmentInteractionListener} interface
+ * {@link MyPoolDetailFragment.OnMyPoolDetailFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MyPoolsFragment#newInstance} factory method to
+ * Use the {@link MyPoolDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyPoolsFragment extends Fragment {
+public class MyPoolDetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARGS_MY_POOLS = "args_pool";
+    private static final String ARG_PARAM1 = "param1";
+    private MyPool pool;
 
-    private ArrayList<MyPool> pools;
 
-    private OnMyPoolsFragmentInteractionListener mListener;
+    private OnMyPoolDetailFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param pools Parameter 1.
-     * @return A new instance of fragment MyPoolsFragment.
+     * @param myPool .
+     * @return A new instance of fragment MyPoolDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyPoolsFragment newInstance(ArrayList<MyPool> pools) {
-        MyPoolsFragment fragment = new MyPoolsFragment();
+    public static MyPoolDetailFragment newInstance(MyPool myPool) {
+        MyPoolDetailFragment fragment = new MyPoolDetailFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(ARGS_MY_POOLS, pools);
+        args.putParcelable(ARG_PARAM1, myPool);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public MyPoolsFragment() {
+    public MyPoolDetailFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        final ListView poolsListView = (ListView) view.findViewById(R.id.listview_my_pools);
-
-        MyPoolsListAdapter poolsListAdapter = new MyPoolsListAdapter(pools, getActivity(), true);
-
-        poolsListView.setAdapter(poolsListAdapter);
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            pools = getArguments().getParcelableArrayList(ARGS_MY_POOLS);
+            pool = getArguments().getParcelable(ARG_PARAM1);
         }
     }
 
@@ -82,18 +61,22 @@ public class MyPoolsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_pools, container, false);
+        return inflater.inflate(R.layout.fragment_my_pool_detail, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnMyPoolsFragmentInteractionListener) activity;
+            mListener = (OnMyPoolDetailFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnMyPoolsFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -113,9 +96,9 @@ public class MyPoolsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnMyPoolsFragmentInteractionListener {
+    public interface OnMyPoolDetailFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onMyPoolsFragmentInteraction(Uri uri);
+        public void onMyPoolDetailFragmentInteraction(Uri uri);
     }
 
 }

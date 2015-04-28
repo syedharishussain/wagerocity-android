@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.client.Response;
@@ -84,7 +85,7 @@ public interface ServiceModel {
     public void unjoinPool(@Part("userId") String userId, @Part("poolId") String poolId, Callback<ArrayList<Pool>> callback);
 
     @GET("/getMyPools")
-    public void getMyPools(@Query("userId") String userId, Callback<ArrayList<Pool>> callback);
+    public void getMyPools(@Query("userId") String userId, Callback<ArrayList<MyPool>> callback);
 
     @GET("/getGamesOfPlayer")
     public void getGamesOfPlayer(@Query("playerID") String playerID, @Query("userID") String userID, Callback<ArrayList<Game>> callback);

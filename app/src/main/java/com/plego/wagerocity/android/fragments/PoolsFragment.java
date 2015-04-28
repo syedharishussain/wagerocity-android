@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.PoolsListAdapter;
+import com.plego.wagerocity.android.model.MyPool;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
 
@@ -73,12 +74,12 @@ public class PoolsFragment extends Fragment {
             public void onClick(View v) {
 
                 RestClient restClient = new RestClient();
-                restClient.getApiService().getMyPools(new WagerocityPref(getActivity()).user().getUserId(), new Callback<ArrayList<Pool>>() {
+                restClient.getApiService().getMyPools(new WagerocityPref(getActivity()).user().getUserId(), new Callback<ArrayList<MyPool>>() {
                     @Override
-                    public void success(ArrayList<Pool> pools, Response response) {
+                    public void success(ArrayList<MyPool> myPools, Response response) {
 
                         Uri uri = Uri.parse(getString(R.string.uri_open_my_pools_fragment));
-                        mListener.onPoolsFragmentInteraction(uri, pools);
+                        mListener.onPoolsFragmentInteraction(uri, myPools);
 
                     }
 
@@ -145,7 +146,7 @@ public class PoolsFragment extends Fragment {
      */
     public interface OnPoolsFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onPoolsFragmentInteraction(Uri uri, ArrayList<Pool> pools);
+        public void onPoolsFragmentInteraction(Uri uri, ArrayList<MyPool> pools);
     }
 
 }

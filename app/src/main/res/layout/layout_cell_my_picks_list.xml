@@ -25,7 +25,6 @@
                     android:id="@+id/relativelayout_cell_my_picks_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp">
 
                     <TextView
@@ -47,10 +46,8 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/relativelayout_cell_my_picks_date"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <ImageView
@@ -81,10 +78,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/relativelayout_cell_my_picks_date"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <ImageView
@@ -93,19 +88,6 @@
                         android:layout_height="60dp"
                         android:layout_gravity="center_horizontal"
                         android:background="#c8ffffff" />
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/textview_cell_my_picks_team_b_name"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_centerVertical="true"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:gravity="center"-->
-                        <!--android:minLines="2"-->
-                        <!--android:scrollHorizontally="false"-->
-                        <!--android:text="California"-->
-                        <!--android:textIsSelectable="false"-->
-                        <!--android:textSize="8pt" />-->
 
                 </LinearLayout>
 
@@ -117,7 +99,6 @@
                 android:layout_height="wrap_content"
                 android:text="Team A vs Team B"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textSize="20sp"
@@ -127,7 +108,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -153,7 +133,7 @@
                     android:gravity="right"
                     android:maxLines="2"
                     android:text="California Dragons"
-                    android:textColor="#ff005aff"
+                    android:textColor="#ffff3100"
                     android:textSize="20sp"
                     android:textStyle="bold"
 
@@ -164,7 +144,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -187,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="200"
-                    android:textColor="#ff005aff"
+                    android:textColor="#ffff3100"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -196,7 +175,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -220,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="150"
-                    android:textColor="#ff005aff"
+                    android:textColor="#ffff3100"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -229,7 +207,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -252,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="100"
-                    android:textColor="#ff005aff"
+                    android:textColor="#ffff3100"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 

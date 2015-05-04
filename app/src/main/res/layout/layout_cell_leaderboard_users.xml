@@ -71,7 +71,7 @@
                 android:id="@+id/button_leaderboard_user_buy_picks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Buy Pick"
+                android:text="Buy Picks"
                 android:background="#00ffffff"
                 android:textColor="#ffffffff"
                 android:layout_centerVertical="true"

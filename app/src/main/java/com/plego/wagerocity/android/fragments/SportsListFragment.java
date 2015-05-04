@@ -1,7 +1,6 @@
 package com.plego.wagerocity.android.fragments;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,10 +13,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.SportsListAdapter;
 import com.plego.wagerocity.android.model.Game;
+import com.plego.wagerocity.android.model.LeaderboardPlayer;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.SportsListObject;
+import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
@@ -41,9 +43,7 @@ public class SportsListFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    boolean hasOverAll;
 
     private OnSportsListFragmentInteractionListener mListener;
 
@@ -51,16 +51,14 @@ public class SportsListFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param hasOverAll Parameter 1.
      * @return A new instance of fragment SportsListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SportsListFragment newInstance(String param1, String param2) {
+    public static SportsListFragment newInstance(boolean hasOverAll) {
         SportsListFragment fragment = new SportsListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(ARG_PARAM1, hasOverAll);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,8 +71,7 @@ public class SportsListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            hasOverAll = getArguments().getBoolean(ARG_PARAM1);
         }
     }
 
@@ -84,7 +81,7 @@ public class SportsListFragment extends Fragment {
 
         final ListView sportsListView = (ListView) view.findViewById(R.id.listview_sports_list);
 
-        SportsListAdapter sportsListAdapter = new SportsListAdapter(view.getContext(), getSportsListData());
+        SportsListAdapter sportsListAdapter = new SportsListAdapter(view.getContext(), getSportsListData(hasOverAll));
         sportsListView.setAdapter(sportsListAdapter);
 
         sportsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -94,49 +91,53 @@ public class SportsListFragment extends Fragment {
 
                 Log.e("Selected Sports", sportsName);
 
-                final SweetAlertDialog pDialog = AndroidUtils.showDialog(
-                        getString(R.string.loading_games),
-                        getString(R.string.please_wait),
-                        SweetAlertDialog.PROGRESS_TYPE,
-                        getActivity()
-                );
+                if (hasOverAll) {
+                    getLeaderboards(sportsName);
+                } else {
+                    final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                            getString(R.string.loading_games),
+                            getString(R.string.please_wait),
+                            SweetAlertDialog.PROGRESS_TYPE,
+                            getActivity()
+                    );
 
-                RestClient restClient = new RestClient();
-                restClient.getApiService().getGames(AndroidUtils.getSportsNameForParam(sportsName), new Callback<ArrayList<Game>>() {
-                    @Override
-                    public void success(ArrayList<Game> games, Response response) {
+                    RestClient restClient = new RestClient();
+                    restClient.getApiService().getGames(AndroidUtils.getSportsNameForParam(sportsName), new Callback<ArrayList<Game>>() {
+                        @Override
+                        public void success(ArrayList<Game> games, Response response) {
 
-                        pDialog.dismiss();
+                            pDialog.dismiss();
 
-                        if (games.size() > 0) {
+                            if (games.size() > 0) {
 
-                            Uri uri = Uri.parse(getString(R.string.uri_open_games_list_fragment));
-                            mListener.onSportsListFragmentInteraction(uri, games, AndroidUtils.getSportsNameForParam(sportsName));
+                                Uri uri = Uri.parse(getString(R.string.uri_open_games_list_fragment));
+                                mListener.onSportsListFragmentInteraction(uri, games, AndroidUtils.getSportsNameForParam(sportsName));
 
-                        } else {
+                            } else {
 
 
-                            SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                                SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                                        getString(R.string.no_games_found),
+                                        "There are no " + sportsName + " games going on for now. Please come back later",
+                                        SweetAlertDialog.ERROR_TYPE,
+                                        getActivity()
+                                );
+                            }
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            pDialog.dismiss();
+
+                            AndroidUtils.showDialog(
                                     getString(R.string.no_games_found),
                                     "There are no " + sportsName + " games going on for now. Please come back later",
                                     SweetAlertDialog.ERROR_TYPE,
                                     getActivity()
                             );
                         }
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        pDialog.dismiss();
-
-                        AndroidUtils.showDialog(
-                                getString(R.string.no_games_found),
-                                "There are no " + sportsName + " games going on for now. Please come back later",
-                                SweetAlertDialog.ERROR_TYPE,
-                                getActivity()
-                        );
-                    }
-                });
+                    });
+                }
             }
         });
     }
@@ -178,11 +179,13 @@ public class SportsListFragment extends Fragment {
     public interface OnSportsListFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam);
+        public void onSportsListLeaderbaordsFragmentInteraction(Uri uri, ArrayList<LeaderboardPlayer> leaderboardPlayers, String sportsNameValueForParam);
     }
 
-    private ArrayList<SportsListObject> getSportsListData() {
+    private ArrayList<SportsListObject> getSportsListData(boolean hasOverAllKey) {
         ArrayList<SportsListObject> sportsListObjects = new ArrayList<SportsListObject>();
 
+        if (hasOverAllKey) sportsListObjects.add(new SportsListObject("Overall", R.drawable.logo_w));
         sportsListObjects.add(new SportsListObject("NFL", R.drawable.nfl));
         sportsListObjects.add(new SportsListObject("NCAA Football", R.drawable.ncaa_football));
         sportsListObjects.add(new SportsListObject("MLB", R.drawable.mlb));
@@ -193,6 +196,35 @@ public class SportsListFragment extends Fragment {
         sportsListObjects.add(new SportsListObject("Tennis", R.drawable.tennis));
 
         return sportsListObjects;
+    }
+
+    private void getLeaderboards(final String leagueName) {
+        final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                getString(R.string.loading),
+                null,
+                SweetAlertDialog.PROGRESS_TYPE,
+                getActivity()
+        );
+
+        RestClient restClient = new RestClient();
+        restClient.getApiService().getLeaderboards(AndroidUtils.getSportsNameForParam(leagueName), new Callback<ArrayList<LeaderboardPlayer>>() {
+            @Override
+            public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, Response response) {
+                pDialog.dismiss();
+                mListener.onSportsListLeaderbaordsFragmentInteraction(Uri.parse(getString(R.string.uri_open_leaderboards_list_fragment)), leaderboardPlayers, leagueName);
+//                replaceFragment(LeaderBoardListFragment.newInstance(leaderboardPlayers), StringConstants.TAG_FRAG_LEADERBOARD_LIST);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                pDialog.dismiss();
+
+                Log.e("getLeaderboards", String.valueOf(error));
+
+                AndroidUtils.showErrorDialog(error, getActivity());
+
+            }
+        });
     }
 
 }

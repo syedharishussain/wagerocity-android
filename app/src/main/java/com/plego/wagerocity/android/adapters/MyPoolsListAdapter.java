@@ -89,44 +89,8 @@ public class MyPoolsListAdapter extends BaseAdapter {
 
                     final MyPool pool = pools.get(position);
 
-//                    Uri uri = Uri.parse(context.getString(R.string.uri_open_my_picks_fragment));
-//                    mListner.onMyPoolsListAdapterFragmentInteraction(uri, pool);
-
-
-                    RestClient restClient = new RestClient();
-                    restClient.getApiService().getGames(pool.getPoolLeague(), new Callback<ArrayList<Game>>() {
-                        @Override
-                        public void success(ArrayList<Game> games, Response response) {
-
-                            if (games.size() > 0) {
-
-
-                            Uri uri = Uri.parse(context.getString(R.string.uri_open_games_list_fragment));
-                            mListner.onMyPoolOpenGames(uri, games, pool.getPoolLeague());
-
-                            } else {
-
-                                SweetAlertDialog pDialog = AndroidUtils.showDialog(
-                                        context.getString(R.string.no_games_found),
-                                        "There are no " + pool.getPoolLeague() + " games going on for now. Please come back later",
-                                        SweetAlertDialog.ERROR_TYPE,
-                                        context
-                                );
-                            }
-
-
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            SweetAlertDialog pDialog = AndroidUtils.showDialog(
-                                    context.getString(R.string.no_games_found),
-                                    "There are no " + pool.getPoolLeague() + " games going on for now. Please come back later",
-                                    SweetAlertDialog.ERROR_TYPE,
-                                    context
-                            );
-                        }
-                    });
+                    Uri uri = Uri.parse(context.getString(R.string.uri_open_my_pool_detail_fragment));
+                    mListner.onMyPoolsListAdapterFragmentInteraction(uri, pool);
                 }
             });
 
@@ -164,6 +128,6 @@ public class MyPoolsListAdapter extends BaseAdapter {
     public interface OnMyPoolsListAdapterFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onMyPoolsListAdapterFragmentInteraction(Uri uri, MyPool pool);
-        public void onMyPoolOpenGames(Uri uri, ArrayList<Game> games, String leagueName);
+//        public void onMyPoolOpenGames(Uri uri, ArrayList<Game> games, String leagueName);
     }
 }

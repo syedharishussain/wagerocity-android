@@ -21,6 +21,7 @@ import com.plego.wagerocity.android.fragments.GamesListFragment;
 import com.plego.wagerocity.android.fragments.GetDollarsFragment;
 import com.plego.wagerocity.android.fragments.LeaderBoardListFragment;
 import com.plego.wagerocity.android.fragments.MyPicksFragment;
+import com.plego.wagerocity.android.fragments.MyPoolDetailFragment;
 import com.plego.wagerocity.android.fragments.MyPoolsFragment;
 import com.plego.wagerocity.android.fragments.NavigationBarFragment;
 import com.plego.wagerocity.android.fragments.PicksOfPlayerFragment;
@@ -67,7 +68,8 @@ public class DashboardActivity
         SettingsFragment.OnSettingFragmentInteractionListener,
         PicksOfPlayerFragment.OnPicksOfPlayerFragmentInteractionListener,
         PicksOfPlayerAdapter.OnPicksOfPlayerAdapterListAdapterFragmentInteractionListener,
-        MyPoolsListAdapter.OnMyPoolsListAdapterFragmentInteractionListener {
+        MyPoolsListAdapter.OnMyPoolsListAdapterFragmentInteractionListener,
+        MyPoolDetailFragment.OnMyPoolDetailFragmentInteractionListener {
 
     SweetAlertDialog pDialog;
 
@@ -139,32 +141,7 @@ public class DashboardActivity
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_leaderboards_list_fragment))) {
-
-            pDialog = AndroidUtils.showDialog(
-                    getString(R.string.loading),
-                    null,
-                    SweetAlertDialog.PROGRESS_TYPE,
-                    DashboardActivity.this
-            );
-
-            RestClient restClient = new RestClient();
-            restClient.getApiService().getLeaderboards(new WagerocityPref(this).user().getUserId(), new Callback<ArrayList<LeaderboardPlayer>>() {
-                @Override
-                public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, retrofit.client.Response response) {
-                    pDialog.dismiss();
-                    replaceFragment(LeaderBoardListFragment.newInstance(leaderboardPlayers), StringConstants.TAG_FRAG_LEADERBOARD_LIST);
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    pDialog.dismiss();
-
-                    Log.e("getLeaderboards", String.valueOf(error));
-
-                    AndroidUtils.showErrorDialog(error, getApplicationContext());
-
-                }
-            });
+            replaceFragment(SportsListFragment.newInstance(true), StringConstants.TAG_FRAG_SPORTS_LIST);
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
@@ -253,7 +230,7 @@ public class DashboardActivity
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_sports_list_fragment))) {
-            replaceFragment(new SportsListFragment(), StringConstants.TAG_FRAG_SPORTS_LIST);
+            replaceFragment(SportsListFragment.newInstance(false), StringConstants.TAG_FRAG_SPORTS_LIST);
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_setting_fragment))) {
@@ -303,6 +280,13 @@ public class DashboardActivity
     public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam) {
         if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
             replaceFragment(GamesListFragment.newInstance(games, sportsNameValueForParam), StringConstants.TAG_FRAG_GAMES_LIST);
+        }
+    }
+
+    @Override
+    public void onSportsListLeaderbaordsFragmentInteraction(Uri uri, ArrayList<LeaderboardPlayer> leaderboardPlayers, String sportsNameValueForParam) {
+        if (uri.toString().equals(getString(R.string.uri_open_leaderboards_list_fragment))) {
+            replaceFragment(LeaderBoardListFragment.newInstance(leaderboardPlayers), StringConstants.TAG_FRAG_LEADERBOARD_LIST);
         }
     }
 
@@ -369,13 +353,23 @@ public class DashboardActivity
 
     @Override
     public void onMyPoolsListAdapterFragmentInteraction(Uri uri, MyPool pool) {
-
+        if (uri.toString().equals(getString(R.string.uri_open_my_pool_detail_fragment))) {
+            replaceFragment(MyPoolDetailFragment.newInstance(pool), StringConstants.TAG_FRAG_MY_POOL_DETAILS);
+        }
     }
 
     @Override
-    public void onMyPoolOpenGames(Uri uri, ArrayList<Game> games, String leagueName) {
+    public void onMyPoolDetailFragmentInteraction(Uri uri, ArrayList<Game> games, String leagueName) {
         if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
             replaceFragment(GamesListFragment.newInstance(games, leagueName), StringConstants.TAG_FRAG_GAMES_LIST);
         }
     }
+
+//    @Override
+//    public void onMyPoolOpenGames(Uri uri, ArrayList<Game> games, String leagueName) {
+
+//
+//
+//    }
+
 }

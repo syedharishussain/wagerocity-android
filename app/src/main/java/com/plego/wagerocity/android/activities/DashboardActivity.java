@@ -1,5 +1,6 @@
 package com.plego.wagerocity.android.activities;
 
+import android.app.FragmentManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,7 @@ import com.plego.wagerocity.android.model.ExpertPlayer;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
 import com.plego.wagerocity.android.model.MyPool;
+import com.plego.wagerocity.android.model.OddHolder;
 import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
@@ -93,9 +95,26 @@ public class DashboardActivity
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
+
+//            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+//                hideBackButton();
+//            }
+
         } else {
             super.onBackPressed();
         }
+    }
+
+    private void showBackButton() {
+        NavigationBarFragment fragment = (NavigationBarFragment)AndroidUtils.getFragmentByTag(this, StringConstants.TAG_FRAG_NAVIGATION);
+
+        fragment.showBackButton(true);
+    }
+
+    private void hideBackButton() {
+        NavigationBarFragment fragment = (NavigationBarFragment)AndroidUtils.getFragmentByTag(this, StringConstants.TAG_FRAG_NAVIGATION);
+
+        fragment.showBackButton(false);
     }
 
     private void addNavigationBarFragment() {
@@ -132,6 +151,19 @@ public class DashboardActivity
         if (uri.toString().equals(getString(R.string.uri_open_get_dollars_fragment))) {
             replaceGetDollarsFragment();
         }
+    }
+
+    @Override
+    public void onNavigationBarGoHomeFragmentInteraction() {
+
+        while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+    }
+
+    @Override
+    public void onNavigationBarGoBackFragmentInteraction() {
+        this.onBackPressed();
     }
 
     @Override
@@ -291,15 +323,19 @@ public class DashboardActivity
     }
 
     @Override
-    public void onGamesListFragmentInteraction(Uri uri) {
+    public void onGamesListFragmentInteraction(Uri uri, ArrayList<OddHolder> oddHolders) {
 
+        if (uri.toString().equals(getString(R.string.uri_selected_game_for_betting))) {
+
+            replaceFragment(BetOnGameFragment.newInstance(oddHolders), StringConstants.TAG_FRAG_BET_ON_GAME);
+        }
     }
 
     @Override
     public void onGamesListAdapterFragmentInteraction(Uri uri, Game game) {
         if (uri.toString().equals(getString(R.string.uri_selected_game_for_betting))) {
-            Log.e("Select Game", game.getTeamAName());
-            replaceFragment(BetOnGameFragment.newInstance(game), StringConstants.TAG_FRAG_BET_ON_GAME);
+//            Log.e("Select Game", game.getTeamAName());
+//            replaceFragment(BetOnGameFragment.newInstance(game), StringConstants.TAG_FRAG_BET_ON_GAME);
         }
     }
 
@@ -364,6 +400,8 @@ public class DashboardActivity
             replaceFragment(GamesListFragment.newInstance(games, leagueName), StringConstants.TAG_FRAG_GAMES_LIST);
         }
     }
+
+
 
 //    @Override
 //    public void onMyPoolOpenGames(Uri uri, ArrayList<Game> games, String leagueName) {

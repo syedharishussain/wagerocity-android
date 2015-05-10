@@ -24,7 +24,7 @@ public interface ServiceModel {
     public void getAllPools(@Query("userId") String userId, Callback<ArrayList<Pool>> callback);
 
     @GET("/getLeaderboards")
-    public void getLeaderboards(@Query("leagueName") String leagueName, Callback<ArrayList<LeaderboardPlayer>> callback);
+    public void getLeaderboards(@Query("leagueName") String leagueName, @Query("year") String year, Callback<ArrayList<LeaderboardPlayer>> callback);
 
     @GET("/getExperts")
     public void getExperts(@Query("userId") String userId, Callback<ArrayList<ExpertPlayer>> callback);

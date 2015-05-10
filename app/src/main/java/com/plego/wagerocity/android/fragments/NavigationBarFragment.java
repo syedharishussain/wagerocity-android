@@ -73,6 +73,21 @@ public class NavigationBarFragment extends Fragment {
             }
         });
 
+        Button home = (Button) view.findViewById(R.id.button_navigation_bar_logo);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onNavigationBarGoHomeFragmentInteraction();
+            }
+        });
+
+        Button back = (Button) view.findViewById(R.id.button_navigation_bar_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onNavigationBarGoBackFragmentInteraction();
+            }
+        });
     }
 
     @Override
@@ -114,6 +129,19 @@ public class NavigationBarFragment extends Fragment {
     public interface OnNavigationBarFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onNavigationBarFragmentInteraction(Uri uri);
+        public void onNavigationBarGoHomeFragmentInteraction();
+        public void onNavigationBarGoBackFragmentInteraction();
+    }
+
+    public void showBackButton (boolean showBackButton) {
+        View view = getView();
+
+        if (view != null) {
+            Button back = (Button) getView().findViewById(R.id.button_navigation_bar_back);
+            if (showBackButton) back.setVisibility(View.VISIBLE);
+            else back.setVisibility(View.INVISIBLE);
+        }
+
     }
 
 }

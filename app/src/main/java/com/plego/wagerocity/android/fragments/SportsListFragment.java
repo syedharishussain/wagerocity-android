@@ -13,16 +13,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.plego.wagerocity.R;
-import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.SportsListAdapter;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.SportsListObject;
-import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
@@ -206,11 +206,16 @@ public class SportsListFragment extends Fragment {
                 getActivity()
         );
 
+        String leagaeName1 = (leagueName.equals("Overall")? "all" : AndroidUtils.getSportsNameForParam(leagueName));
+
         RestClient restClient = new RestClient();
-        restClient.getApiService().getLeaderboards(AndroidUtils.getSportsNameForParam(leagueName), new Callback<ArrayList<LeaderboardPlayer>>() {
+        restClient.getApiService().getLeaderboards(leagaeName1, "2015", new Callback<ArrayList<LeaderboardPlayer>>() {
             @Override
             public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, Response response) {
                 pDialog.dismiss();
+
+                Collections.sort(leaderboardPlayers, new LeaderboardPlayer());
+
                 mListener.onSportsListLeaderbaordsFragmentInteraction(Uri.parse(getString(R.string.uri_open_leaderboards_list_fragment)), leaderboardPlayers, leagueName);
 //                replaceFragment(LeaderBoardListFragment.newInstance(leaderboardPlayers), StringConstants.TAG_FRAG_LEADERBOARD_LIST);
             }

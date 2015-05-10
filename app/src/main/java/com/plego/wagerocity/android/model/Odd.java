@@ -36,6 +36,9 @@ public class Odd implements Parcelable {
     private String money;
 
     public String getPointSpreadString() {
+
+        if (getPointMid().equals("") ) return AndroidUtils.getSignedOddValue( getPoint() );
+
         return getPointMid() + " (" + AndroidUtils.getSignedOddValue( getPoint() ) + ")"  ;
     }
 
@@ -115,7 +118,7 @@ public class Odd implements Parcelable {
      * The pointMid
      */
     public String getPointMid() {
-        return pointMid;
+        return ( pointMid == null ) ? "" : pointMid;
     }
 
     /**

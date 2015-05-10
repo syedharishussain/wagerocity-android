@@ -21,6 +21,9 @@ import junit.framework.Assert;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.RetrofitError;
@@ -181,11 +184,28 @@ public class AndroidUtils {
 
     public static String getSignedOddValue (String string) {
 
+        if (string == null) {
+            return "0";
+        }
+
         if (Double.parseDouble(string) > 0) {
             return "+"+string;
         } else {
             return string;
         }
 
+    }
+
+    public static String getFormatedDate (String dateString) throws ParseException {
+        String strCurrentDate = "2015-05-06 18:05:00";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");//    "EEE, dd MMM yyyy hh:mm:ss Z");
+        Date newDate = format.parse(dateString); // format.parse(strCurrentDate);
+//        Thursday, May 07, 2015
+        format = new SimpleDateFormat("EEEE, MMM dd, yyyy hh:mm");
+        String date = format.format(newDate);
+
+        date = date + " CST";
+
+        return date;
     }
 }

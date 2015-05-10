@@ -5,7 +5,10 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.plego.wagerocity.utils.AndroidUtils;
 
+import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +72,17 @@ public class Game implements Parcelable {
     @Expose
     private Boolean isPurchased;
 
+    private ArrayList<OddHolder> oddHolders;
+
+    public ArrayList<OddHolder> getOddHolders() {
+        return oddHolders;
+    }
+
+    public void setOddHolders(ArrayList<OddHolder> oddHolders) {
+        this.oddHolders = oddHolders;
+    }
+
+
 
     public Boolean getIsPurchased() {
         return isPurchased;
@@ -118,8 +132,8 @@ public class Game implements Parcelable {
      * @return
      * The cstStartTime
      */
-    public String getCstStartTime() {
-        return cstStartTime;
+    public String getCstStartTime() throws ParseException {
+        return AndroidUtils.getFormatedDate(cstStartTime);
     }
 
     /**
@@ -391,6 +405,7 @@ public class Game implements Parcelable {
         dest.writeString(this.teamBLogo);
         dest.writeString(this.sportsName);
         dest.writeString(this.leagueName);
+        dest.writeList(this.oddHolders);
     }
 
     public Game() {
@@ -416,6 +431,7 @@ public class Game implements Parcelable {
         this.teamBLogo = in.readString();
         this.sportsName = in.readString();
         this.leagueName = in.readString();
+        this.oddHolders = new ArrayList<OddHolder>();
     }
 
     public static final Creator<Game> CREATOR = new Creator<Game>() {

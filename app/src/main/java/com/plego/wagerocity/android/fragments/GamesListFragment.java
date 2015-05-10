@@ -8,13 +8,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.adapters.GamesListAdapter;
 import com.plego.wagerocity.android.model.Game;
+import com.plego.wagerocity.android.model.Odd;
+import com.plego.wagerocity.android.model.OddHolder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,9 +82,28 @@ public class GamesListFragment extends Fragment {
 
         final ListView gamesListView = (ListView) view.findViewById(R.id.listview_games_list);
 
-        GamesListAdapter gamesListAdapter = new GamesListAdapter(view.getContext(), games, sportsName);
+        final GamesListAdapter gamesListAdapter = new GamesListAdapter(view.getContext(), games, sportsName);
 
         gamesListView.setAdapter(gamesListAdapter);
+
+        Button showBetSlip = (Button) view.findViewById(R.id.button_cell_games_list_shoeBetSlip);
+        showBetSlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<OddHolder> oddHolders = new ArrayList<OddHolder>();
+
+                for (Game game: games) {
+                    if (game.getOddHolders() != null)
+                    if (game.getOddHolders().size() > 0) {
+                        oddHolders.addAll(game.getOddHolders());
+                    }
+                }
+
+                Uri uri = Uri.parse(getString(R.string.uri_selected_game_for_betting));
+                mListener.onGamesListFragmentInteraction(uri, oddHolders);
+
+            }
+        });
 
     }
 
@@ -113,7 +136,7 @@ public class GamesListFragment extends Fragment {
      */
     public interface OnGamesListFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onGamesListFragmentInteraction(Uri uri);
+        public void onGamesListFragmentInteraction(Uri uri, ArrayList<OddHolder> oddHolders);
     }
 
 }

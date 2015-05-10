@@ -12,7 +12,6 @@
             android:id="@+id/linearlayout_player_games_team_a"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
@@ -58,7 +57,6 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
@@ -91,6 +89,8 @@
             android:id="@+id/imageview_player_games_separator_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_below="@id/linearlayout_player_games_team_a"
             android:background="@drawable/seperator" />
 
@@ -99,8 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/imageview_player_games_separator_1"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp">
+            >
 
             <TextView
                 android:id="@+id/textview_player_games_pointspread_team_a"
@@ -145,6 +144,8 @@
             android:id="@+id/imageview_player_games_separator_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_below="@id/relativelayout_player_games_point_spread"
             android:background="@drawable/seperator" />
 
@@ -153,8 +154,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/imageview_player_games_separator_2"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp">
+            >
 
             <TextView
                 android:id="@+id/textview_player_games_money_line_team_a"
@@ -200,6 +200,8 @@
             android:id="@+id/imageview_player_games_separator_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_below="@id/relativelayout_player_games_money_line"
             android:background="@drawable/seperator" />
 
@@ -209,7 +211,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/imageview_player_games_separator_3"
-            android:layout_marginTop="10dp">
+            >
 
             <TextView
                 android:id="@+id/textview_player_games_over_team_a"

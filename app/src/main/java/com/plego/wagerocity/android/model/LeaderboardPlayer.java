@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class LeaderboardPlayer implements Parcelable{
+import java.util.Comparator;
+
+public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlayer> {
 
     @SerializedName("usr_id")
     @Expose
@@ -191,4 +193,9 @@ public class LeaderboardPlayer implements Parcelable{
             return new LeaderboardPlayer[size];
         }
     };
+
+    @Override
+    public int compare(LeaderboardPlayer lhs, LeaderboardPlayer rhs) {
+        return Double.compare(Double.parseDouble(rhs.getPoints()), Double.parseDouble(lhs.getPoints()));
+    }
 }

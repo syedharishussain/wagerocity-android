@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
@@ -17,6 +19,7 @@ import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.utils.AndroidUtils;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -113,7 +116,11 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         ArrayList arrayList = new ArrayList();
-                        arrayList.add(createPickObject(game));
+                        try {
+                            arrayList.add(createPickObject(game));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
                         Uri uri = Uri.parse(context.getString(R.string.uri_open_picks_of_player_fragment));
                         mListner.onPicksOfPlayerAdapterListAdapterFragmentInteraction(uri, arrayList);
@@ -134,7 +141,11 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
                                     public void onClick(SweetAlertDialog dialog) {
                                         dialog.dismiss();
                                         ArrayList<Pick> arrayList = new ArrayList<>();
-                                        arrayList.add(createPickObject(game));
+                                        try {
+                                            arrayList.add(createPickObject(game));
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
 
                                         Uri uri = Uri.parse(context.getString(R.string.uri_open_my_picks_fragment));
                                         mListner.onPicksOfPlayerAdapterListAdapterFragmentInteraction(uri, arrayList);
@@ -165,17 +176,27 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
             viewHolder.teamNameA.setText(game.getTeamAFullname());
             viewHolder.teamNameB.setText(game.getTeamBFullname());
 
-            Picasso.with(context)
-                    .load(game.getTeamALogo())
-                    .placeholder(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
-                    .error(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
-                    .into(viewHolder.teamFlagA);
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true) // default
+                    .cacheOnDisk(true) // default
+                    .showImageOnFail(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
+                    .showImageForEmptyUri(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
+                    .build();
 
-            Picasso.with(context)
-                    .load(game.getTeamBLogo())
-                    .placeholder(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
-                    .error(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
-                    .into(viewHolder.teamFlagB);
+            ImageLoader.getInstance().displayImage(game.getTeamALogo(), viewHolder.teamFlagA, options);
+            ImageLoader.getInstance().displayImage(game.getTeamBLogo(), viewHolder.teamFlagB, options);
+
+//            Picasso.with(context)
+//                    .load(game.getTeamALogo())
+//                    .placeholder(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
+//                    .error(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
+//                    .into(viewHolder.teamFlagA);
+//
+//            Picasso.with(context)
+//                    .load(game.getTeamBLogo())
+//                    .placeholder(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
+//                    .error(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
+//                    .into(viewHolder.teamFlagB);
 
             viewHolder.pointSpreadA.setText(game.getTeamAOdd().getPointMid() + " (" + AndroidUtils.getSignedOddValue(game.getTeamAOdd().getPoint()) + ")");
             viewHolder.pointSpreadB.setText(game.getTeamBOdd().getPointMid() + " (" + AndroidUtils.getSignedOddValue(game.getTeamBOdd().getPoint()) + " )");
@@ -193,7 +214,7 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private Pick createPickObject(Game game) {
+    private Pick createPickObject(Game game) throws ParseException {
         Pick pick = new Pick();
 
         pick.setTeamName(game.getBet().getTeamName());

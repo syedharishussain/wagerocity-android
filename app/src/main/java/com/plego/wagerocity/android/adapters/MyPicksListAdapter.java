@@ -17,6 +17,7 @@ import com.plego.wagerocity.utils.AndroidUtils;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -92,7 +93,11 @@ public class MyPicksListAdapter extends BaseAdapter {
 
             viewHolder.textViewTeamA.setText( pick.getMatchDet() );
 //            viewHolder.textViewTeamB.setText( pick.getTeamBName() );
-            viewHolder.textViewDate.setText( pick.getStartTime() );
+            try {
+                viewHolder.textViewDate.setText( pick.getStartTime() );
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             viewHolder.textViewTeamName.setText( pick.getTeamName() );
             viewHolder.textViewBetType.setText(AndroidUtils.getBetTypeFromBetOT(Integer.parseInt(pick.getBetOt()), pick.getPos()));

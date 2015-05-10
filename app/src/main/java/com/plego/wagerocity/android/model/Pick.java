@@ -5,7 +5,9 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.plego.wagerocity.utils.AndroidUtils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class Pick implements Parcelable {
@@ -645,8 +647,8 @@ public class Pick implements Parcelable {
      * @return
      * The startTime
      */
-    public String getStartTime() {
-        return startTime;
+    public String getStartTime() throws ParseException {
+        return AndroidUtils.getFormatedDate(startTime);
     }
 
     /**
@@ -663,8 +665,8 @@ public class Pick implements Parcelable {
      * @return
      * The cstScheduledTime
      */
-    public String getCstScheduledTime() {
-        return cstScheduledTime;
+    public String getCstScheduledTime() throws ParseException {
+        return AndroidUtils.getFormatedDate(cstScheduledTime);
     }
 
     /**
@@ -681,8 +683,8 @@ public class Pick implements Parcelable {
      * @return
      * The cstStartTime
      */
-    public String getCstStartTime() {
-        return cstStartTime;
+    public String getCstStartTime() throws ParseException {
+        return AndroidUtils.getFormatedDate(cstStartTime);
     }
 
     /**

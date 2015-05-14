@@ -3,9 +3,12 @@ package com.plego.wagerocity.android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class OddHolder implements Parcelable {
+public class OddHolder implements Parcelable, Cloneable {
 
-    public OddHolder(Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString) {
+    public OddHolder() {
+    }
+
+    public OddHolder(Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString, String leagueName) {
         this.stake = stake;
         this.teamId = teamId;
         this.oddId = oddId;
@@ -16,6 +19,9 @@ public class OddHolder implements Parcelable {
         this.betTypeSPT = betTypeSPT;
         this.betOT = betOT;
         this.betTypeString = betTypeString;
+        this.isChecked = false;
+        this.leagueName = leagueName;
+        this.riskValue = "0";
     }
 
     Double stake;
@@ -28,6 +34,45 @@ public class OddHolder implements Parcelable {
     String betOT;
     String betTypeString;
     String pointSpreadString;
+    Boolean isChecked;
+    String leagueName;
+    String riskValue;
+    Double parlayValue;
+
+    public Double getParlayValue() {
+        return parlayValue;
+    }
+
+    public void setParlayValue(Double parlayValue) {
+        this.parlayValue = parlayValue;
+    }
+
+
+    public String getLeagueName() {
+        return leagueName;
+    }
+
+    public void setLeagueName(String leagueName) {
+        this.leagueName = leagueName;
+    }
+
+    public String getRiskValue() {
+        return riskValue;
+    }
+
+    public void setRiskValue(String riskValue) {
+        this.riskValue = riskValue;
+    }
+
+
+    public Boolean getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(Boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
 
     public String getPointSpreadString() {
         return pointSpreadString;
@@ -112,6 +157,13 @@ public class OddHolder implements Parcelable {
     }
 
 
+
+
+    @Override
+    public OddHolder clone() throws CloneNotSupportedException {
+        return (OddHolder) super.clone();
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -127,9 +179,11 @@ public class OddHolder implements Parcelable {
         dest.writeString(this.oddValue);
         dest.writeString(this.betTypeSPT);
         dest.writeString(this.betOT);
-    }
-
-    public OddHolder() {
+        dest.writeString(this.betTypeString);
+        dest.writeString(this.pointSpreadString);
+        dest.writeValue(this.isChecked);
+        dest.writeString(this.leagueName);
+        dest.writeString(this.riskValue);
     }
 
     private OddHolder(Parcel in) {
@@ -141,6 +195,11 @@ public class OddHolder implements Parcelable {
         this.oddValue = in.readString();
         this.betTypeSPT = in.readString();
         this.betOT = in.readString();
+        this.betTypeString = in.readString();
+        this.pointSpreadString = in.readString();
+        this.isChecked = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.leagueName = in.readString();
+        this.riskValue = in.readString();
     }
 
     public static final Creator<OddHolder> CREATOR = new Creator<OddHolder>() {

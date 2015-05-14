@@ -391,6 +391,7 @@ public class Game implements Parcelable {
         dest.writeString(this.teamANumber);
         dest.writeString(this.teamBNumber);
         dest.writeList(this.sports);
+        dest.writeList(this.oddHolders);
         dest.writeParcelable(this.teamAOdd, 0);
         dest.writeParcelable(this.teamBOdd, 0);
         dest.writeParcelable(this.user, 0);
@@ -417,6 +418,8 @@ public class Game implements Parcelable {
         this.teamBNumber = in.readString();
         this.sports = new ArrayList<String>();
         in.readList(this.sports, List.class.getClassLoader());
+        this.oddHolders = new ArrayList<OddHolder>();
+        in.readList(this.oddHolders, List.class.getClassLoader());
         this.teamAOdd = in.readParcelable(Odd.class.getClassLoader());
         this.teamBOdd = in.readParcelable(Odd.class.getClassLoader());
         this.user = in.readParcelable(User.class.getClassLoader());

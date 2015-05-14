@@ -65,17 +65,17 @@
 
             </LinearLayout>
 
-        <Button
-            android:id="@+id/button_cell_games_list_bet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/blue_button_small"
-            android:text="BET"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:textColor="#ffffffff"
-            />
+        <!--<Button-->
+            <!--android:id="@+id/button_cell_games_list_bet"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:background="@drawable/blue_button_small"-->
+            <!--android:text="BET"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:textColor="#ffffffff"-->
+            <!--/>-->
 
         <LinearLayout
             android:layout_width="100dp"

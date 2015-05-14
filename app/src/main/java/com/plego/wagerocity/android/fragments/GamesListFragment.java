@@ -76,6 +76,16 @@ public class GamesListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_games_list, container, false);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        for (Game game : games) {
+            game.setOddHolders(new ArrayList<OddHolder>());
+        }
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -92,15 +102,19 @@ public class GamesListFragment extends Fragment {
             public void onClick(View v) {
                 ArrayList<OddHolder> oddHolders = new ArrayList<OddHolder>();
 
-                for (Game game: games) {
+                for (Game game : games) {
                     if (game.getOddHolders() != null)
-                    if (game.getOddHolders().size() > 0) {
-                        oddHolders.addAll(game.getOddHolders());
-                    }
+                        if (game.getOddHolders().size() > 0) {
+                            oddHolders.addAll(game.getOddHolders());
+                        }
                 }
 
-                Uri uri = Uri.parse(getString(R.string.uri_selected_game_for_betting));
-                mListener.onGamesListFragmentInteraction(uri, oddHolders);
+                if (oddHolders.size() > 0) {
+
+                    Uri uri = Uri.parse(getString(R.string.uri_selected_game_for_betting));
+                    mListener.onGamesListFragmentInteraction(uri, oddHolders);
+
+                }
 
             }
         });

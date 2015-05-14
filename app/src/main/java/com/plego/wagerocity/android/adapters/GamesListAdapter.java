@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Game;
+import com.plego.wagerocity.android.model.Odd;
 import com.plego.wagerocity.android.model.OddHolder;
 import com.plego.wagerocity.utils.AndroidUtils;
 
@@ -34,6 +35,11 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  */
 public class GamesListAdapter extends BaseAdapter {
 
+    public static final String POINT_SPREAD = "PointSpread";
+    public static final String SINGLE = "single";
+    public static final String MONEY_LINE = "MoneyLine";
+    public static final String OVER = "Over";
+    public static final String UNDER = "Under";
     List<Game> games;
     String sportsName;
     Context context;
@@ -88,7 +94,7 @@ public class GamesListAdapter extends BaseAdapter {
             viewHolder.textViewDate = (TextView) convertView.findViewById(R.id.textview_cell_games_date_time);
             viewHolder.imageViewA = (ImageView) convertView.findViewById(R.id.imageview_cell_games_list_team_a_flag);
             viewHolder.imageViewB = (ImageView) convertView.findViewById(R.id.imageview_cell_games_list_team_b_flag);
-            viewHolder.button = (Button) convertView.findViewById(R.id.button_cell_games_list_bet);
+//            viewHolder.button = (Button) convertView.findViewById(R.id.button_cell_games_list_bet);
 
             viewHolder.tvPSA = (TextView) convertView.findViewById((R.id.button_cell_games_list_pointspread_team_a));
             viewHolder.tvPSB = (TextView) convertView.findViewById((R.id.button_cell_games_list_pointspread_team_b));
@@ -114,7 +120,7 @@ public class GamesListAdapter extends BaseAdapter {
                         if (game.getOddHolders() == null) {
                             game.setOddHolders(new ArrayList<OddHolder>());
                         }
-                        game.getOddHolders().add(
+                        game.getOddHolders().add( //(Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString)
                                 new OddHolder(
                                         0.0,
                                         game.getTeamANumber(),
@@ -122,14 +128,16 @@ public class GamesListAdapter extends BaseAdapter {
                                         game.getTeamAFullname(),
                                         game.getTeamAFullname() + " vs " + game.getTeamBFullname(),
                                         game.getTeamAOdd().getPoint(),
-                                        "single",
+                                        SINGLE,
                                         "3",
-                                        "PointSpread",
-                                        game.getTeamAOdd().getPointSpreadString()
+                                        POINT_SPREAD,
+                                        game.getTeamAOdd().getPointSpreadString(),
+                                        sportsName
                                 ));
                     } else {
                         if (game.getOddHolders() != null)
-                        removeObject(game.getTeamANumber(), game.getTeamAOdd().getId(), game.getOddHolders());
+                            if (game.getOddHolders().size() > 0)
+                        removeObject(game.getTeamANumber(), game.getTeamAOdd().getId(), POINT_SPREAD, game.getOddHolders());
                         }
                     }
 
@@ -138,43 +146,150 @@ public class GamesListAdapter extends BaseAdapter {
             viewHolder.cbPLB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
 
+                        if (game.getOddHolders() == null) {
+                            game.setOddHolders(new ArrayList<OddHolder>());
+                        }
+                        game.getOddHolders().add(
+                                new OddHolder(
+                                        0.0,
+                                        game.getTeamBNumber(),
+                                        game.getTeamBOdd().getId(),
+                                        game.getTeamBFullname(),
+                                        game.getTeamAFullname() + " vs " + game.getTeamBFullname(),
+                                        game.getTeamBOdd().getPoint(),
+                                        SINGLE,
+                                        "3",
+                                        POINT_SPREAD,
+                                        game.getTeamBOdd().getPointSpreadString(),
+                                        sportsName
+                                ));
+                    } else {
+                        if (game.getOddHolders() != null)
+                            if (game.getOddHolders().size() > 0)
+                            removeObject(game.getTeamBNumber(), game.getTeamBOdd().getId(), POINT_SPREAD, game.getOddHolders());
+                    }
                 }
             });
 
             viewHolder.cbMLA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
 
+                        if (game.getOddHolders() == null) {
+                            game.setOddHolders(new ArrayList<OddHolder>());
+                        }
+                        game.getOddHolders().add(
+                                new OddHolder(
+                                        0.0,
+                                        game.getTeamANumber(),
+                                        game.getTeamAOdd().getId(),
+                                        game.getTeamAFullname(),
+                                        game.getTeamAFullname() + " vs " + game.getTeamBFullname(),
+                                        game.getTeamAOdd().getMoney(),
+                                        SINGLE,
+                                        "1",
+                                        MONEY_LINE,
+                                        game.getTeamAOdd().getMoney(),
+                                        sportsName
+                                ));
+                    } else {
+                        if (game.getOddHolders() != null)
+                            if (game.getOddHolders().size() > 0)
+                            removeObject(game.getTeamANumber(), game.getTeamAOdd().getId(), MONEY_LINE, game.getOddHolders());
+                    }
                 }
             });
 
             viewHolder.cbMLB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
 
+                        if (game.getOddHolders() == null) {
+                            game.setOddHolders(new ArrayList<OddHolder>());
+                        }
+                        game.getOddHolders().add(
+                                new OddHolder(
+                                        0.0,
+                                        game.getTeamBNumber(),
+                                        game.getTeamBOdd().getId(),
+                                        game.getTeamBFullname(),
+                                        game.getTeamAFullname() + " vs " + game.getTeamBFullname(),
+                                        game.getTeamBOdd().getMoney(),
+                                        SINGLE,
+                                        "1",
+                                        MONEY_LINE,
+                                        game.getTeamBOdd().getMoney(),
+                                        sportsName
+                                ));
+                    } else {
+                        if (game.getOddHolders() != null)
+                            if (game.getOddHolders().size() > 0)
+                            removeObject(game.getTeamBNumber(), game.getTeamBOdd().getId(), MONEY_LINE, game.getOddHolders());
+                    }
                 }
             });
 
             viewHolder.cbOA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
 
+                        if (game.getOddHolders() == null) {
+                            game.setOddHolders(new ArrayList<OddHolder>());
+                        }
+                        game.getOddHolders().add(
+                                new OddHolder(
+                                        0.0,
+                                        game.getTeamANumber(),
+                                        game.getTeamAOdd().getId(),
+                                        game.getTeamAFullname(),
+                                        game.getTeamAFullname() + " vs " + game.getTeamBFullname(),
+                                        game.getTeamAOdd().getOver(),
+                                        SINGLE,
+                                        "4",
+                                        OVER,
+                                        game.getTeamAOdd().getPointSpreadString(),
+                                        sportsName
+                                ));
+                    } else {
+                        if (game.getOddHolders() != null)
+                            if (game.getOddHolders().size() > 0)
+                            removeObject(game.getTeamANumber(), game.getTeamAOdd().getId(), OVER, game.getOddHolders());
+                    }
                 }
             });
 
             viewHolder.cbUA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
 
-                }
-            });
-
-            viewHolder.button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
+                        if (game.getOddHolders() == null) {
+                            game.setOddHolders(new ArrayList<OddHolder>());
+                        }
+                        game.getOddHolders().add(
+                                new OddHolder(
+                                        0.0,
+                                        game.getTeamANumber(),
+                                        game.getTeamAOdd().getId(),
+                                        game.getTeamBFullname(),
+                                        game.getTeamAFullname() + " vs " + game.getTeamBFullname(),
+                                        game.getTeamAOdd().getUnder(),
+                                        SINGLE,
+                                        "4",
+                                        UNDER,
+                                        game.getTeamAOdd().getPointSpreadString(),
+                                        sportsName
+                                ));
+                    } else {
+                        if (game.getOddHolders() != null)
+                            if (game.getOddHolders().size() > 0)
+                            removeObject(game.getTeamANumber(), game.getTeamAOdd().getId(), UNDER, game.getOddHolders());
+                    }
                 }
             });
 
@@ -260,7 +375,7 @@ public class GamesListAdapter extends BaseAdapter {
         TextView textViewDate;
         ImageView imageViewA;
         ImageView imageViewB;
-        Button button;
+//        Button button;
 
         TextView tvPSA;
         TextView tvPSB;
@@ -284,9 +399,13 @@ public class GamesListAdapter extends BaseAdapter {
 
     }
 
-    void removeObject(String teamId, String oddId, ArrayList<OddHolder> oddHolders) {
-        for (OddHolder oddHolder: oddHolders) {
-            if (oddHolder.getOddId().equals(oddId) && oddHolder.getTeamId().equals(teamId)) {
+    void removeObject(String teamId, String oddId, String betTypeString, ArrayList<OddHolder> oddHolders) {
+
+        ArrayList<OddHolder> arrayList = new ArrayList<>();
+
+        for ( int i = 0; i < oddHolders.size() ; i++ ) {
+            OddHolder oddHolder = oddHolders.get(i);
+            if (oddHolder.getOddId().equals(oddId) && oddHolder.getTeamId().equals(teamId) && oddHolder.getBetTypeString().equals(betTypeString)) {
                 oddHolders.remove(oddHolder);
             }
         }

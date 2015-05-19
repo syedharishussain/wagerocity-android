@@ -130,7 +130,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
 
         if (leaderboardPlayer != null) {
             Integer rank = position + 1;
-            viewHolder.textViewPlayerName.setText(leaderboardPlayer.getDisplayname());
+            viewHolder.textViewPlayerName.setText(leaderboardPlayer.getUsername());
             viewHolder.textViewUserStats.setText(leaderboardPlayer.getWinPercentage() + " | " + "$" + leaderboardPlayer.getPoints());
             viewHolder.textViewPlayeRank.setText(rank.toString());
 

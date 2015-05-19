@@ -7,11 +7,13 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -80,7 +82,7 @@ public class GamesListAdapter extends BaseAdapter {
 
         final Game game = games.get(position);
 
-        if (convertView == null) {
+//        if (convertView == null) {
 
             viewHolder = new ViewHolder();
 
@@ -111,6 +113,23 @@ public class GamesListAdapter extends BaseAdapter {
             viewHolder.cbOA = (CheckBox) convertView.findViewById(R.id.checkbox_cell_games_list_over_a);
             viewHolder.cbUA = (CheckBox) convertView.findViewById(R.id.checkbox_cell_games_list_over_b);
 
+            if (sportsName.equals("mlb")) {
+                viewHolder.teamAPitcher = (TextView) convertView.findViewById(R.id.textview_cell_games_team_a_pitcher);
+                viewHolder.teamBPitcher = (TextView) convertView.findViewById(R.id.textview_cell_games_team_b_pitcher);
+            }
+
+            if (game.getTeamAOdd() == null) {
+                viewHolder.cbPLA.setEnabled(false);
+                viewHolder.cbMLA.setEnabled(false);
+                viewHolder.cbOA.setEnabled(false);
+                viewHolder.cbUA.setEnabled(false);
+            }
+
+            if (game.getTeamBOdd() == null) {
+                viewHolder.cbPLB.setEnabled(false);
+                viewHolder.cbMLB.setEnabled(false);
+            }
+
             viewHolder.cbPLA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -120,6 +139,7 @@ public class GamesListAdapter extends BaseAdapter {
                         if (game.getOddHolders() == null) {
                             game.setOddHolders(new ArrayList<OddHolder>());
                         }
+
                         game.getOddHolders().add( //(Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString)
                                 new OddHolder(
                                         0.0,
@@ -293,15 +313,19 @@ public class GamesListAdapter extends BaseAdapter {
                 }
             });
 
-            convertView.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+//            convertView.setTag(viewHolder);
+//
+//        } else {
+//            viewHolder = (ViewHolder) convertView.getTag();
+//        }
 
         if (game != null) {
             viewHolder.textViewTeamA.setText(game.getTeamAFullname());
             viewHolder.textViewTeamB.setText(game.getTeamBFullname());
+            if (sportsName.equals("mlb")) {
+                viewHolder.teamAPitcher.setText((game.getTeamAPitcher() == null) ? "" : game.getTeamAPitcher());
+                viewHolder.teamBPitcher.setText((game.getTeamBPitcher() == null) ? "" : game.getTeamBPitcher());
+            }
             try {
                 viewHolder.textViewDate.setText(game.getCstStartTime());
             } catch (ParseException e) {
@@ -369,10 +393,14 @@ public class GamesListAdapter extends BaseAdapter {
 
     }
 
-    class ViewHolder {
+    private class ViewHolder {
         TextView textViewTeamA;
         TextView textViewTeamB;
         TextView textViewDate;
+
+        TextView teamAPitcher;
+        TextView teamBPitcher;
+
         ImageView imageViewA;
         ImageView imageViewB;
 //        Button button;
@@ -396,7 +424,6 @@ public class GamesListAdapter extends BaseAdapter {
 
         CheckBox cbOA;
         CheckBox cbUA;
-
     }
 
     void removeObject(String teamId, String oddId, String betTypeString, ArrayList<OddHolder> oddHolders) {

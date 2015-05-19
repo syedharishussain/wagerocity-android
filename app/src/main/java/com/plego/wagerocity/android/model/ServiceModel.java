@@ -47,6 +47,9 @@ public interface ServiceModel {
     @GET("/getGames")
     public void getGames(@Query("leagueName") String leagueName, Callback<ArrayList<Game>> callback);
 
+    @GET("/getBetParent")
+    public void getBetParent(Callback<BetParent> callback);
+
     @Multipart
     @POST("/betOnGame")
     public void betOnGames(
@@ -62,6 +65,8 @@ public interface ServiceModel {
             @Part("sportsName") String sportsName,
             @Part("bet_type") String bet_type,
             @Part("bet_ot") String bet_ot,
+            @Part("bet_parent") String betParent,
+            @Part("is_pool_bet") String isPoolBet,
             Callback<ArrayList<Pick>> callback
     );
 

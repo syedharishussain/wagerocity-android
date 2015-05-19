@@ -61,6 +61,7 @@
         android:textSize="16sp" />
 
     <RelativeLayout
+        android:id="@+id/rl_betslip_risk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -109,7 +110,15 @@
 
         </RelativeLayout>
 
-
     </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/spinner_betslip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+
+    </Spinner>
 
 </LinearLayout>

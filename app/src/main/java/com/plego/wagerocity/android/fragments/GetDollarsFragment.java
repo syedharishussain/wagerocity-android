@@ -1,6 +1,7 @@
 package com.plego.wagerocity.android.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.RestClient;
@@ -32,12 +35,14 @@ import retrofit.client.Response;
  * Use the {@link GetDollarsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GetDollarsFragment extends Fragment {
+public class GetDollarsFragment extends Fragment implements BillingProcessor.IBillingHandler {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
     private OnGetDollarsFragmentInteractionListener mListener;
+    BillingProcessor bp;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -72,12 +77,16 @@ public class GetDollarsFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        bp = new BillingProcessor(getActivity(), getActivity().getString(R.string.in_app_billing_public_key), this);
+
         Button get2000DollarsButton = (Button) view.findViewById(R.id.button_get_dollars_2000);
         get2000DollarsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 buyCreditsAPI((float)2000.0);
+                bp.purchase(getActivity(), getActivity().getString(R.string.in_app_billing_rookie));
+
             }
         });
 
@@ -157,6 +166,42 @@ public class GetDollarsFragment extends Fragment {
                 AndroidUtils.showErrorDialog(error, getActivity());
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (!bp.handleActivityResult(requestCode, resultCode, data))
+            super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null)
+            bp.release();
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void onProductPurchased(String s, TransactionDetails transactionDetails) {
+        Log.i("In App Billing", s + " " + transactionDetails.purchaseInfo);
+
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int i, Throwable throwable) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
     }
 
     /**

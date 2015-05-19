@@ -70,6 +70,9 @@ public class MyPicksListAdapter extends BaseAdapter {
             viewHolder.textViewDate = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_date_time);
 
             viewHolder.textViewTeamName = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_team_name);
+            viewHolder.poolLabel = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_pool_label);
+            viewHolder.poolName = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_pool_name);
+
             viewHolder.textViewBetType = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_bet_type);
             viewHolder.textViewBetTypeValue = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_bet_type_value);
             viewHolder.textViewStake = (TextView) convertView.findViewById(R.id.textview_cell_my_picks_stake_value);
@@ -90,6 +93,12 @@ public class MyPicksListAdapter extends BaseAdapter {
 
         if (pick != null) {
 
+            if (!pick.getIsPoolBet().equals("0") && pick.getPoolName() != null) {
+                viewHolder.poolLabel.setVisibility(View.VISIBLE);
+                viewHolder.poolName.setVisibility(View.VISIBLE);
+
+                viewHolder.poolName.setText(pick.getPoolName());
+            }
 
             viewHolder.textViewTeamA.setText( pick.getMatchDet() );
 //            viewHolder.textViewTeamB.setText( pick.getTeamBName() );
@@ -125,6 +134,9 @@ public class MyPicksListAdapter extends BaseAdapter {
         TextView textViewTeamA;
         TextView textViewTeamB;
         TextView textViewDate;
+
+        TextView poolLabel;
+        TextView poolName;
 
         TextView textViewTeamName;
         TextView textViewBetType;

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/teaser1_nba"
+        android:title="+6 pts " />
+    <item android:id="@+id/teaser2_nba"
+        android:title="Another Context Option" />
+    <item android:id="@+id/teaser3_nba"
+        android:title="Another Context Option" />
+
+</menu>

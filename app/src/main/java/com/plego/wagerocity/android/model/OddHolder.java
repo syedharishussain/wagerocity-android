@@ -3,6 +3,12 @@ package com.plego.wagerocity.android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class OddHolder implements Parcelable, Cloneable {
 
     public OddHolder() {
@@ -22,6 +28,10 @@ public class OddHolder implements Parcelable, Cloneable {
         this.isChecked = false;
         this.leagueName = leagueName;
         this.riskValue = "0";
+        this.teaser1 = 0;
+        this.teaser2 = 0;
+        this.teaser3 = 0;
+        this.teaserString = "";
     }
 
     Double stake;
@@ -34,10 +44,52 @@ public class OddHolder implements Parcelable, Cloneable {
     String betOT;
     String betTypeString;
     String pointSpreadString;
+    String teaserString;
     Boolean isChecked;
     String leagueName;
     String riskValue;
     Double parlayValue;
+    Integer teaser1;
+    Integer teaser2;
+    Integer teaser3;
+
+    public String getTeaserString() {
+        return teaserString;
+    }
+
+    public void setTeaserString(String teaserString) {
+        this.teaserString = teaserString;
+    }
+
+
+    public Integer getTeaser1() {
+        return teaser1;
+    }
+
+    public void setTeaser1(Integer teaser1) {
+        this.teaser1 = teaser1;
+    }
+
+    public Integer getTeaser2() {
+        return teaser2;
+    }
+
+    public void setTeaser2(Integer teaser2) {
+        this.teaser2 = teaser2;
+    }
+
+    public Integer getTeaser3() {
+        return teaser3;
+    }
+
+    public void setTeaser3(Integer teaser3) {
+        this.teaser3 = teaser3;
+    }
+
+
+
+
+
 
     public Double getParlayValue() {
         return parlayValue;
@@ -164,6 +216,7 @@ public class OddHolder implements Parcelable, Cloneable {
         return (OddHolder) super.clone();
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -183,7 +236,12 @@ public class OddHolder implements Parcelable, Cloneable {
         dest.writeString(this.pointSpreadString);
         dest.writeValue(this.isChecked);
         dest.writeString(this.leagueName);
+        dest.writeString(this.teaserString);
         dest.writeString(this.riskValue);
+        dest.writeValue(this.parlayValue);
+        dest.writeValue(this.teaser1);
+        dest.writeValue(this.teaser2);
+        dest.writeValue(this.teaser3);
     }
 
     private OddHolder(Parcel in) {
@@ -200,6 +258,11 @@ public class OddHolder implements Parcelable, Cloneable {
         this.isChecked = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.leagueName = in.readString();
         this.riskValue = in.readString();
+        this.teaserString = in.readString();
+        this.parlayValue = (Double) in.readValue(Double.class.getClassLoader());
+        this.teaser1 = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.teaser2 = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.teaser3 = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 
     public static final Creator<OddHolder> CREATOR = new Creator<OddHolder>() {
@@ -212,3 +275,4 @@ public class OddHolder implements Parcelable, Cloneable {
         }
     };
 }
+

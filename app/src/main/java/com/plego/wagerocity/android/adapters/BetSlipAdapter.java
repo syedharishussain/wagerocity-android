@@ -1,6 +1,7 @@
 package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,11 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.plego.wagerocity.R;
@@ -20,6 +26,8 @@ import com.plego.wagerocity.android.model.OddHolder;
 import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
 
+import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +38,7 @@ import java.util.Map;
 public class BetSlipAdapter extends BaseAdapter {
 
     public static final String PARLAY = "parlay";
+    public static final String TEASER = "teaser";
 
     public BetSlipAdapter(ArrayList<OddHolder> oddHolders, Context context) {
         this.oddHolders = new ArrayList<>(oddHolders);
@@ -83,6 +92,56 @@ public class BetSlipAdapter extends BaseAdapter {
 
         viewHolder.cb = (CheckBox) convertView.findViewById(R.id.checkbox_betslip);
 
+        viewHolder.spinner = (Spinner) convertView.findViewById(R.id.spinner_betslip);
+
+        if (oddHolder.getBetTypeSPT().equals(TEASER)) {
+            final ArrayList <String> arrayList = new ArrayList<>();
+            if (oddHolder.getLeagueName().equals("nfl")) {
+                arrayList.add("+6 pts " + oddHolder.getTeaser1());
+                arrayList.add("+6.5 pts " + oddHolder.getTeaser2());
+                arrayList.add("+7 pts " + oddHolder.getTeaser3());
+            } else {
+                arrayList.add("+4 pts " + oddHolder.getTeaser1());
+                arrayList.add("+4.5 pts " + oddHolder.getTeaser2());
+                arrayList.add("+5 pts " + oddHolder.getTeaser3());
+            }
+
+
+
+            ArrayAdapter arrayAdapter = new ArrayAdapter(context, R.layout.abc_simple_dropdown_hint, arrayList);
+            viewHolder.spinner.setAdapter(arrayAdapter);
+
+            final ViewHolder finalViewHolder = viewHolder;
+            viewHolder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch (position) {
+                        case 0:
+                            oddHolder.setOddValue(oddHolder.getTeaser1().toString());
+                            break;
+                        case 1:
+                            oddHolder.setOddValue(oddHolder.getTeaser2().toString());
+                            break;
+                        case 2:
+                            oddHolder.setOddValue(oddHolder.getTeaser3().toString());
+                            break;
+                    }
+
+                    finalViewHolder.toWin.setText(String.valueOf(AndroidUtils.getToWinAmount(Float.parseFloat(oddHolder.getRiskValue()), Double.parseDouble(oddHolder.getOddValue()))));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+        }
+
+        if ((oddHolder.getLeagueName().equals("nfl") || oddHolder.getLeagueName().equals("nba")) && oddHolder.getBetTypeSPT().equals(TEASER)) {
+            viewHolder.spinner.setVisibility(View.VISIBLE);
+        }
+
         viewHolder.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -106,10 +165,18 @@ public class BetSlipAdapter extends BaseAdapter {
             viewHolder.cb.setChecked(oddHolder.getIsChecked());
             viewHolder.risk.setText(oddHolder.getRiskValue());
 
+            DecimalFormat f = new DecimalFormat("##.00");
+
             if (oddHolder.getBetTypeSPT().equals(PARLAY)) {
-                viewHolder.toWin.setText(String.valueOf(oddHolder.getParlayValue() * Double.parseDouble(oddHolder.getRiskValue())));
-            } else {
-                viewHolder.toWin.setText(String.valueOf(AndroidUtils.getToWinAmount(Float.parseFloat(oddHolder.getRiskValue()), Double.parseDouble(oddHolder.getOddValue()))));
+                viewHolder.toWin.setText(String.valueOf(f.format(oddHolder.getParlayValue() * Double.parseDouble(oddHolder.getRiskValue()))));
+            }
+
+            else if (oddHolder.getBetTypeSPT().equals(TEASER)) {
+                viewHolder.toWin.setText(String.valueOf(f.format(AndroidUtils.getToWinAmount(Float.parseFloat(oddHolder.getRiskValue()), Double.parseDouble(oddHolder.getOddValue())))));
+            }
+
+            else {
+                viewHolder.toWin.setText(String.valueOf(f.format(AndroidUtils.getToWinAmount(Float.parseFloat(oddHolder.getRiskValue()), Double.parseDouble(oddHolder.getOddValue())))));
 
             }
 
@@ -132,6 +199,9 @@ public class BetSlipAdapter extends BaseAdapter {
         EditText risk;
         EditText toWin;
         CheckBox cb;
+        Spinner spinner;
+        Button button;
+        TextView selectedTeaser;
     }
 
 //    public interface OnBetSlipAdapterFragmentInteractionListener {
@@ -166,6 +236,8 @@ public class BetSlipAdapter extends BaseAdapter {
 
             OddHolder oddHolder = oddHolders.get(position);
 
+            DecimalFormat f = new DecimalFormat("##.00");
+
             if (string.length() > 0) {
 
                 if (!viewHolder.risk.isFocused()) {
@@ -177,7 +249,7 @@ public class BetSlipAdapter extends BaseAdapter {
 
                     result = oddHolder.getParlayValue() * value;
 
-                    viewHolder.toWin.setText(String.valueOf(result));
+                    viewHolder.toWin.setText(String.valueOf(f.format(result)));
 
                     oddHolder.setRiskValue(s.toString());
 
@@ -188,7 +260,7 @@ public class BetSlipAdapter extends BaseAdapter {
 
                     result = AndroidUtils.getToWinAmount(value, Double.parseDouble(oddHolder.getOddValue()));
 
-                    viewHolder.toWin.setText(String.valueOf(result));
+                    viewHolder.toWin.setText(String.valueOf(f.format(result)));
 
                     oddHolder.setRiskValue(s.toString());
 

@@ -125,7 +125,7 @@ public class MyPoolDetailFragment extends Fragment {
 
 
                             Uri uri = Uri.parse(getActivity().getString(R.string.uri_open_games_list_fragment));
-                            mListener.onMyPoolDetailFragmentInteraction(uri, games, pool.getPoolLeague());
+                            mListener.onMyPoolDetailFragmentInteraction(uri, games, pool.getPoolLeague(), pool.getPoolId());
 
                         } else {
 
@@ -192,7 +192,7 @@ public class MyPoolDetailFragment extends Fragment {
      */
     public interface OnMyPoolDetailFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onMyPoolDetailFragmentInteraction(Uri uri, ArrayList<Game> games, String leagueName);
+        public void onMyPoolDetailFragmentInteraction(Uri uri, ArrayList<Game> games, String leagueName, String poolId);
     }
 
     public static boolean setListViewHeightBasedOnItems(ListView listView) {

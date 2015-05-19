@@ -79,11 +79,8 @@ public class PoolsListAdapter extends BaseAdapter {
 
             viewHolder.textViewPoolName = (TextView) convertView.findViewById(R.id.textview_pools_cell_name);
             viewHolder.textViewStatus = (TextView) convertView.findViewById(R.id.textview_pool_cell_pool_open_close_status);
-//            viewHolder.textViewActive = (TextView) convertView.findViewById(R.id.textview_pool_cell_pool_members_active_inactive_status);
             viewHolder.textViewStartDate = (TextView) convertView.findViewById(R.id.textview_pool_cell_pool_start_date);
             viewHolder.textViewEndDate = (TextView) convertView.findViewById(R.id.textview_pool_cell_pool_end_date);
-//            viewHolder.textViewMembersCount = (TextView) convertView.findViewById(R.id.textview_pool_cell_pool_members_count);
-
             viewHolder.button = (Button) convertView.findViewById(R.id.button_pool_join_unjoin);
 
             viewHolder.button.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +117,7 @@ public class PoolsListAdapter extends BaseAdapter {
 
                             pDialog.dismiss();
 
-                            Uri uri = Uri.parse(context.getString(R.string.uri_open_my_picks_fragment));
+                            Uri uri = Uri.parse(context.getString(R.string.uri_open_my_pools_fragment));
                             mListner.onPoolsListAdapterFragmentInteraction(uri, myPools);
                         }
 
@@ -144,7 +141,6 @@ public class PoolsListAdapter extends BaseAdapter {
 
         if (pool != null) {
             viewHolder.textViewPoolName.setText(pool.getName());
-//            viewHolder.textViewMembersCount.setText(pool.getJoinedMembers());
             viewHolder.textViewStatus.setText(pool.getPrivacy());
             viewHolder.textViewStartDate.setText(pool.getFromDate());
             viewHolder.textViewEndDate.setText(pool.getToDate());
@@ -157,8 +153,6 @@ public class PoolsListAdapter extends BaseAdapter {
     class ViewHolder {
         TextView textViewPoolName;
         TextView textViewStatus;
-        TextView textViewActive;
-        TextView textViewMembersCount;
         TextView textViewStartDate;
         TextView textViewEndDate;
         Button button;

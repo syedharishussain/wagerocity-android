@@ -108,7 +108,7 @@ public class AndroidUtils {
         } else if (leagueName.equals("Tennis") || leagueName.toLowerCase().equals("tennis")) {
             return R.drawable.tennis;
         } else {
-            return R.drawable.sports;
+            return R.drawable.logo_w;
         }
     }
 
@@ -198,7 +198,7 @@ public class AndroidUtils {
 
     public static String getFormatedDate (String dateString) throws ParseException {
         String strCurrentDate = "2015-05-06 18:05:00";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");//    "EEE, dd MMM yyyy hh:mm:ss Z");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");//    "EEE, dd MMM yyyy hh:mm:ss Z");
         Date newDate = format.parse(dateString); // format.parse(strCurrentDate);
 //        Thursday, May 07, 2015
         format = new SimpleDateFormat("EEEE, MMM dd, yyyy hh:mm");

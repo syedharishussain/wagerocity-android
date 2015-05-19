@@ -13,9 +13,8 @@
         <ListView
             android:id="@+id/listview_betslips"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_above="@+id/relativeLayout" />
-
 
         <RelativeLayout
             android:layout_width="fill_parent"

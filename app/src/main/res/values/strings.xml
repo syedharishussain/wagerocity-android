@@ -32,13 +32,15 @@
     <string name="USER_FACEBOOK_ID">myFBUserID</string>
     <string name="uri_selected_game_for_betting">Selected Game</string>
     <string name="loading">Loading..</string>
-    <string name="please_wait">Please Wait...</string>
+    <string name="please_wait">Please Wait…</string>
     <string name="loading_games">Loading Games..</string>
     <string name="no_betting_information">No Betting Information</string>
     <string name="no_betting_information_message">We do not have betting information for this game yet. Please come back later.</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="no_games_found">No Games Found!</string>
     <string name="no_games_found_message">There are no games going on for now. Please come back later.</string>
+    <string name="in_app_billing_public_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAietZKFTmPtO5hTB6h3wUd6ZN1BTOn7QL4qoDO6Rc5KJ7ZAS3FpTNlMQRdXm6/KlEcAmjTclvWaAdYDhlsyCh027rlbJQnrjxu3rQ2Xt9qFXX35P7u0wfmlTaI0ahBaUI1VPDt+IdqdB3xK2lJNBrGyVy32d8WYXpg3kCnU/rDzaHgHYX4A6Sk+Pdc0A87mUzxlrldTE7trOzVx+KSZava+/ONHaHNgjTHFfLf239AxwaogR5ztlkYwu3KTqgewptPh8CwFREbvexZfSanFedXOXat39923dvL+if7zkPr5UlAWEfffpiLdu8kaoPby1YZbLiz4P/ibIbJJzY4DXXNwIDAQAB</string>
+    <string name="in_app_billing_rookie">com.wagerocity.rookie</string>
 
     <string-array name="leaderboard_filters">
         <item>All Leaderboards</item>

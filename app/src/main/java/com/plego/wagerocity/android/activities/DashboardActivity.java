@@ -42,6 +42,7 @@ import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
@@ -173,7 +174,7 @@ public class DashboardActivity
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_leaderboards_list_fragment))) {
-            replaceFragment(SportsListFragment.newInstance(true), StringConstants.TAG_FRAG_SPORTS_LIST);
+            replaceFragment(SportsListFragment.newInstance(true, ""), StringConstants.TAG_FRAG_SPORTS_LIST);
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
@@ -249,6 +250,9 @@ public class DashboardActivity
                 public void success(ArrayList<Pick> picks, Response response) {
                     pDialog.dismiss();
 
+
+                    Collections.sort(picks, new Pick());
+
                     replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
                 }
 
@@ -262,7 +266,7 @@ public class DashboardActivity
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_sports_list_fragment))) {
-            replaceFragment(SportsListFragment.newInstance(false), StringConstants.TAG_FRAG_SPORTS_LIST);
+            replaceFragment(SportsListFragment.newInstance(false, ""), StringConstants.TAG_FRAG_SPORTS_LIST);
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_setting_fragment))) {
@@ -309,9 +313,9 @@ public class DashboardActivity
     }
 
     @Override
-    public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam) {
+    public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam, String poolId) {
         if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
-            replaceFragment(GamesListFragment.newInstance(games, sportsNameValueForParam), StringConstants.TAG_FRAG_GAMES_LIST);
+            replaceFragment(GamesListFragment.newInstance(games, sportsNameValueForParam, poolId), StringConstants.TAG_FRAG_GAMES_LIST);
         }
     }
 
@@ -323,11 +327,11 @@ public class DashboardActivity
     }
 
     @Override
-    public void onGamesListFragmentInteraction(Uri uri, ArrayList<OddHolder> oddHolders) {
+    public void onGamesListFragmentInteraction(Uri uri, ArrayList<OddHolder> oddHolders, String poolId) {
 
         if (uri.toString().equals(getString(R.string.uri_selected_game_for_betting))) {
 
-            replaceFragment(BetOnGameFragment.newInstance(oddHolders), StringConstants.TAG_FRAG_BET_ON_GAME);
+            replaceFragment(BetOnGameFragment.newInstance(oddHolders, poolId), StringConstants.TAG_FRAG_BET_ON_GAME);
         }
     }
 
@@ -367,7 +371,9 @@ public class DashboardActivity
 
     @Override
     public void onPoolsListAdapterFragmentInteraction(Uri uri, ArrayList<MyPool> pools) {
-
+        if (uri.toString().equals(getString(R.string.uri_open_my_pools_fragment))) {
+            replaceFragment(MyPoolsFragment.newInstance(pools), StringConstants.TAG_FRAG_MY_POOLS_LIST);
+        }
     }
 
     @Override
@@ -395,19 +401,10 @@ public class DashboardActivity
     }
 
     @Override
-    public void onMyPoolDetailFragmentInteraction(Uri uri, ArrayList<Game> games, String leagueName) {
+    public void onMyPoolDetailFragmentInteraction(Uri uri, ArrayList<Game> games, String leagueName, String poolId) {
         if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
-            replaceFragment(GamesListFragment.newInstance(games, leagueName), StringConstants.TAG_FRAG_GAMES_LIST);
+            replaceFragment(GamesListFragment.newInstance(games, leagueName, poolId), StringConstants.TAG_FRAG_GAMES_LIST);
         }
     }
-
-
-
-//    @Override
-//    public void onMyPoolOpenGames(Uri uri, ArrayList<Game> games, String leagueName) {
-
-//
-//
-//    }
 
 }

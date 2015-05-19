@@ -33,9 +33,11 @@ public class GamesListFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARGS_GAMES_LIST = "games_list";
     private static final String ARGS_SPORTS_NAME = "sports_name";
+    private static final String ARGS_POOL_ID = "Pool_Id";
 
     private ArrayList<Game> games;
     private String sportsName;
+    private String poolId;
 
     private OnGamesListFragmentInteractionListener mListener;
 
@@ -47,11 +49,12 @@ public class GamesListFragment extends Fragment {
      * @return A new instance of fragment GamesListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GamesListFragment newInstance(ArrayList<Game> games, String sportsName) {
+    public static GamesListFragment newInstance(ArrayList<Game> games, String sportsName, String poolId) {
         GamesListFragment fragment = new GamesListFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARGS_GAMES_LIST, games);
         args.putString(ARGS_SPORTS_NAME, sportsName);
+        args.putString(ARGS_POOL_ID, poolId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,6 +69,7 @@ public class GamesListFragment extends Fragment {
         if (getArguments() != null) {
             games = getArguments().getParcelableArrayList(ARGS_GAMES_LIST);
             sportsName = getArguments().getString(ARGS_SPORTS_NAME);
+            poolId = getArguments().getString(ARGS_POOL_ID);
         }
     }
 
@@ -112,7 +116,7 @@ public class GamesListFragment extends Fragment {
                 if (oddHolders.size() > 0) {
 
                     Uri uri = Uri.parse(getString(R.string.uri_selected_game_for_betting));
-                    mListener.onGamesListFragmentInteraction(uri, oddHolders);
+                    mListener.onGamesListFragmentInteraction(uri, oddHolders, poolId);
 
                 }
 
@@ -150,7 +154,7 @@ public class GamesListFragment extends Fragment {
      */
     public interface OnGamesListFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onGamesListFragmentInteraction(Uri uri, ArrayList<OddHolder> oddHolders);
+        public void onGamesListFragmentInteraction(Uri uri, ArrayList<OddHolder> oddHolders, String PoolId);
     }
 
 }

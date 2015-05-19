@@ -2,15 +2,19 @@ package com.plego.wagerocity.android.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.DateFormat;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 
-public class Pick implements Parcelable {
+public class Pick implements Parcelable, Comparator<Pick> {
 
     @SerializedName("bet_id")
     @Expose
@@ -162,6 +166,9 @@ public class Pick implements Parcelable {
     @SerializedName("team_B_logo")
     @Expose
     private String teamBLogo;
+    @SerializedName("pool_name")
+    @Expose
+    private String poolName;
 
     private Odd odd;
 
@@ -169,9 +176,13 @@ public class Pick implements Parcelable {
         return this.odds.get(0);
     }
 
-//    public void setOdd(Odd odd) {
-//        this.odd = odd;
-//    }
+    public String getPoolName() {
+        return poolName;
+    }
+
+    public void setPoolName(String poolName) {
+        this.poolName = poolName;
+    }
 
 
     /**
@@ -1241,4 +1252,28 @@ public class Pick implements Parcelable {
             return new Pick[size];
         }
     };
+
+    @Override
+    public int compare(Pick lhs, Pick rhs) {
+        java.text.DateFormat f = new SimpleDateFormat("EEEE, MMM dd, yyyy hh:mm");
+
+        Date lDate = null, rDate = null;
+        try {
+            lDate = f.parse(lhs.getStartTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            rDate = f.parse(rhs.getStartTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (lDate == null || rDate == null) return 0;
+
+        int compare = rDate.compareTo(lDate);
+
+        return compare;
+
+    }
 }

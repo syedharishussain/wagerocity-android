@@ -42,8 +42,10 @@ public class SportsListFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_POOL_ID = "pool_id";
 
     boolean hasOverAll;
+    private String poolId;
 
     private OnSportsListFragmentInteractionListener mListener;
 
@@ -55,10 +57,11 @@ public class SportsListFragment extends Fragment {
      * @return A new instance of fragment SportsListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SportsListFragment newInstance(boolean hasOverAll) {
+    public static SportsListFragment newInstance(boolean hasOverAll, String poolId) {
         SportsListFragment fragment = new SportsListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_PARAM1, hasOverAll);
+        args.putString(ARG_POOL_ID, poolId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,6 +75,7 @@ public class SportsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             hasOverAll = getArguments().getBoolean(ARG_PARAM1);
+            poolId = getArguments().getString(ARG_POOL_ID);
         }
     }
 
@@ -111,10 +115,9 @@ public class SportsListFragment extends Fragment {
                             if (games.size() > 0) {
 
                                 Uri uri = Uri.parse(getString(R.string.uri_open_games_list_fragment));
-                                mListener.onSportsListFragmentInteraction(uri, games, AndroidUtils.getSportsNameForParam(sportsName));
+                                mListener.onSportsListFragmentInteraction(uri, games, AndroidUtils.getSportsNameForParam(sportsName), poolId);
 
                             } else {
-
 
                                 SweetAlertDialog pDialog = AndroidUtils.showDialog(
                                         getString(R.string.no_games_found),
@@ -178,7 +181,7 @@ public class SportsListFragment extends Fragment {
      */
     public interface OnSportsListFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam);
+        public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam, String poolId);
         public void onSportsListLeaderbaordsFragmentInteraction(Uri uri, ArrayList<LeaderboardPlayer> leaderboardPlayers, String sportsNameValueForParam);
     }
 

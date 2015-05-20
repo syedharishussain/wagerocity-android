@@ -25,6 +25,8 @@ import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -403,7 +405,7 @@ public class BetOnGameFragment extends Fragment {
                                                     pDialog.dismiss();
 
                                                     oddHolders.removeAll(oddHolders);
-
+                                                    Collections.sort(picks, new Pick());
                                                     Uri uri = Uri.parse(getString(R.string.uri_open_my_picks_fragment));
                                                     mListener.onBetOnGameFragmentInteraction(uri, picks);
 
@@ -430,7 +432,7 @@ public class BetOnGameFragment extends Fragment {
                         );
 
                         if (poolId != null) {
-                            if (poolId.equals("0")) {
+                            if (poolId.equals("0") || poolId.equals("") ) {
                                 restClient.getApiService().consumeCredits(new WagerocityPref(getActivity()).user().getUserId(),
                                         Float.parseFloat(stake),
                                         new Callback<User>() {

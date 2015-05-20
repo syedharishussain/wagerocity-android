@@ -1255,25 +1255,26 @@ public class Pick implements Parcelable, Comparator<Pick> {
 
     @Override
     public int compare(Pick lhs, Pick rhs) {
-        java.text.DateFormat f = new SimpleDateFormat("EEEE, MMM dd, yyyy hh:mm");
+//        java.text.DateFormat f = new SimpleDateFormat("EEEE, MMM dd, yyyy hh:mm");
+//
+//        Date lDate = null, rDate = null;
+//        try {
+//            lDate = f.parse(lhs.getStartTime());
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            rDate = f.parse(rhs.getStartTime());
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (lDate == null || rDate == null) return 0;
+//
+//        int compare = rDate.compareTo(lDate);
+//
+//        return compare;
 
-        Date lDate = null, rDate = null;
-        try {
-            lDate = f.parse(lhs.getStartTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        try {
-            rDate = f.parse(rhs.getStartTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (lDate == null || rDate == null) return 0;
-
-        int compare = rDate.compareTo(lDate);
-
-        return compare;
-
+        return rhs.getBetId().compareTo(lhs.getBetId());
     }
 }

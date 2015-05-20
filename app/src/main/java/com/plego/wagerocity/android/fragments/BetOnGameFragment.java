@@ -95,13 +95,14 @@ public class BetOnGameFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        if (oddHolders.size() == 0 ) {
+        if (oddHolders.size() == 0) {
             mListener.onBetOnGameGoBackFragmentInteraction();
         }
 
         if (oddHolders.size() > 1) {
             createParlayOdd();
-            if (oddHolders.get(0).getLeagueName().equals("nfl") || oddHolders.get(0).getLeagueName().equals("nba")) createTeaserOdd();
+            if (oddHolders.get(0).getLeagueName().equals("nfl") || oddHolders.get(0).getLeagueName().equals("nba"))
+                createTeaserOdd();
         }
 
         Button placeBet = (Button) view.findViewById(R.id.button_cell_betongame_place_bet);
@@ -324,6 +325,7 @@ public class BetOnGameFragment extends Fragment {
     public interface OnBetOnGameFragmentInteractionListener {
 
         public void onBetOnGameFragmentInteraction(Uri uri, ArrayList<Pick> picks);
+
         public void onBetOnGameGoBackFragmentInteraction();
     }
 
@@ -342,7 +344,7 @@ public class BetOnGameFragment extends Fragment {
         pDialog.setTitleText("Placing Bet..");
         pDialog.setCancelable(false);
 
-        final ArrayList <String> arrayList = new ArrayList<>();
+        final ArrayList<String> arrayList = new ArrayList<>();
 
         for (final OddHolder oddHolder : oddHolders) {
             if (!oddHolder.getRiskValue().equals("0") && oddHolder.getIsChecked()) {
@@ -351,7 +353,7 @@ public class BetOnGameFragment extends Fragment {
 
                 final String userId = new WagerocityPref(getActivity()).user().getUserId();
                 final String oddId = oddHolder.getOddId();
-                final String oddValue = oddHolder.getBetTypeSPT().equals(PARLAY) ? oddHolder.getParlayValue().toString(): oddHolder.getOddValue();
+                final String oddValue = oddHolder.getBetTypeSPT().equals(PARLAY) ? oddHolder.getParlayValue().toString() : oddHolder.getOddValue();
                 final String position = oddHolder.getBetTypeSPT().equals(SINGLE) ? oddHolder.getBetTypeString().equals(OVER) || oddHolder.getBetTypeString().equals(UNDER) ? oddHolder.getBetTypeString().toLowerCase() : "-" : "-";
                 final String matchDetail = oddHolder.getTeamVsteam();
                 final String oddType = "ao";
@@ -361,7 +363,7 @@ public class BetOnGameFragment extends Fragment {
                 final String leagueName = oddHolder.getLeagueName();
                 final String betType = oddHolder.getBetTypeSPT();
                 final String betOt = oddHolder.getBetOT();
-                final String poolID = (poolId == null || poolId.equals("")) ? "" : poolId ;
+                final String poolID = (poolId == null || poolId.equals("")) ? "" : poolId;
                 String parentId = "";
 
                 arrayList.add("http://api.wagerocity.com/betOnGame");
@@ -383,7 +385,7 @@ public class BetOnGameFragment extends Fragment {
                                 betType,                    // betType: Single, Parlay, Teaser
                                 betOt,                      // betOT: 1 moneyline, 3 pointspread, 4 over|under
                                 betParent.getBetParent(),   // betParent
-                                poolID                      ,   // isPoolBet
+                                poolID,   // isPoolBet
                                 new Callback<ArrayList<Pick>>() {
                                     @Override
                                     public void success(ArrayList<Pick> picks, Response response) {
@@ -427,22 +429,26 @@ public class BetOnGameFragment extends Fragment {
                                 }
                         );
 
-                        restClient.getApiService().consumeCredits(new WagerocityPref(getActivity()).user().getUserId(),
-                                Float.parseFloat(stake),
-                                new Callback<User>() {
-                                    @Override
-                                    public void success(User user, Response response) {
-                                        Log.e("Credits Consumed", user.getCredits().toString());
-                                        new WagerocityPref(getActivity()).setUser(user);
+                        if (poolId != null) {
+                            if (poolId.equals("0")) {
+                                restClient.getApiService().consumeCredits(new WagerocityPref(getActivity()).user().getUserId(),
+                                        Float.parseFloat(stake),
+                                        new Callback<User>() {
+                                            @Override
+                                            public void success(User user, Response response) {
+                                                Log.e("Credits Consumed", user.getCredits().toString());
+                                                new WagerocityPref(getActivity()).setUser(user);
 
-                                        AndroidUtils.updateStats(getActivity());
-                                    }
+                                                AndroidUtils.updateStats(getActivity());
+                                            }
 
-                                    @Override
-                                    public void failure(RetrofitError error) {
+                                            @Override
+                                            public void failure(RetrofitError error) {
 
-                                    }
-                                });
+                                            }
+                                        });
+                            }
+                        }
                     }
 
                     @Override

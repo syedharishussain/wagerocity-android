@@ -16,7 +16,9 @@ import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.MyPool;
 import com.plego.wagerocity.android.model.Pool;
+import com.plego.wagerocity.android.model.PoolMember;
 import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.User;
 import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
@@ -87,49 +89,32 @@ public class PoolsListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    Pool pool = pools.get(position);
+                    final Pool pool = pools.get(position);
 
-                    final SweetAlertDialog pDialog = AndroidUtils.showDialog(
-                            "Loading",
-                            null,
-                            SweetAlertDialog.PROGRESS_TYPE,
-                            context
-                    );
+                    if (Integer.parseInt(pool.getAmount()) > 0) {
+                        new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Are you sure?")
+                                .setContentText("$" + pool.getAmount() + " will be deducted from your account, do you still want to join?")
+                                .setConfirmText("Yes!")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismissWithAnimation();
+                                        joinPool(pool);
+                                        buyCreditsAPI(Float.parseFloat(pool.getAmount()));
+                                    }
+                                })
+                                .setCancelText("Cancel")
+                                .showCancelButton(true)
+                                .show();
+                    } else {
+                        joinPool(pool);
+                    }
 
-                    RestClient restClient = new RestClient();
-
-                    restClient.getApiService().joinPool(new WagerocityPref(context).user().getUserId(), pool.getPoolId(), new Callback<ArrayList<Pool>>() {
-                        @Override
-                        public void success(ArrayList<Pool> pools, Response response) {
-
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-
-                        }
-                    });
-
-
-                    restClient.getApiService().getMyPools(new WagerocityPref(context).user().getUserId(), new Callback<ArrayList<MyPool>>() {
-                        @Override
-                        public void success(ArrayList<MyPool> myPools, Response response) {
-
-                            pDialog.dismiss();
-
-                            Uri uri = Uri.parse(context.getString(R.string.uri_open_my_pools_fragment));
-                            mListner.onPoolsListAdapterFragmentInteraction(uri, myPools);
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-
-                            pDialog.dismiss();
-                            AndroidUtils.showErrorDialog(error, context);
-                        }
-                    });
                 }
+
             });
+
 
             convertView.setTag(viewHolder);
 
@@ -144,10 +129,73 @@ public class PoolsListAdapter extends BaseAdapter {
             viewHolder.textViewStatus.setText(pool.getPrivacy());
             viewHolder.textViewStartDate.setText(pool.getFromDate());
             viewHolder.textViewEndDate.setText(pool.getToDate());
-            if (isMyPools) viewHolder.button.setVisibility(View.INVISIBLE);
+
+            if (pool.isJoined()) {
+                viewHolder.button.setText("Joined");
+                viewHolder.button.setEnabled(false);
+//                viewHolder.button.setVisibility(View.INVISIBLE);
+            }
         }
 
         return convertView;
+    }
+
+    private void joinPool(Pool pool) {
+
+        final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                "Loading",
+                null,
+                SweetAlertDialog.PROGRESS_TYPE,
+                context
+        );
+
+        final RestClient restClient = new RestClient();
+
+        restClient.getApiService().joinPool(new WagerocityPref(context).user().getUserId(), pool.getPoolId(), new Callback<ArrayList<Pool>>() {
+            @Override
+            public void success(ArrayList<Pool> pools, Response response) {
+                restClient.getApiService().getMyPools(new WagerocityPref(context).user().getUserId(), new Callback<ArrayList<MyPool>>() {
+                    @Override
+                    public void success(ArrayList<MyPool> myPools, Response response) {
+
+                        pDialog.dismiss();
+
+                        Uri uri = Uri.parse(context.getString(R.string.uri_open_my_pools_fragment));
+                        mListner.onPoolsListAdapterFragmentInteraction(uri, myPools);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                        pDialog.dismiss();
+                        AndroidUtils.showErrorDialog(error, context);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    public void buyCreditsAPI (Float credits) {
+
+        final WagerocityPref pref = new WagerocityPref(context);
+        final User user = pref.user();
+
+        new RestClient().getApiService().buyCredits(user.getUserId(), credits, new Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                pref.setUser(user);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                AndroidUtils.showErrorDialog(error, context);
+            }
+        });
     }
 
     class ViewHolder {

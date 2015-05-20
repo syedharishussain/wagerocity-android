@@ -73,6 +73,18 @@ public class Pool implements Parcelable {
     @SerializedName("min_people")
     @Expose
     private String minPeople;
+    @SerializedName("is_join")
+    @Expose
+    private boolean isJoined;
+
+    public boolean isJoined() {
+        return isJoined;
+    }
+
+    public void setJoined(boolean isJoined) {
+        this.isJoined = isJoined;
+    }
+
 
     /**
      *
@@ -536,8 +548,9 @@ public class Pool implements Parcelable {
         dest.writeString(this.dateTime);
         dest.writeString(this.joinedMembers);
         dest.writeString(this.isPaid);
-        dest.writeValue(this.amount);
+        dest.writeString(this.amount);
         dest.writeString(this.minPeople);
+        dest.writeByte(isJoined ? (byte) 1 : (byte) 0);
     }
 
     public Pool() {
@@ -568,6 +581,7 @@ public class Pool implements Parcelable {
         this.isPaid = in.readString();
         this.amount = in.readString();
         this.minPeople = in.readString();
+        this.isJoined = in.readByte() != 0;
     }
 
     public static final Creator<Pool> CREATOR = new Creator<Pool>() {

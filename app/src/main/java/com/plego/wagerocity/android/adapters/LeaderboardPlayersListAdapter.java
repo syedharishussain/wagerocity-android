@@ -22,6 +22,7 @@ import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.utils.AndroidUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -131,7 +132,11 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
         if (leaderboardPlayer != null) {
             Integer rank = position + 1;
             viewHolder.textViewPlayerName.setText(leaderboardPlayer.getUsername());
-            viewHolder.textViewUserStats.setText(leaderboardPlayer.getWinPercentage() + " | " + "$" + leaderboardPlayer.getPoints());
+
+            double amount = Double.parseDouble(leaderboardPlayer.getPoints());
+            DecimalFormat formatter = new DecimalFormat("#,###.00");
+
+            viewHolder.textViewUserStats.setText(leaderboardPlayer.getWinPercentage() + " | " + "$" + formatter.format(amount));
             viewHolder.textViewPlayeRank.setText(rank.toString());
 
             DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -142,7 +147,6 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
                     .build();
 
             ImageLoader.getInstance().displayImage(leaderboardPlayer.getImageUrl(), viewHolder.imageViewUserImage, options);
-
         }
 
         return convertView;
@@ -154,7 +158,6 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
         TextView textViewUserStats;
         ImageView imageViewUserImage;
         Button button;
-
     }
 
     public interface OnLeaderboardPlayerListAdapterFragmentInteractionListener {

@@ -15,8 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            />
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/textview_cell_betslip_team_name"
@@ -76,14 +75,33 @@
                 android:text="Risk:"
                 android:textSize="18sp" />
 
-            <EditText
-                android:id="@+id/edittext_cell_betslip_risk"
-                android:layout_width="120dp"
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textview_cell_betslip_risk"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:inputType="numberDecimal" />
+                >
+
+                <TextView
+                    android:id="@+id/tv_$_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/edittext_cell_betslip_risk"
+                    android:layout_alignBottom="@id/edittext_cell_betslip_risk"
+                    android:gravity="center"
+                    android:text="$"
+                    android:layout_marginRight="5dp"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/edittext_cell_betslip_risk"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/tv_$_1"
+                    android:inputType="numberDecimal" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
@@ -99,14 +117,34 @@
                 android:text="To Win:"
                 android:textSize="18sp" />
 
-            <EditText
-                android:id="@+id/edittext_cell_betslip_to_win"
-                android:layout_width="120dp"
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textview_cell_betslip_win"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/tv_$_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/edittext_cell_betslip_to_win"
+                    android:layout_alignBottom="@id/edittext_cell_betslip_to_win"
+                    android:gravity="center"
+                    android:text="$"
+                    android:layout_marginRight="5dp"
+                    android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edittext_cell_betslip_to_win"
+                android:layout_width="120dp"
+                android:layout_toRightOf="@id/tv_$_2"
+                android:layout_height="wrap_content"
                 android:inputType="numberDecimal" />
+
+                </RelativeLayout>
 
         </RelativeLayout>
 
@@ -116,8 +154,7 @@
         android:id="@+id/spinner_betslip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
     </Spinner>
 

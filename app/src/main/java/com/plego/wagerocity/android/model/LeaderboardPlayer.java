@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.DecimalFormat;
 import java.util.Comparator;
 
 public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlayer> {

@@ -1,6 +1,8 @@
 package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +55,7 @@ public class MyPicksListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
         if (convertView == null) {
@@ -82,6 +84,19 @@ public class MyPicksListAdapter extends BaseAdapter {
             viewHolder.imageViewA = (ImageView) convertView.findViewById(R.id.imageview_cell_my_picks_team_a_flag);
             viewHolder.imageViewB = (ImageView) convertView.findViewById(R.id.imageview_cell_my_picks_team_b_flag);
 
+            viewHolder.share = (Button) convertView.findViewById(R.id.button_cell_my_picks_share);
+
+            viewHolder.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    sharingIntent.setType("text/plain");
+                    String shareBody = "Share your Pick!";
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, picks.get(position).getMatchDet());
+                    context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                }
+            });
 
             convertView.setTag(viewHolder);
 
@@ -147,5 +162,7 @@ public class MyPicksListAdapter extends BaseAdapter {
 
         ImageView imageViewA;
         ImageView imageViewB;
+
+        Button share;
     }
 }

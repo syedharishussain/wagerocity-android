@@ -351,6 +351,11 @@ public class DashboardActivity
     }
 
     @Override
+    public void onBetOnGameGoBackFragmentInteraction() {
+        this.onBackPressed();
+    }
+
+    @Override
     public void onMyPicksFragmentInteraction(Uri uri) {
 
     }

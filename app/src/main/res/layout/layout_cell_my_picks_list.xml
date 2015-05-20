@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/ll_cell_my_picks_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -41,55 +42,39 @@
 
                 </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/linearlayout_cell_my_picks_team_a"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/imageview_cell_my_picks_team_a_flag"
+                    android:layout_width="60dp"
+
+                    android:layout_height="60dp"
                     android:layout_below="@id/relativelayout_cell_my_picks_date"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:orientation="vertical">
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:background="#c8ffffff" />
 
-                    <ImageView
-                        android:id="@+id/imageview_cell_my_picks_team_a_flag"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:background="#c8ffffff" />
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/textview_cell_my_picks_team_a_name"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_centerVertical="true"-->
-                        <!--android:layout_marginTop="10dp"-->
-                        <!--android:gravity="center"-->
-                        <!--android:minLines="2"-->
-                        <!--android:scrollHorizontally="false"-->
-                        <!--android:text="California"-->
-                        <!--android:textIsSelectable="false"-->
-                        <!--android:textSize="8pt" />-->
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearlayout_cell_my_picks_team_b"
-                    android:layout_width="100dp"
+                <Button
+                    android:id="@+id/button_cell_my_picks_share"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/share_button"
+                    android:layout_below="@id/relativelayout_cell_my_picks_date"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerInParent="true"
+                    />
+
+                <ImageView
+                    android:id="@+id/imageview_cell_my_picks_team_b_flag"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/relativelayout_cell_my_picks_date"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/imageview_cell_my_picks_team_b_flag"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:background="#c8ffffff" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="#c8ffffff" />
 
-                </LinearLayout>
 
             </RelativeLayout>
 
@@ -97,12 +82,11 @@
                 android:id="@+id/textview_cell_my_picks_team_a_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Team A vs Team B"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textSize="20sp"
-                />
+                android:text="Team A vs Team B"
+                android:textSize="20sp" />
 
 
             <RelativeLayout
@@ -157,8 +141,7 @@
                     android:layout_height="wrap_content"
                     android:text="Pool Name :"
                     android:textSize="18sp"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/textview_cell_my_picks_pool_name"
@@ -171,8 +154,7 @@
                     android:textColor="#ffff3100"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -305,7 +287,7 @@
                 android:id="@+id/imageview_cell_my_picks_separator_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/linearlayout_cell_my_picks_team_a"
+                android:layout_below="@id/ll_cell_my_picks_data"
                 android:background="@drawable/seperator" />
 
         </LinearLayout>

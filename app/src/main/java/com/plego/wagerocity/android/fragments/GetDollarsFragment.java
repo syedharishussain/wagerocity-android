@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,8 +85,13 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                buyCreditsAPI((float)2000.0);
-                bp.purchase(getActivity(), getActivity().getString(R.string.in_app_billing_rookie));
+                bp.consumePurchase("android.test.purchased");
+                boolean isPurchased = bp.isPurchased("android.test.purchased");
+
+                if (isPurchased) {
+                }
+//                bp.purchase(getActivity(), getActivity().getString(R.string.in_app_billing_rookie));
+                bp.purchase(getActivity(), "android.test.purchased");
 
             }
         });
@@ -95,7 +101,9 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                buyCreditsAPI((float)15000.0);
+                bp.purchase(getActivity(), "android.test.purchased");
+                bp.consumePurchase("android.test.purchased");
+//                buyCreditsAPI((float)15000.0);
             }
         });
 
@@ -104,7 +112,9 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                buyCreditsAPI((float)100000.0);
+                bp.purchase(getActivity(), "android.test.purchased");
+                bp.consumePurchase("android.test.purchased");
+//                buyCreditsAPI((float)100000.0);
             }
         });
     }
@@ -171,8 +181,12 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (!bp.handleActivityResult(requestCode, resultCode, data))
-            super.onActivityResult(requestCode, resultCode, data);
+        FragmentManager fragmentManager = getFragmentManager();
+        GetDollarsFragment fragment = (GetDollarsFragment) fragmentManager.findFragmentByTag(StringConstants.TAG_FRAG_GET_DOLLARS);
+        if (fragment != null)
+        {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -185,8 +199,8 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
 
     @Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
-        Log.i("In App Billing", s + " " + transactionDetails.purchaseInfo);
-
+        Log.i("In App Billing", s + " " + transactionDetails.productId);
+        if (transactionDetails.productId.equals("android.test.purchased")) buyCreditsAPI((float)2000.0);
     }
 
     @Override

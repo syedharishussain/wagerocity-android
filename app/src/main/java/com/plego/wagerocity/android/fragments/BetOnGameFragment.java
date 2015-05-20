@@ -95,6 +95,10 @@ public class BetOnGameFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
+        if (oddHolders.size() == 0 ) {
+            mListener.onBetOnGameGoBackFragmentInteraction();
+        }
+
         if (oddHolders.size() > 1) {
             createParlayOdd();
             if (oddHolders.get(0).getLeagueName().equals("nfl") || oddHolders.get(0).getLeagueName().equals("nba")) createTeaserOdd();
@@ -320,6 +324,7 @@ public class BetOnGameFragment extends Fragment {
     public interface OnBetOnGameFragmentInteractionListener {
 
         public void onBetOnGameFragmentInteraction(Uri uri, ArrayList<Pick> picks);
+        public void onBetOnGameGoBackFragmentInteraction();
     }
 
     void processBet() {

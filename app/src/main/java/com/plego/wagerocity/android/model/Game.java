@@ -157,8 +157,8 @@ public class Game implements Parcelable {
      * @return
      * The cstStartTime
      */
-    public String getCstStartTime() throws ParseException {
-        return AndroidUtils.getFormatedDate(cstStartTime);
+    public String getCstStartTime(){
+        return cstStartTime;
     }
 
     /**

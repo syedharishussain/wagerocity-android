@@ -124,6 +124,13 @@ public class BetOnGameFragment extends Fragment {
 
     private void createParlayOdd() {
 
+        if (oddHolders.size() == 2)
+            if ( oddHolders.get(0).getTeamId().equals(oddHolders.get(1).getTeamId()))
+             if (( oddHolders.get(0).getBetOT().equals("1") && oddHolders.get(1).getBetOT().equals("3") ) ||
+                ( oddHolders.get(0).getBetOT().equals("3") && oddHolders.get(1).getBetOT().equals("1") ))
+
+                 return;
+
         if (oddHolders.size() > 1) {
 
             String teamId = null;
@@ -148,21 +155,6 @@ public class BetOnGameFragment extends Fragment {
             DecimalFormat f = new DecimalFormat("##.00");
 
             parlayValue = Double.parseDouble(f.format(parlayValue));
-
-//            Double stake;
-//            String teamId;
-//            String oddId;
-//            String teamName;
-//            String teamVsteam;
-//            String oddValue;
-//            String betTypeSPT;
-//            String betOT;
-//            String betTypeString;
-//            String pointSpreadString;
-//            Boolean isChecked;
-//            String leagueName;
-//            String riskValue;
-//            Double parlayValue;
 
             OddHolder oddHolder = new OddHolder();
             oddHolder.setTeamId(teamId);

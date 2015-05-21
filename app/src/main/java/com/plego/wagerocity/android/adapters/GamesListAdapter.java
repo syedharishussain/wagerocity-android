@@ -317,7 +317,7 @@ public class GamesListAdapter extends BaseAdapter {
                 viewHolder.teamBPitcher.setText((game.getTeamBPitcher() == null) ? "" : game.getTeamBPitcher());
             }
             try {
-                viewHolder.textViewDate.setText(game.getCstStartTime());
+                viewHolder.textViewDate.setText(AndroidUtils.getFormatedDate(game.getCstStartTime()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

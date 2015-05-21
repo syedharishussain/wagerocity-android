@@ -186,18 +186,6 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
             ImageLoader.getInstance().displayImage(game.getTeamALogo(), viewHolder.teamFlagA, options);
             ImageLoader.getInstance().displayImage(game.getTeamBLogo(), viewHolder.teamFlagB, options);
 
-//            Picasso.with(context)
-//                    .load(game.getTeamALogo())
-//                    .placeholder(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
-//                    .error(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
-//                    .into(viewHolder.teamFlagA);
-//
-//            Picasso.with(context)
-//                    .load(game.getTeamBLogo())
-//                    .placeholder(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
-//                    .error(AndroidUtils.getDrawableFromLeagueName(game.getLeagueName()))
-//                    .into(viewHolder.teamFlagB);
-
             viewHolder.pointSpreadA.setText(game.getTeamAOdd().getPointMid() + " (" + AndroidUtils.getSignedOddValue(game.getTeamAOdd().getPoint()) + ")");
             viewHolder.pointSpreadB.setText(game.getTeamBOdd().getPointMid() + " (" + AndroidUtils.getSignedOddValue(game.getTeamBOdd().getPoint()) + " )");
 

@@ -32,12 +32,12 @@ public class MyPicksListAdapter extends BaseAdapter {
     Context context;
 
 
-
     public MyPicksListAdapter(Context context, ArrayList<Pick> picks) {
         this.picks = picks;
         this.context = context;
-    };
+    }
 
+    ;
 
 
     @Override
@@ -109,17 +109,18 @@ public class MyPicksListAdapter extends BaseAdapter {
 
         if (pick != null) {
 
-            if (!pick.getIsPoolBet().equals("0") && pick.getPoolName() != null) {
-                viewHolder.poolLabel.setVisibility(View.VISIBLE);
-                viewHolder.poolName.setVisibility(View.VISIBLE);
+            if (pick.getIsPoolBet() != null && pick.getPoolName() != null)
+                if (!pick.getIsPoolBet().equals("0")) {
+                    viewHolder.poolLabel.setVisibility(View.VISIBLE);
+                    viewHolder.poolName.setVisibility(View.VISIBLE);
 
-                viewHolder.poolName.setText(pick.getPoolName());
-            }
+                    viewHolder.poolName.setText(pick.getPoolName());
+                }
 
-            viewHolder.textViewTeamA.setText( pick.getMatchDet() );
+            viewHolder.textViewTeamA.setText(pick.getMatchDet());
 //            viewHolder.textViewTeamB.setText( pick.getTeamBName() );
             try {
-                viewHolder.textViewDate.setText( pick.getStartTime() );
+                viewHolder.textViewDate.setText(pick.getStartTime());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -128,11 +129,11 @@ public class MyPicksListAdapter extends BaseAdapter {
 
             String betTypeString = pick.getTeamName().equals("Parlay") || pick.getTeamName().equals("Teaser") ? pick.getTeamName() : AndroidUtils.getBetTypeFromBetOT(Integer.parseInt(pick.getBetOt()), pick.getPos());
 
-            viewHolder.textViewTeamName.setText( pick.getTeamName() );
+            viewHolder.textViewTeamName.setText(pick.getTeamName());
             viewHolder.textViewBetType.setText(betTypeString);
             viewHolder.textViewBetTypeValue.setText(AndroidUtils.getSignedOddValue(pick.getOddsVal()));
-            viewHolder.textViewStake.setText("$"+pick.getStake());
-            viewHolder.textViewToWin.setText("$"+String.valueOf(f.format(AndroidUtils.getToWinAmount(Double.parseDouble(pick.getStake()), Double.parseDouble(pick.getOddsVal())))));
+            viewHolder.textViewStake.setText("$" + pick.getStake());
+            viewHolder.textViewToWin.setText("$" + String.valueOf(f.format(AndroidUtils.getToWinAmount(Double.parseDouble(pick.getStake()), Double.parseDouble(pick.getOddsVal())))));
             viewHolder.textViewResult.setText(pick.getBetResult());
 
             DisplayImageOptions options = new DisplayImageOptions.Builder()

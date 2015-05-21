@@ -188,6 +188,8 @@ public class AndroidUtils {
             return "0";
         }
 
+        if (string.equals("")) return "";
+
         if (Double.parseDouble(string) > 0) {
             return "+"+string;
         } else {

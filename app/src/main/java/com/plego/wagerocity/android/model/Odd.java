@@ -39,7 +39,7 @@ public class Odd implements Parcelable {
 
         if (getPointMid().equals("") ) return AndroidUtils.getSignedOddValue( getPoint() );
 
-        return getPointMid() + " (" + AndroidUtils.getSignedOddValue( getPoint() ) + ")"  ;
+        return AndroidUtils.getSignedOddValue( getPointMid() ) + " (" + AndroidUtils.getSignedOddValue( getPoint() ) + ")"  ;
     }
 
 

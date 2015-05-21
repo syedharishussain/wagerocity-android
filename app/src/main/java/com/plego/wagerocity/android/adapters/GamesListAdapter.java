@@ -1,36 +1,26 @@
 package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Game;
-import com.plego.wagerocity.android.model.Odd;
 import com.plego.wagerocity.android.model.OddHolder;
 import com.plego.wagerocity.utils.AndroidUtils;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by haris on 29/03/15.
@@ -96,7 +86,6 @@ public class GamesListAdapter extends BaseAdapter {
             viewHolder.textViewDate = (TextView) convertView.findViewById(R.id.textview_cell_games_date_time);
             viewHolder.imageViewA = (ImageView) convertView.findViewById(R.id.imageview_cell_games_list_team_a_flag);
             viewHolder.imageViewB = (ImageView) convertView.findViewById(R.id.imageview_cell_games_list_team_b_flag);
-//            viewHolder.button = (Button) convertView.findViewById(R.id.button_cell_games_list_bet);
 
             viewHolder.tvPSA = (TextView) convertView.findViewById((R.id.button_cell_games_list_pointspread_team_a));
             viewHolder.tvPSB = (TextView) convertView.findViewById((R.id.button_cell_games_list_pointspread_team_b));
@@ -320,6 +309,7 @@ public class GamesListAdapter extends BaseAdapter {
 //        }
 
         if (game != null) {
+
             viewHolder.textViewTeamA.setText(game.getTeamAFullname());
             viewHolder.textViewTeamB.setText(game.getTeamBFullname());
             if (sportsName.equals("mlb")) {
@@ -386,10 +376,10 @@ public class GamesListAdapter extends BaseAdapter {
             view.tvPSB.setText(game.getTeamBOdd().getPointSpreadString() == null ? "-" : game.getTeamBOdd().getPointSpreadString());
         }
 
-        view.tvMLA.setText(mlA);
-        view.tvMLB.setText(mlB);
-        view.tvOA.setText(oA);
-        view.tvUA.setText(uA);
+        view.tvMLA.setText(AndroidUtils.getSignedOddValue(mlA));
+        view.tvMLB.setText(AndroidUtils.getSignedOddValue(mlB));
+        view.tvOA.setText(AndroidUtils.getSignedOddValue(oA));
+        view.tvUA.setText(AndroidUtils.getSignedOddValue(uA));
 
     }
 

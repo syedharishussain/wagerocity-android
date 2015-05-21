@@ -161,7 +161,7 @@ public class BetSlipAdapter extends BaseAdapter {
             viewHolder.teamName.setText(oddHolder.getTeamName());
             viewHolder.betType.setText(oddHolder.getBetTypeString());
             viewHolder.teamVsTeam.setText(oddHolder.getTeamVsteam());
-            viewHolder.betValue.setText(oddHolder.getBetOT().equals("3") ? oddHolder.getPointSpreadString() : oddHolder.getOddValue());
+            viewHolder.betValue.setText(oddHolder.getBetOT().equals("3") ? oddHolder.getPointSpreadString() : AndroidUtils.getSignedOddValue(oddHolder.getOddValue()));
             viewHolder.cb.setChecked(oddHolder.getIsChecked());
             viewHolder.risk.setText(oddHolder.getRiskValue());
 

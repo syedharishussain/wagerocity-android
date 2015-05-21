@@ -123,8 +123,10 @@ public class MyPicksListAdapter extends BaseAdapter {
                 e.printStackTrace();
             }
 
+            String betTypeString = pick.getTeamName().equals("Parlay") || pick.getTeamName().equals("Teaser") ? pick.getTeamName() : AndroidUtils.getBetTypeFromBetOT(Integer.parseInt(pick.getBetOt()), pick.getPos());
+
             viewHolder.textViewTeamName.setText( pick.getTeamName() );
-            viewHolder.textViewBetType.setText(AndroidUtils.getBetTypeFromBetOT(Integer.parseInt(pick.getBetOt()), pick.getPos()));
+            viewHolder.textViewBetType.setText(betTypeString);
             viewHolder.textViewBetTypeValue.setText(pick.getOddsVal());
             viewHolder.textViewStake.setText(pick.getStake());
             viewHolder.textViewToWin.setText(String.valueOf(AndroidUtils.getToWinAmount(Double.parseDouble(pick.getStake()), Double.parseDouble(pick.getOddsVal()))));

@@ -40,7 +40,7 @@ public class BetSlipAdapter extends BaseAdapter {
     public static final String PARLAY = "parlay";
     public static final String TEASER = "teaser";
 
-    DecimalFormat f = new DecimalFormat("##.00");
+    DecimalFormat f = new DecimalFormat("####");
 
     public BetSlipAdapter(ArrayList<OddHolder> oddHolders, Context context) {
         this.oddHolders = new ArrayList<>(oddHolders);
@@ -166,8 +166,6 @@ public class BetSlipAdapter extends BaseAdapter {
             viewHolder.betValue.setText(oddHolder.getBetOT().equals("3") ? oddHolder.getPointSpreadString() : AndroidUtils.getSignedOddValue(oddHolder.getOddValue()));
             viewHolder.cb.setChecked(oddHolder.getIsChecked());
             viewHolder.risk.setText(f.format(Double.parseDouble(oddHolder.getRiskValue())));
-
-            DecimalFormat f = new DecimalFormat("##.00");
 
             if (oddHolder.getBetTypeSPT().equals(PARLAY)) {
                 viewHolder.toWin.setText(String.valueOf(f.format(oddHolder.getParlayValue() * Double.parseDouble(oddHolder.getRiskValue()))));

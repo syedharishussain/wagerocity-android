@@ -190,6 +190,8 @@ public class AndroidUtils {
 
         if (string.equals("")) return "";
 
+        if (string.equals("-")) return "-";
+
         if (Double.parseDouble(string) > 0) {
             return "+"+string;
         } else {

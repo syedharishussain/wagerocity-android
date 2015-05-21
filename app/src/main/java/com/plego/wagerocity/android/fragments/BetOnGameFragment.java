@@ -380,6 +380,8 @@ public class BetOnGameFragment extends Fragment {
                                 betOt,                      // betOT: 1 moneyline, 3 pointspread, 4 over|under
                                 betParent.getBetParent(),   // betParent
                                 poolID,   // isPoolBet
+                                "pending",
+                                "pending",
                                 new Callback<ArrayList<Pick>>() {
                                     @Override
                                     public void success(ArrayList<Pick> picks, Response response) {

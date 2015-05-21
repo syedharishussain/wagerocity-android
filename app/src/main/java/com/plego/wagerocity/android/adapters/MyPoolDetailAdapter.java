@@ -69,8 +69,8 @@ public class MyPoolDetailAdapter extends BaseAdapter {
 
         if (poolMember != null) {
             viewHolder.rank.setText(poolMember.getRank().toString());
-            viewHolder.name.setText(poolMember.getDisplayname());
-            viewHolder.credits.setText(poolMember.getDollars().toString());
+            viewHolder.name.setText(poolMember.getUserName());
+            viewHolder.credits.setText("$" + poolMember.getDollars().toString());
             viewHolder.wlt.setText(poolMember.getWin().toString() + "-" + poolMember.getLost().toString() + "-" + poolMember.getTie().toString());
             viewHolder.status.setText(poolMember.getStatus());
 

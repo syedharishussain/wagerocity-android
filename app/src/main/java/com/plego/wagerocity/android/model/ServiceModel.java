@@ -67,6 +67,8 @@ public interface ServiceModel {
             @Part("bet_ot") String bet_ot,
             @Part("bet_parent") String betParent,
             @Part("is_pool_bet") String isPoolBet,
+            @Part("bet_result") String betResult,
+            @Part("bet_processed") String betProcessed,
             Callback<ArrayList<Pick>> callback
     );
 

@@ -25,6 +25,19 @@ public class PoolMember implements Parcelable {
     private Double dollars;
     @Expose
     private Integer rank;
+    @SerializedName("username")
+    @Expose
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+
 
     /**
      *
@@ -186,6 +199,7 @@ public class PoolMember implements Parcelable {
         dest.writeValue(this.tie);
         dest.writeValue(this.dollars);
         dest.writeValue(this.rank);
+        dest.writeString(this.userName);
     }
 
     public PoolMember() {
@@ -200,6 +214,7 @@ public class PoolMember implements Parcelable {
         this.tie = (Integer) in.readValue(Integer.class.getClassLoader());
         this.dollars = (Double) in.readValue(Double.class.getClassLoader());
         this.rank = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.userName = in.readString();
     }
 
     public static final Creator<PoolMember> CREATOR = new Creator<PoolMember>() {

@@ -130,7 +130,7 @@ public class MyPicksListAdapter extends BaseAdapter {
 
             viewHolder.textViewTeamName.setText( pick.getTeamName() );
             viewHolder.textViewBetType.setText(betTypeString);
-            viewHolder.textViewBetTypeValue.setText(pick.getOddsVal());
+            viewHolder.textViewBetTypeValue.setText(AndroidUtils.getSignedOddValue(pick.getOddsVal()));
             viewHolder.textViewStake.setText("$"+pick.getStake());
             viewHolder.textViewToWin.setText("$"+String.valueOf(f.format(AndroidUtils.getToWinAmount(Double.parseDouble(pick.getStake()), Double.parseDouble(pick.getOddsVal())))));
             viewHolder.textViewResult.setText(pick.getBetResult());

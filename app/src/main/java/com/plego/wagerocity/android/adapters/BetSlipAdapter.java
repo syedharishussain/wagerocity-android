@@ -40,6 +40,8 @@ public class BetSlipAdapter extends BaseAdapter {
     public static final String PARLAY = "parlay";
     public static final String TEASER = "teaser";
 
+    DecimalFormat f = new DecimalFormat("##.00");
+
     public BetSlipAdapter(ArrayList<OddHolder> oddHolders, Context context) {
         this.oddHolders = new ArrayList<>(oddHolders);
         this.context = context;
@@ -163,7 +165,7 @@ public class BetSlipAdapter extends BaseAdapter {
             viewHolder.teamVsTeam.setText(oddHolder.getTeamVsteam());
             viewHolder.betValue.setText(oddHolder.getBetOT().equals("3") ? oddHolder.getPointSpreadString() : AndroidUtils.getSignedOddValue(oddHolder.getOddValue()));
             viewHolder.cb.setChecked(oddHolder.getIsChecked());
-            viewHolder.risk.setText(oddHolder.getRiskValue());
+            viewHolder.risk.setText(f.format(Double.parseDouble(oddHolder.getRiskValue())));
 
             DecimalFormat f = new DecimalFormat("##.00");
 
@@ -236,8 +238,6 @@ public class BetSlipAdapter extends BaseAdapter {
 
             OddHolder oddHolder = oddHolders.get(position);
 
-            DecimalFormat f = new DecimalFormat("##.00");
-
             if (string.length() > 0) {
 
                 if (!viewHolder.risk.isFocused()) {
@@ -251,7 +251,7 @@ public class BetSlipAdapter extends BaseAdapter {
 
                     viewHolder.toWin.setText(String.valueOf(f.format(result)));
 
-                    oddHolder.setRiskValue(s.toString());
+                    oddHolder.setRiskValue(f.format(Double.parseDouble(s.toString())));
 
                     oddHolders.set(position, oddHolder);
                 } else {
@@ -262,7 +262,7 @@ public class BetSlipAdapter extends BaseAdapter {
 
                     viewHolder.toWin.setText(String.valueOf(f.format(result)));
 
-                    oddHolder.setRiskValue(s.toString());
+                    oddHolder.setRiskValue(f.format(Double.parseDouble(s.toString())));
 
                     oddHolders.set(position, oddHolder);
 

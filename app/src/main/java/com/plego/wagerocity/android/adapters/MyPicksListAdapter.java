@@ -19,6 +19,7 @@ import com.plego.wagerocity.utils.AndroidUtils;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -123,13 +124,15 @@ public class MyPicksListAdapter extends BaseAdapter {
                 e.printStackTrace();
             }
 
+            DecimalFormat f = new DecimalFormat("##.00");
+
             String betTypeString = pick.getTeamName().equals("Parlay") || pick.getTeamName().equals("Teaser") ? pick.getTeamName() : AndroidUtils.getBetTypeFromBetOT(Integer.parseInt(pick.getBetOt()), pick.getPos());
 
             viewHolder.textViewTeamName.setText( pick.getTeamName() );
             viewHolder.textViewBetType.setText(betTypeString);
             viewHolder.textViewBetTypeValue.setText(pick.getOddsVal());
-            viewHolder.textViewStake.setText(pick.getStake());
-            viewHolder.textViewToWin.setText(String.valueOf(AndroidUtils.getToWinAmount(Double.parseDouble(pick.getStake()), Double.parseDouble(pick.getOddsVal()))));
+            viewHolder.textViewStake.setText("$"+pick.getStake());
+            viewHolder.textViewToWin.setText("$"+String.valueOf(f.format(AndroidUtils.getToWinAmount(Double.parseDouble(pick.getStake()), Double.parseDouble(pick.getOddsVal())))));
             viewHolder.textViewResult.setText(pick.getBetResult());
 
             DisplayImageOptions options = new DisplayImageOptions.Builder()

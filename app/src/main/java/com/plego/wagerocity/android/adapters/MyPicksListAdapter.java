@@ -136,6 +136,11 @@ public class MyPicksListAdapter extends BaseAdapter {
             viewHolder.textViewToWin.setText("$" + String.valueOf(f.format(AndroidUtils.getToWinAmount(Double.parseDouble(pick.getStake()), Double.parseDouble(pick.getOddsVal())))));
             viewHolder.textViewResult.setText(pick.getBetResult());
 
+            if (pick.getTeamName().equals("Parlay") || pick.getTeamName().equals("Teaser")) {
+                viewHolder.textViewBetType.setVisibility(View.GONE);
+                viewHolder.textViewBetTypeValue.setVisibility(View.GONE);
+            }
+
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .cacheInMemory(true) // default
                     .cacheOnDisk(true) // default

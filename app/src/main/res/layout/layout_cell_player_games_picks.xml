@@ -44,7 +44,7 @@
             android:id="@+id/button_player_games_show_bet"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Buy Bet"
+            android:text="Buy Pick"
             android:background="@drawable/blue_button_small"
             android:textColor="#ffffff"
             android:textSize="16sp"
@@ -89,8 +89,6 @@
             android:id="@+id/imageview_player_games_separator_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_below="@id/linearlayout_player_games_team_a"
             android:background="@drawable/seperator" />
 
@@ -144,8 +142,6 @@
             android:id="@+id/imageview_player_games_separator_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_below="@id/relativelayout_player_games_point_spread"
             android:background="@drawable/seperator" />
 
@@ -200,8 +196,6 @@
             android:id="@+id/imageview_player_games_separator_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_below="@id/relativelayout_player_games_money_line"
             android:background="@drawable/seperator" />
 

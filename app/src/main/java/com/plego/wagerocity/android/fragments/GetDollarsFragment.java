@@ -80,7 +80,7 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
 
         bp = new BillingProcessor(getActivity(), getActivity().getString(R.string.in_app_billing_public_key), this);
 
-        Button get2000DollarsButton = (Button) view.findViewById(R.id.button_get_dollars_2000);
+        Button get2000DollarsButton = (Button) view.findViewById(R.id.button_get_dollars_rookie);
         get2000DollarsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,25 +96,47 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             }
         });
 
-        Button get15000DollarsButton = (Button) view.findViewById(R.id.button_get_dollars_15000);
-        get15000DollarsButton.setOnClickListener(new View.OnClickListener() {
+        Button getChaserDollarsButton = (Button) view.findViewById(R.id.button_get_dollars_chaser);
+        getChaserDollarsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 bp.purchase(getActivity(), "android.test.purchased");
                 bp.consumePurchase("android.test.purchased");
-//                buyCreditsAPI((float)15000.0);
+//                buyCreditsAPI((float)6250.0);
             }
         });
 
-        Button get100000DollarsButton = (Button) view.findViewById(R.id.button_get_dollars_100000);
-        get100000DollarsButton.setOnClickListener(new View.OnClickListener() {
+        Button getPlayerDollarsButton = (Button) view.findViewById(R.id.button_get_dollars_player);
+        getPlayerDollarsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 bp.purchase(getActivity(), "android.test.purchased");
                 bp.consumePurchase("android.test.purchased");
-//                buyCreditsAPI((float)100000.0);
+//                buyCreditsAPI((float)30000.0);
+            }
+        });
+
+        Button getGuruDollarsButton = (Button) view.findViewById(R.id.button_get_dollars_guru);
+        getGuruDollarsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                bp.purchase(getActivity(), "android.test.purchased");
+                bp.consumePurchase("android.test.purchased");
+//                buyCreditsAPI((float)87500.0);
+            }
+        });
+
+        Button getBawseDollarsButton = (Button) view.findViewById(R.id.button_get_dollars_bawse);
+        getBawseDollarsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                bp.purchase(getActivity(), "android.test.purchased");
+                bp.consumePurchase("android.test.purchased");
+//                buyCreditsAPI((float)200000.0);
             }
         });
     }
@@ -124,13 +146,6 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_get_dollars, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onGetDollarsFragmentInteraction(uri);
-        }
     }
 
     @Override

@@ -97,5 +97,9 @@ public interface ServiceModel {
     @GET("/getGamesOfPlayer")
     public void getGamesOfPlayer(@Query("playerID") String playerID, @Query("userID") String userID, Callback<ArrayList<Game>> callback);
 
+    @Multipart
+    @POST("/PurchasePicksOfPlayer")
+    public void purchasePicksOfPlayer(@Part("userID") String userId, @Part("expertID") String expertId, @Part("betID") String betId, Callback<ArrayList<Pool>> callback);
+
 }
 

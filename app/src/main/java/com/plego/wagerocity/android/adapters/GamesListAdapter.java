@@ -103,6 +103,9 @@ public class GamesListAdapter extends BaseAdapter {
             viewHolder.cbUA = (CheckBox) convertView.findViewById(R.id.checkbox_cell_games_list_over_b);
 
             if (sportsName.equals("mlb")) {
+                viewHolder.teamAPitcher.setVisibility(View.VISIBLE);
+                viewHolder.teamBPitcher.setVisibility(View.VISIBLE);
+
                 viewHolder.teamAPitcher = (TextView) convertView.findViewById(R.id.textview_cell_games_team_a_pitcher);
                 viewHolder.teamBPitcher = (TextView) convertView.findViewById(R.id.textview_cell_games_team_b_pitcher);
             }

@@ -8,109 +8,87 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        >
-        <!--android:background="#ff9a9a9a"-->
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/textview_cell_games_date_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Monday, Jan 3rd, 2015"
             android:layout_alignParentBottom="false"
             android:layout_alignParentTop="false"
             android:layout_alignWithParentIfMissing="false"
             android:layout_centerInParent="true"
-            android:textIsSelectable="false"
-            />
-            <!--android:textColor="#000000"-->
+            android:text="Monday, Jan 3rd, 2015"
+            android:textIsSelectable="false" />
+        <!--android:textColor="#000000"-->
 
-        </RelativeLayout>
+    </RelativeLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        >
 
         <LinearLayout
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            >
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imageview_cell_games_list_team_a_flag"
                 android:layout_width='60dp'
                 android:layout_height="60dp"
-                android:layout_gravity="center_horizontal"
-                />
+                android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:id="@+id/textview_cell_games_team_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="California"
-                android:textSize="8pt"
-                android:textIsSelectable="false"
                 android:layout_centerVertical="true"
-                android:scrollHorizontally="false"
-                android:minLines="2"
                 android:gravity="center"
-                />
+                android:minLines="2"
+                android:scrollHorizontally="false"
+                android:text="California"
+                android:textIsSelectable="false"
+                android:textSize="8pt" />
 
             <TextView
                 android:id="@+id/textview_cell_games_team_a_pitcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 />
 
-            </LinearLayout>
-
-        <!--<Button-->
-            <!--android:id="@+id/button_cell_games_list_bet"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:background="@drawable/blue_button_small"-->
-            <!--android:text="BET"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:textColor="#ffffffff"-->
-            <!--/>-->
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imageview_cell_games_list_team_b_flag"
                 android:layout_width='60dp'
                 android:layout_height="60dp"
-                android:layout_gravity="center_horizontal"
-                />
+                android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:id="@+id/textview_cell_games_team_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Florida"
-                android:layout_marginTop="10dp"
-                android:textSize="8pt"
                 android:gravity="center"
-                android:textIsSelectable="false"
-                android:scrollHorizontally="false"
                 android:minLines="2"
+                android:scrollHorizontally="false"
+                android:text="Florida"
+                android:textIsSelectable="false"
+                android:textSize="8pt"
 
                 />
 
@@ -119,17 +97,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 />
 
-            </LinearLayout>
+        </LinearLayout>
 
-        </RelativeLayout>
-    
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/relativelayout_cell_games_list_point_spread"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/button_cell_games_list_pointspread_team_a"
@@ -148,16 +126,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/button_cell_games_list_pointspread_team_a"
-            android:layout_marginLeft="40dp"
-            />
+            android:layout_marginLeft="40dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Point Spread"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:gravity="center"
+            android:text="Point Spread"
             android:textSize="16sp"
 
             />
@@ -166,38 +143,27 @@
             android:id="@+id/button_cell_games_list_pointspread_team_b"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
             android:layout_alignParentRight="true"
-            android:text="+125"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:gravity="center"
-            android:textColor="#ffffff"
-            />
+            android:text="+125"
+            android:textColor="#ffffff" />
 
         <CheckBox
             android:id="@+id/checkbox_cell_games_list_pointspread_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/button_cell_games_list_pointspread_team_b"
-            android:layout_marginRight="40dp"
             android:layout_alignParentRight="true"
-            />
+            android:layout_below="@id/button_cell_games_list_pointspread_team_b"
+            android:layout_marginRight="40dp" />
 
     </RelativeLayout>
-
-    <!--<ImageView-->
-        <!--android:id="@+id/imageview_cell_games_list_separator_2"-->
-        <!--android:layout_below="@id/relativelayout_cell_games_list_point_spread"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@drawable/seperator"-->
-        <!--/>-->
 
     <RelativeLayout
         android:id="@+id/relativelayout_cell_games_list_money_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         >
 
         <TextView
@@ -206,8 +172,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:text="+125"
             android:gravity="center"
+            android:text="+125"
             android:textColor="#ffffff"
 
             />
@@ -217,26 +183,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/button_cell_games_list_money_line_team_a"
-            android:layout_marginLeft="40dp"
-            />
+            android:layout_marginLeft="40dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Money Line"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:textSize="16sp"
-            />
+            android:text="Money Line"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/button_cell_games_list_money_line_team_b"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
             android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:gravity="center"
             android:text="+125"
             android:textColor="#ffffff"
@@ -247,26 +211,16 @@
             android:id="@+id/checkbox_cell_games_list_moneyline_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/button_cell_games_list_money_line_team_b"
-            android:layout_marginRight="40dp"
             android:layout_alignParentRight="true"
-            />
+            android:layout_below="@id/button_cell_games_list_money_line_team_b"
+            android:layout_marginRight="40dp" />
 
     </RelativeLayout>
-
-    <!--<ImageView-->
-        <!--android:id="@+id/imageview_cell_games_list_separator_3"-->
-        <!--android:layout_below="@id/relativelayout_cell_games_list_money_line"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@drawable/seperator"-->
-        <!--/>-->
 
     <RelativeLayout
         android:id="@+id/relativelayout_cell_games_list_over_under"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_alignParentBottom="true"
         >
 
@@ -276,8 +230,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:text="+125"
             android:gravity="center"
+            android:text="+125"
             android:textColor="#ffffff"
 
             />
@@ -287,20 +241,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/button_cell_games_list_over_team_a"
-            android:layout_marginLeft="40dp"
-            />
+            android:layout_marginLeft="40dp" />
 
         <TextView
             android:id="@+id/textview_cell_games_list_over_under"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Over \n| 5 |\nUnder"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:textSize="14sp"
-            android:minLines="3"
             android:maxLines="3"
+            android:minLines="3"
+            android:text="Over \n| 5 |\nUnder"
+            android:textSize="14sp"
 
             />
 
@@ -308,30 +261,27 @@
             android:id="@+id/button_cell_games_list_over_team_b"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
             android:layout_alignParentRight="true"
-            android:text="+125"
-            android:textColor="#ffffff"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:gravity="center"
-            />
+            android:text="+125"
+            android:textColor="#ffffff" />
 
         <CheckBox
             android:id="@+id/checkbox_cell_games_list_over_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/button_cell_games_list_over_team_b"
-            android:layout_marginRight="40dp"
             android:layout_alignParentRight="true"
-            />
+            android:layout_below="@id/button_cell_games_list_over_team_b"
+            android:layout_marginRight="40dp" />
 
     </RelativeLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/seperator"
-        />
-    
+        android:layout_marginTop="1dp"
+        android:background="@drawable/seperator" />
+
 </LinearLayout>

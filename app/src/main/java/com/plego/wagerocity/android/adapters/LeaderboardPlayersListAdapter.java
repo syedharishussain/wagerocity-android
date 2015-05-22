@@ -70,7 +70,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
-        if (convertView == null) {
+//        if (convertView == null) {
 
             viewHolder = new ViewHolder();
 
@@ -121,11 +121,11 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
                 }
             });
 
-            convertView.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+//            convertView.setTag(viewHolder);
+//
+//        } else {
+//            viewHolder = (ViewHolder) convertView.getTag();
+//        }
 
         LeaderboardPlayer leaderboardPlayer = this.leaderboardPlayers.get(position);
 

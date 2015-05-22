@@ -19,7 +19,7 @@
                 android:id="@+id/text_get_dollars_2000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/get_dollars_2000"
+                android:text="@string/get_dollars_rookie"
                 android:background="#00000000"
                 android:textColor="#ffffff"
                 android:layout_marginLeft="20dp"
@@ -29,11 +29,11 @@
                 />
 
             <Button
-                android:id="@+id/button_get_dollars_2000"
+                android:id="@+id/button_get_dollars_rookie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/get_dollar_field"
-                android:text="$4.99"
+                android:text="$1.99"
                 android:textSize="20dp"
                 android:textColor="#ffffff"
                 android:layout_marginTop="10dp"
@@ -49,10 +49,10 @@
             android:layout_below="@id/get_dollars_01">
 
             <EditText
-                android:id="@+id/text_get_dollars_15000"
+                android:id="@+id/text_get_dollars_chaser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/get_dollars_15000"
+                android:text="@string/get_dollars_chaser"
                 android:background="#00000000"
                 android:textColor="#ffffff"
                 android:layout_marginLeft="20dp"
@@ -62,11 +62,11 @@
                 />
 
             <Button
-                android:id="@+id/button_get_dollars_15000"
+                android:id="@+id/button_get_dollars_chaser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/get_dollar_field"
-                android:text="$19.99"
+                android:text="$4.99"
                 android:textSize="20dp"
                 android:textColor="#ffffff"
                 android:layout_marginTop="10dp"
@@ -82,10 +82,10 @@
             android:layout_below="@id/get_dollars_02">
 
             <EditText
-                android:id="@+id/text_get_dollars_100000"
+                android:id="@+id/text_get_dollars_player"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/get_dollars_100000"
+                android:text="@string/get_dollars_player"
                 android:background="#00000000"
                 android:textColor="#ffffff"
                 android:layout_marginLeft="20dp"
@@ -95,7 +95,73 @@
                 />
 
             <Button
-                android:id="@+id/button_get_dollars_100000"
+                android:id="@+id/button_get_dollars_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/get_dollar_field"
+                android:text="$19.99"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="10dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/get_dollars_04"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/get_dollars_03">
+
+            <EditText
+                android:id="@+id/text_get_dollars_guru"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/get_dollars_guru"
+                android:background="#00000000"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:textSize="20dp"
+                android:layout_weight="1.0"
+                />
+
+            <Button
+                android:id="@+id/button_get_dollars_guru"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/get_dollar_field"
+                android:text="$49.99"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="10dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/get_dollars_05"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/get_dollars_04">
+
+            <EditText
+                android:id="@+id/text_get_dollars_bawse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/get_dollars_bawse"
+                android:background="#00000000"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:textSize="20dp"
+                android:layout_weight="1.0"
+                />
+
+            <Button
+                android:id="@+id/button_get_dollars_bawse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/get_dollar_field"

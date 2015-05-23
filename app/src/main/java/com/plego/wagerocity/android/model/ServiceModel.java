@@ -34,7 +34,7 @@ public interface ServiceModel {
 
     @Multipart
     @POST("/createUser")
-    public void createUser(@Part("firstName") String firstName, @Part("lastName") String lastName, @Part("facebookID") String facebookID, Callback<User> callback);
+    public void createUser(@Part("firstName") String firstName, @Part("lastName") String lastName, @Part("facebookID") String facebookID, @Part("email") String email, Callback<User> callback);
 
     @Multipart
     @POST("/buyCredits")

@@ -1,10 +1,14 @@
 package com.plego.wagerocity.android.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -17,6 +21,8 @@ import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.User;
 import com.plego.wagerocity.utils.AndroidUtils;
+import com.sromku.simple.fb.Permission;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -35,7 +41,12 @@ public class LoginActivity extends RoboFragmentActivity {
         setContentView(R.layout.activity_login);
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
+
+        com.facebook.widget.LoginButton button = (com.facebook.widget.LoginButton) findViewById(R.id.authButton);
+        button.setReadPermissions(Permission.EMAIL.getValue(), Permission.BASIC_INFO.getValue(), Permission.USER_ABOUT_ME.getValue());
     }
+
+
 
     @Override
     public void onResume() {
@@ -105,6 +116,8 @@ public class LoginActivity extends RoboFragmentActivity {
                     pref.setFirstName(user.getFirstName());
                     pref.setLastName(user.getLastName());
 
+                    final String email = user.asMap().get("email").toString();
+
                     final RestClient restClient = new RestClient();
                     restClient.getApiService().getUser(user.getId(), new Callback<User>() {
                         @Override
@@ -119,7 +132,6 @@ public class LoginActivity extends RoboFragmentActivity {
                                     finish();
                                 }
                             }, 0);
-
                         }
 
                         @Override
@@ -129,6 +141,7 @@ public class LoginActivity extends RoboFragmentActivity {
                                         user.getFirstName(),
                                         user.getLastName(),
                                         user.getId(),
+                                        email,
                                         new Callback<User>() {
                                     @Override
                                     public void success(User user, retrofit.client.Response response) {

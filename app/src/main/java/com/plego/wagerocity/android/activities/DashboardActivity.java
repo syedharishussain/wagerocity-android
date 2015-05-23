@@ -1,6 +1,6 @@
 package com.plego.wagerocity.android.activities;
 
-import android.app.FragmentManager;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +12,7 @@ import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.ExpertPlayerListAdapter;
 import com.plego.wagerocity.android.adapters.GamesListAdapter;
 import com.plego.wagerocity.android.adapters.LeaderboardPlayersListAdapter;
+import com.plego.wagerocity.android.adapters.MyPicksListAdapter;
 import com.plego.wagerocity.android.adapters.MyPoolsListAdapter;
 import com.plego.wagerocity.android.adapters.PicksOfPlayerAdapter;
 import com.plego.wagerocity.android.adapters.PoolsListAdapter;
@@ -40,6 +41,11 @@ import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
+import com.sromku.simple.fb.Permission;
+import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.SimpleFacebookConfiguration;
+import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.listeners.OnPublishListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,9 +78,12 @@ public class DashboardActivity
         PicksOfPlayerFragment.OnPicksOfPlayerFragmentInteractionListener,
         PicksOfPlayerAdapter.OnPicksOfPlayerAdapterListAdapterFragmentInteractionListener,
         MyPoolsListAdapter.OnMyPoolsListAdapterFragmentInteractionListener,
-        MyPoolDetailFragment.OnMyPoolDetailFragmentInteractionListener {
+        MyPoolDetailFragment.OnMyPoolDetailFragmentInteractionListener,
+        MyPicksListAdapter.OnMyPickShareInteractionListener {
 
     SweetAlertDialog pDialog;
+    SimpleFacebook simpleFacebook;
+    OnPublishListener onPublishListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +99,51 @@ public class DashboardActivity
             Log.e("FACEBOOKID", facebokoID);
         }
 
+        Permission[] permissions = new Permission[] {
+                Permission.BASIC_INFO,
+                Permission.USER_ABOUT_ME,
+                Permission.EMAIL,
+                Permission.PUBLISH_ACTION
+        };
+
+        SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
+                .setAppId(String.valueOf(R.string.app_id))
+                .setNamespace("Wagerocity")
+                .setPermissions(permissions)
+                .build();
+
+        SimpleFacebook.setConfiguration(configuration);
+
+        onPublishListener = new OnPublishListener() {
+            @Override
+            public void onComplete(String postId) {
+                Log.i("Facebook Post Tag", "Published successfully. The new post id = " + postId);
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                super.onException(throwable);
+            }
+
+            @Override
+            public void onFail(String reason) {
+                Log.e("Facebook Post Failed!", "Publish failed = " + reason);
+                super.onFail(reason);
+            }
+        };
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        simpleFacebook = SimpleFacebook.getInstance(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        simpleFacebook.onActivityResult(this, requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -356,6 +410,11 @@ public class DashboardActivity
     }
 
     @Override
+    public void onBetOnGameShareFragmentInteraction(Feed feed) {
+        simpleFacebook.publish(feed, true, onPublishListener);
+    }
+
+    @Override
     public void onMyPicksFragmentInteraction(Uri uri) {
 
     }
@@ -412,4 +471,8 @@ public class DashboardActivity
         }
     }
 
+    @Override
+    public void onMyPickShareInteraction(Feed feed) {
+        simpleFacebook.publish(feed, true, onPublishListener);
+    }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.adapters.MyPicksListAdapter;
 import com.plego.wagerocity.android.model.Pick;
+import com.sromku.simple.fb.listeners.OnPublishListener;
 
 import java.util.ArrayList;
 
@@ -57,6 +59,8 @@ public class MyPicksFragment extends Fragment {
         if (getArguments() != null) {
             picks = getArguments().getParcelableArrayList(ARGS_MY_PICKS);
         }
+
+
     }
 
     @Override

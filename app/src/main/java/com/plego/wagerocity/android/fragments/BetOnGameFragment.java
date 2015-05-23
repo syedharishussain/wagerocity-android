@@ -1,6 +1,7 @@
 package com.plego.wagerocity.android.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,10 @@ import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.User;
 import com.plego.wagerocity.utils.AndroidUtils;
+import com.sromku.simple.fb.Permission;
+import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.listeners.OnPublishListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -63,6 +68,7 @@ public class BetOnGameFragment extends Fragment {
     private String poolId;
     private OnBetOnGameFragmentInteractionListener mListener;
 
+
     public static BetOnGameFragment newInstance(ArrayList<OddHolder> oddHolders, String poolId) {
         BetOnGameFragment fragment = new BetOnGameFragment();
         Bundle args = new Bundle();
@@ -79,6 +85,7 @@ public class BetOnGameFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             oddHolders = getArguments().getParcelableArrayList(ARGS_GAME);
             poolId = getArguments().getString(ARGS_POOL_ID);
@@ -111,7 +118,44 @@ public class BetOnGameFragment extends Fragment {
         placeBet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                processBet();
+
+                OddHolder odd = null;
+
+                for (OddHolder oddHolder: oddHolders) {
+                    if (oddHolder.getIsChecked()) {
+                        odd = oddHolder;
+                    }
+                }
+
+                if (odd != null) {
+                    final OddHolder finalOdd = odd;
+                    new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Share with your Friends?")
+                            .setContentText("Do you want to share this bet on Facebook?")
+                            .setConfirmText("Yes do it!")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismissWithAnimation();
+                                    sahreBet(finalOdd);
+                                processBet();
+                                }
+                            })
+                            .setCancelText("Cancel")
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog dialog) {
+                                    dialog.cancel();
+                                    processBet();
+                                }
+                            })
+                            .showCancelButton(true)
+                            .show();
+                } else {
+                    processBet();
+                }
+
+
             }
         });
 
@@ -120,6 +164,30 @@ public class BetOnGameFragment extends Fragment {
         final BetSlipAdapter betSlipAdapter = new BetSlipAdapter(oddHolders, view.getContext());
 
         betSlipListView.setAdapter(betSlipAdapter);
+
+    }
+
+    private void sahreBet(OddHolder oddHolder) {
+
+        String name = oddHolder.getTeamName();
+        String caption = "I have put my stakes " + "$" + oddHolder.getRiskValue() + " on " + oddHolder.getTeamName() + " " + oddHolder.getBetTypeString() + " " + oddHolder.getOddValue();
+
+
+        Feed feed = new Feed.Builder()
+//                            .setMessage("message: " + caption)
+                .setName(name)
+//                            .setCaption(caption)
+                .setDescription(caption)
+                .setPicture("https://www.wagerocity.com/user_data/images/logo1.png")
+                .setLink("https://www.wagerocity.com")
+                .build();
+        mListener.onBetOnGameShareFragmentInteraction(feed);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     private void createParlayOdd() {
@@ -321,6 +389,7 @@ public class BetOnGameFragment extends Fragment {
         public void onBetOnGameFragmentInteraction(Uri uri, ArrayList<Pick> picks);
 
         public void onBetOnGameGoBackFragmentInteraction();
+        public void onBetOnGameShareFragmentInteraction(Feed feed);
     }
 
     void processBet() {

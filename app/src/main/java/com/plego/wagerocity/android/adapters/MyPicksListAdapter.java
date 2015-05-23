@@ -3,6 +3,7 @@ package com.plego.wagerocity.android.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.utils.AndroidUtils;
+import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.listeners.OnPublishListener;
 
 import org.w3c.dom.Text;
 
@@ -30,15 +33,18 @@ public class MyPicksListAdapter extends BaseAdapter {
 
     ArrayList<Pick> picks;
     Context context;
-
-
+    private OnMyPickShareInteractionListener mListener;
     public MyPicksListAdapter(Context context, ArrayList<Pick> picks) {
         this.picks = picks;
         this.context = context;
+
+        try {
+            mListener = (OnMyPickShareInteractionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnMyPickShareInteractionListener");
+        }
     }
-
-    ;
-
 
     @Override
     public int getCount() {
@@ -59,7 +65,11 @@ public class MyPicksListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
-        if (convertView == null) {
+        final Pick pick = picks.get(position);
+
+        final String betTypeString = pick.getTeamName().equals("Parlay") || pick.getTeamName().equals("Teaser") ? pick.getTeamName() : AndroidUtils.getBetTypeFromBetOT(Integer.parseInt(pick.getBetOt()), pick.getPos());
+
+//        if (convertView == null) {
 
             viewHolder = new ViewHolder();
 
@@ -90,22 +100,37 @@ public class MyPicksListAdapter extends BaseAdapter {
             viewHolder.share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                    sharingIntent.setType("text/plain");
-                    String shareBody = "Share your Pick!";
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, picks.get(position).getMatchDet());
-                    context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+//                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+//                    sharingIntent.setType("text/plain");
+//                    String shareBody = "Share your Pick!";
+//                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+//                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, picks.get(position).getMatchDet());
+//                    context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
+                    String name = pick.getMatchDet();
+                    String caption = "I have put my stakes " + "$" + pick.getStake() + " on " + pick.getTeamName() + " " + betTypeString + " " + pick.getOddsVal();
+
+
+                    Feed feed = new Feed.Builder()
+//                            .setMessage("message: " + caption)
+                            .setName(name)
+//                            .setCaption(caption)
+                            .setDescription(caption)
+                            .setPicture("https://www.wagerocity.com/user_data/images/logo1.png")
+                            .setLink("https://www.wagerocity.com")
+                            .build();
+                    mListener.onMyPickShareInteraction(feed);
+
                 }
             });
 
-            convertView.setTag(viewHolder);
+//            convertView.setTag(viewHolder);
+//
+//        } else {
+//            viewHolder = (ViewHolder) convertView.getTag();
+//        }
 
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
 
-        Pick pick = picks.get(position);
 
         if (pick != null) {
 
@@ -127,7 +152,7 @@ public class MyPicksListAdapter extends BaseAdapter {
 
             DecimalFormat f = new DecimalFormat("##.00");
 
-            String betTypeString = pick.getTeamName().equals("Parlay") || pick.getTeamName().equals("Teaser") ? pick.getTeamName() : AndroidUtils.getBetTypeFromBetOT(Integer.parseInt(pick.getBetOt()), pick.getPos());
+
 
             viewHolder.textViewTeamName.setText(pick.getTeamName());
             viewHolder.textViewBetType.setText(betTypeString);
@@ -175,5 +200,9 @@ public class MyPicksListAdapter extends BaseAdapter {
         ImageView imageViewB;
 
         Button share;
+    }
+
+    public interface OnMyPickShareInteractionListener {
+        public void onMyPickShareInteraction(Feed feed);
     }
 }

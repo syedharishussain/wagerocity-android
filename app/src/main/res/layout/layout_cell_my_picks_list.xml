@@ -37,6 +37,7 @@
                         android:layout_alignWithParentIfMissing="false"
                         android:layout_centerInParent="true"
                         android:text="Monday, Jan 3rd, 2015"
+                        android:textSize="14sp"
                         android:textIsSelectable="false" />
 
 
@@ -44,9 +45,8 @@
 
                 <ImageView
                     android:id="@+id/imageview_cell_my_picks_team_a_flag"
-                    android:layout_width="60dp"
-
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_below="@id/relativelayout_cell_my_picks_date"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="20dp"
@@ -59,14 +59,14 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/share_button"
                     android:layout_below="@id/relativelayout_cell_my_picks_date"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_centerInParent="true"
                     />
 
                 <ImageView
                     android:id="@+id/imageview_cell_my_picks_team_b_flag"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/relativelayout_cell_my_picks_date"
 
@@ -83,10 +83,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="Team A vs Team B"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
+                <!--android:layout_marginTop="10dp"-->
 
 
             <RelativeLayout
@@ -104,8 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Team :"
-                    android:textSize="16sp"
-
+                    android:textSize="14sp"
                     />
 
                 <TextView
@@ -118,7 +117,7 @@
                     android:maxLines="2"
                     android:text="California Dragons"
                     android:textColor="#ffff3100"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
 
                     />
@@ -132,8 +131,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                >
+            >
+                <!--android:layout_marginTop="5dp"-->
 
 
                 <TextView
@@ -141,7 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pool Name :"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:visibility="gone" />
 
                 <TextView
@@ -154,7 +153,7 @@
                     android:maxLines="2"
                     android:text="California Dragons"
                     android:textColor="#ffff3100"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
@@ -167,8 +166,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 >
+                <!--android:layout_marginTop="5dp"-->
 
 
                 <TextView
@@ -176,7 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Points Spread :"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
 
                     />
 
@@ -187,7 +186,7 @@
                     android:layout_alignParentRight="true"
                     android:text="200"
                     android:textColor="#ffff3100"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>
@@ -199,7 +198,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp">
+                >
+                <!--android:layout_marginTop="5dp"-->
 
 
                 <TextView
@@ -207,7 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Stake Amount :"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
 
                     />
 
@@ -218,7 +218,7 @@
                     android:layout_alignParentRight="true"
                     android:text="150"
                     android:textColor="#ffff3100"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>
@@ -230,7 +230,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp">
+                >
+                <!--android:layout_marginTop="5dp"-->
 
 
                 <TextView
@@ -238,7 +239,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="To Win :"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
 
                     />
 
@@ -249,7 +250,7 @@
                     android:layout_alignParentRight="true"
                     android:text="100"
                     android:textColor="#ffff3100"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>
@@ -257,19 +258,20 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp">
+                >
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_marginTop="5dp"-->
 
                 <TextView
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bet Results :"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
 
                     />
 
@@ -280,7 +282,7 @@
                     android:layout_alignParentRight="true"
                     android:text="Pending.."
                     android:textColor="#ffff3100"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>

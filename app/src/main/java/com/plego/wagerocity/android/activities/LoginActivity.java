@@ -116,9 +116,14 @@ public class LoginActivity extends RoboFragmentActivity {
                     pref.setFirstName(user.getFirstName());
                     pref.setLastName(user.getLastName());
 
-                    final String email = user.asMap().get("email").toString();
+                    String email = null;
+                    if (user.asMap().get("email") != null) {
+                        email = user.asMap().get("email").toString();
+                    } else email = "";
+
 
                     final RestClient restClient = new RestClient();
+                    final String finalEmail = email;
                     restClient.getApiService().getUser(user.getId(), new Callback<User>() {
                         @Override
                         public void success(User user, retrofit.client.Response response) {
@@ -141,7 +146,7 @@ public class LoginActivity extends RoboFragmentActivity {
                                         user.getFirstName(),
                                         user.getLastName(),
                                         user.getId(),
-                                        email,
+                                        finalEmail,
                                         new Callback<User>() {
                                     @Override
                                     public void success(User user, retrofit.client.Response response) {

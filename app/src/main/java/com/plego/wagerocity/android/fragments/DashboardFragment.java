@@ -1,16 +1,31 @@
 package com.plego.wagerocity.android.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.constants.StringConstants;
+import com.plego.wagerocity.utils.AndroidUtils;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +35,7 @@ import com.plego.wagerocity.R;
  * Use the {@link DashboardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements BillingProcessor.IBillingHandler {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,6 +45,7 @@ public class DashboardFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    BillingProcessor bp;
     private OnDashboardFragmentInteractionListener mListener;
 
     /**
@@ -63,8 +79,118 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        FragmentManager fragmentManager = getFragmentManager();
+        GetDollarsFragment fragment = (GetDollarsFragment) fragmentManager.findFragmentByTag(StringConstants.TAG_FRAG_GET_DOLLARS);
+        if (fragment != null) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null)
+            bp.release();
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void onProductPurchased(String s, TransactionDetails transactionDetails) {
+        Log.i("In App Billing", s + " " + transactionDetails.productId);
+
+        if (transactionDetails.productId.equals("android.test.purchased")) {
+            final WagerocityPref pref = new WagerocityPref(getActivity());
+
+            final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                    "Loading",
+                    null,
+                    SweetAlertDialog.PROGRESS_TYPE,
+                    getActivity()
+            );
+
+            final RestClient restClient = new RestClient();
+            restClient.getApiService().clearRecord(pref.user().getUserId(), new Callback<Response>() {
+                @Override
+                public void success(Response response, Response response2) {
+                    restClient.getApiService().getUser(pref.facebookID(), new Callback<User>() {
+                        @Override
+                        public void success(User user, Response response) {
+                            pref.setUser(user);
+                            AndroidUtils.updateStats(getActivity());
+                            pDialog.dismiss();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int i, Throwable throwable) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bp = new BillingProcessor(getActivity(), getActivity().getString(R.string.in_app_billing_public_key), this);
+
+        Button clearRecordButton = (Button) view.findViewById(R.id.button_clear_balance);
+        clearRecordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Clear Records for $1.99?")
+                        .setContentText("You will be charged $1.99 to clear you record.?")
+                        .setConfirmText("Yes do it!")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismissWithAnimation();
+
+                                bp.purchase(getActivity(), "android.test.purchased");
+                                bp.consumePurchase("android.test.purchased");
+
+                            }
+                        })
+                        .setCancelText("Cancel")
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog dialog) {
+                                dialog.cancel();
+                            }
+                        })
+                        .showCancelButton(true)
+                        .show();
+
+
+            }
+        });
 
         Button bettingPortalButton = (Button) view.findViewById(R.id.button_betting_portal);
         bettingPortalButton.setOnClickListener(new View.OnClickListener() {

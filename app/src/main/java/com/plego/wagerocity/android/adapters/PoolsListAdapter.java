@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.activities.DashboardActivity;
 import com.plego.wagerocity.android.model.MyPool;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.PoolMember;
@@ -21,6 +22,7 @@ import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.User;
 import com.plego.wagerocity.utils.AndroidUtils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -101,7 +103,35 @@ public class PoolsListAdapter extends BaseAdapter {
                                     public void onClick(SweetAlertDialog sDialog) {
                                         sDialog.dismissWithAnimation();
                                         joinPool(pool);
-                                        buyCreditsAPI(Float.parseFloat(pool.getAmount()));
+                                        final WagerocityPref pref = new WagerocityPref(context);
+
+                                        new RestClient().getApiService().getUser(pref.facebookID(), new Callback<User>() {
+                                            @Override
+                                            public void success(User user, Response response) {
+                                                pref.setUser(user);
+                                                AndroidUtils.updateStats((DashboardActivity)context);
+                                            }
+
+                                            @Override
+                                            public void failure(RetrofitError error) {
+
+                                            }
+                                        });
+
+//
+//                                        new RestClient().getApiService().consumeCredits(user.getUserId(), Float.parseFloat(pool.getAmount()), new Callback<User>() {
+//                                            @Override
+//                                            public void success(User user, Response response) {
+//                                                pref.setUser(user);
+//                                                AndroidUtils.updateStats((DashboardActivity)context);
+//                                            }
+//
+//                                            @Override
+//                                            public void failure(RetrofitError error) {
+//                                                AndroidUtils.showErrorDialog(error, context);
+//                                            }
+//                                        });
+
                                     }
                                 })
                                 .setCancelText("Cancel")
@@ -127,8 +157,12 @@ public class PoolsListAdapter extends BaseAdapter {
         if (pool != null) {
             viewHolder.textViewPoolName.setText(pool.getName());
             viewHolder.textViewStatus.setText(pool.getPrivacy());
-            viewHolder.textViewStartDate.setText(pool.getFromDate());
-            viewHolder.textViewEndDate.setText(pool.getToDate());
+            try {
+                viewHolder.textViewStartDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getFromDate()));
+                viewHolder.textViewEndDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getToDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             if (pool.isJoined()) {
                 viewHolder.button.setText("Joined");
@@ -180,22 +214,9 @@ public class PoolsListAdapter extends BaseAdapter {
         });
     }
 
-    public void buyCreditsAPI (Float credits) {
+    public void consumeCreditsAPI (Float credits) {
 
-        final WagerocityPref pref = new WagerocityPref(context);
-        final User user = pref.user();
 
-        new RestClient().getApiService().buyCredits(user.getUserId(), credits, new Callback<User>() {
-            @Override
-            public void success(User user, Response response) {
-                pref.setUser(user);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                AndroidUtils.showErrorDialog(error, context);
-            }
-        });
     }
 
     class ViewHolder {

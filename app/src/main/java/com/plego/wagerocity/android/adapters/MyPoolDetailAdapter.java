@@ -57,7 +57,7 @@ public class MyPoolDetailAdapter extends BaseAdapter {
             viewHolder.name = (TextView) convertView.findViewById(R.id.textView_pool_members_player_name);
             viewHolder.credits = (TextView) convertView.findViewById(R.id.textView_pool_members_player_dollars);
             viewHolder.wlt = (TextView) convertView.findViewById(R.id.textView_pool_members_player_wlt);
-            viewHolder.status = (TextView) convertView.findViewById(R.id.textView_pool_members_player_status);
+//            viewHolder.status = (TextView) convertView.findViewById(R.id.textView_pool_members_player_status);
 
             convertView.setTag(viewHolder);
 
@@ -72,7 +72,7 @@ public class MyPoolDetailAdapter extends BaseAdapter {
             viewHolder.name.setText(poolMember.getUserName());
             viewHolder.credits.setText("$" + poolMember.getDollars().toString());
             viewHolder.wlt.setText(poolMember.getWin().toString() + "-" + poolMember.getLost().toString() + "-" + poolMember.getTie().toString());
-            viewHolder.status.setText(poolMember.getStatus());
+//            viewHolder.status.setText(poolMember.getStatus());
 
         }
 
@@ -84,7 +84,7 @@ public class MyPoolDetailAdapter extends BaseAdapter {
         TextView name;
         TextView credits;
         TextView wlt;
-        TextView status;
+//        TextView status;
 
     }
 

@@ -25,8 +25,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
                     android:maxLines="2"
                     android:text="Pool Name"
                     android:textSize="24sp"
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/seperator"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
 
                 />
 
@@ -62,7 +62,7 @@
                 android:textSize="18sp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
                 />
 
 
@@ -75,43 +75,14 @@
                 android:textSize="16sp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 />
-
-            <!--<RelativeLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/textView_my_pool_detail_wlt_string"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:text="WLT:"-->
-                    <!--android:layout_marginLeft="20dp"-->
-                    <!--android:layout_marginStart="20dp"-->
-                    <!--android:layout_marginBottom="20dp"-->
-                    <!--/>-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/textView_my_pool_detail_commisioner_wlt"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="0 - 6 - 0"-->
-                    <!--android:textSize="16sp"-->
-                    <!--android:layout_marginLeft="20dp"-->
-                    <!--android:layout_marginStart="20dp"-->
-                    <!--android:layout_alignBottom="@+id/textView_my_pool_detail_wlt_string"-->
-                    <!--android:layout_toRightOf="@+id/textView_my_pool_detail_wlt_string"-->
-                    <!--android:layout_toEndOf="@+id/textView_my_pool_detail_wlt_string" />-->
-
-            <!--</RelativeLayout>-->
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/seperator"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
 
                 />
 
@@ -123,7 +94,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
                 android:textSize="18sp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -133,17 +104,19 @@
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Sports:"
                     android:textSize="16sp"
                     android:layout_marginRight="10dp"
+                    android:layout_weight="1"
                     />
 
                 <TextView
                     android:id="@+id/textView_my_pool_detail_pool_league_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
                     android:text="NBA"
                     android:textSize="16sp"
                     />
@@ -153,16 +126,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="20sp"
                 android:layout_marginStart="20sp"
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Start Date:"
                     android:textSize="16sp"
+                    android:layout_weight="1"
                     android:layout_marginRight="10dp"
                     />
 
@@ -170,6 +143,7 @@
                     android:id="@+id/textView_my_pool_detail_pool_start_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
                     android:text="Date"
                     android:textSize="16sp"
                     />
@@ -179,16 +153,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="20sp"
                 android:layout_marginStart="20sp"
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="End Date:"
                     android:textSize="16sp"
+                    android:layout_weight="1"
                     android:layout_marginRight="10dp"
                     />
 
@@ -196,6 +170,7 @@
                     android:id="@+id/textView_my_pool_detail_pool_end_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
                     android:text="Date"
                     android:textSize="16sp"
                     />
@@ -205,14 +180,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="20sp"
                 android:layout_marginStart="20sp"
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Pool Size:"
                     android:textSize="16sp"
                     android:layout_marginRight="10dp"
@@ -222,49 +197,51 @@
                     android:id="@+id/textView_my_pool_detail_pool_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
                     android:text="Finite"
                     android:textSize="16sp"
                     />
 
             </LinearLayout>
 
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="20sp"-->
+                <!--android:layout_marginStart="20sp"-->
+                <!-->-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="Pool Status:"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/textView_my_pool_detail_pool_status"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginRight="20dp"-->
+                    <!--android:text="Active"-->
+                    <!--android:textSize="16sp"-->
+                    <!--/>-->
+
+            <!--</LinearLayout>-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="20sp"
                 android:layout_marginStart="20sp"
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Pool Status:"
-                    android:textSize="16sp"
-                    android:layout_marginRight="10dp"
-                    />
-
-                <TextView
-                    android:id="@+id/textView_my_pool_detail_pool_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Active"
-                    android:textSize="16sp"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20sp"
-                android:layout_marginStart="20sp"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Paid Pool:"
                     android:textSize="16sp"
                     android:layout_marginRight="10dp"
@@ -274,6 +251,7 @@
                     android:id="@+id/textView_my_pool_detail_pool_paid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
                     android:text="YES"
                     android:textSize="16sp"
                     />
@@ -286,12 +264,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20sp"
                 android:layout_marginStart="20sp"
-                android:layout_marginTop="10dp">
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginRight="10dp"
+
                     android:text="Amount:"
                     android:textSize="16sp" />
 
@@ -300,6 +280,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10"
+                    android:layout_marginRight="20dp"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -308,8 +289,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/seperator"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
 
                 />
 
@@ -321,7 +302,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
                 android:textSize="16sp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
 
                 />
 

@@ -22,6 +22,7 @@ import com.plego.wagerocity.utils.AndroidUtils;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -95,16 +96,24 @@ public class MyPoolDetailFragment extends Fragment {
         leagueName.setText(pool.getPoolLeague());
 
         TextView startDate = (TextView) view.findViewById(R.id.textView_my_pool_detail_pool_start_date);
-        startDate.setText(pool.getRegStartDate());
+        try {
+            startDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getRegStartDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         TextView endDate = (TextView) view.findViewById(R.id.textView_my_pool_detail_pool_end_date);
-        endDate.setText(pool.getRegEndDate());
+        try {
+            endDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getRegEndDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         TextView size = (TextView) view.findViewById(R.id.textView_my_pool_detail_pool_size);
         size.setText(pool.getSize());
 
-        TextView status = (TextView) view.findViewById(R.id.textView_my_pool_detail_pool_status);
-        status.setText(pool.getStatus());
+//        TextView status = (TextView) view.findViewById(R.id.textView_my_pool_detail_pool_status);
+//        status.setText(pool.getStatus());
 
         TextView isPaid = (TextView) view.findViewById(R.id.textView_my_pool_detail_pool_paid);
         isPaid.setText((pool.getIsPaid().equals("1")) ? "YES" : "NO");

@@ -99,7 +99,13 @@ public interface ServiceModel {
 
     @Multipart
     @POST("/PurchasePicksOfPlayer")
-    public void purchasePicksOfPlayer(@Part("userID") String userId, @Part("expertID") String expertId, @Part("betID") String betId, Callback<ArrayList<Pool>> callback);
+    public void purchasePicksOfPlayer(@Part("userID") String userId, @Part("expertID") String expertId, @Part("betID") String betId, @Part("amount") String amount, Callback<Response> callback);
+
+    @Multipart
+    @POST("/clearRecord")
+    public void clearRecord(@Part("userId") String userId, Callback<Response> callback);
+
+
 
 }
 

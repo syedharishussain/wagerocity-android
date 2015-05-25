@@ -212,4 +212,13 @@ public class AndroidUtils {
 
         return date;
     }
+
+    public static String getFormatedDateMMHHYYYY (String dateString) throws ParseException {
+        String strCurrentDate = "2015-05-06";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");//    "EEE, dd MMM yyyy hh:mm:ss Z");
+        Date newDate = format.parse(dateString); // format.parse(strCurrentDate);
+        format = new SimpleDateFormat("MM-dd-yyyy");
+        String date = format.format(newDate);
+        return date;
+    }
 }

@@ -11,6 +11,9 @@ import java.util.Map;
 
 public class OddHolder implements Parcelable, Cloneable {
 
+    public static final String PARLAY = "parlay";
+    public static final String TEASER = "teaser";
+
     public OddHolder() {
     }
 
@@ -25,7 +28,7 @@ public class OddHolder implements Parcelable, Cloneable {
         this.betTypeSPT = betTypeSPT;
         this.betOT = betOT;
         this.betTypeString = betTypeString;
-        this.isChecked = false;
+        this.isChecked = (!(betTypeSPT.equals(PARLAY) || betTypeSPT.equals(TEASER)));
         this.leagueName = leagueName;
         this.riskValue = "0";
         this.teaser1 = 0;

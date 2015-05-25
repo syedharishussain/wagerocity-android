@@ -84,7 +84,7 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
 
         final Game game = games.get(position);
 
-        if (convertView == null) {
+//        if (convertView == null) {
 
             viewHolder = new ViewHolder();
 
@@ -165,11 +165,11 @@ public class PicksOfPlayerAdapter extends BaseAdapter {
                 });
             }
 
-            convertView.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+//            convertView.setTag(viewHolder);
+//
+//        } else {
+//            viewHolder = (ViewHolder) convertView.getTag();
+//        }
 
 
         if (game != null) {

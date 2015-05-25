@@ -28,6 +28,20 @@ public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlay
     @SerializedName("win_percentage")
     @Expose
     private String winPercentage;
+    @SerializedName("total_picks")
+    @Expose
+    private String totalPicks;
+
+    public String getTotalPicks() {
+        return totalPicks;
+    }
+
+    public void setTotalPicks(String totalPicks) {
+        this.totalPicks = totalPicks;
+    }
+
+
+
 
     /**
      *
@@ -157,6 +171,12 @@ public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlay
 
 
     @Override
+    public int compare(LeaderboardPlayer lhs, LeaderboardPlayer rhs) {
+        return Double.compare(Double.parseDouble(rhs.getPoints()), Double.parseDouble(lhs.getPoints()));
+    }
+
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -170,6 +190,7 @@ public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlay
         dest.writeString(this.points);
         dest.writeString(this.imageUrl);
         dest.writeString(this.winPercentage);
+        dest.writeString(this.totalPicks);
     }
 
     public LeaderboardPlayer() {
@@ -183,6 +204,7 @@ public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlay
         this.points = in.readString();
         this.imageUrl = in.readString();
         this.winPercentage = in.readString();
+        this.totalPicks = in.readString();
     }
 
     public static final Creator<LeaderboardPlayer> CREATOR = new Creator<LeaderboardPlayer>() {
@@ -194,9 +216,4 @@ public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlay
             return new LeaderboardPlayer[size];
         }
     };
-
-    @Override
-    public int compare(LeaderboardPlayer lhs, LeaderboardPlayer rhs) {
-        return Double.compare(Double.parseDouble(rhs.getPoints()), Double.parseDouble(lhs.getPoints()));
-    }
 }

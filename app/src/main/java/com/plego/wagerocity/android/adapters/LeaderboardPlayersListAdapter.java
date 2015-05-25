@@ -69,7 +69,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
-
+        LeaderboardPlayer leaderboardPlayer = this.leaderboardPlayers.get(position);
 //        if (convertView == null) {
 
             viewHolder = new ViewHolder();
@@ -84,6 +84,11 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
             viewHolder.textViewUserStats = (TextView) convertView.findViewById(R.id.textview_leaderboard_user_stats);
             viewHolder.imageViewUserImage = (ImageView) convertView.findViewById(R.id.imageview_leaderboard_user);
             viewHolder.button = (Button) convertView.findViewById(R.id.button_leaderboard_user_buy_picks);
+
+            if (Integer.parseInt(leaderboardPlayer.getTotalPicks()) == 0) {
+                viewHolder.button.setEnabled(false);
+                viewHolder.button.setBackgroundResource(R.drawable.blue_button_grey);
+            }
 
             viewHolder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,7 +132,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
 //            viewHolder = (ViewHolder) convertView.getTag();
 //        }
 
-        LeaderboardPlayer leaderboardPlayer = this.leaderboardPlayers.get(position);
+
 
         if (leaderboardPlayer != null) {
             Integer rank = position + 1;

@@ -52,34 +52,17 @@
 
         </LinearLayout>
 
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/blue_button_small"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="5dp"
-                />
-
             <Button
                 android:id="@+id/button_leaderboard_user_buy_picks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:text="Buy Picks"
-                android:background="#00ffffff"
+                android:background="@drawable/blue_button_small"
                 android:textColor="#ffffffff"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 />
-
-        </RelativeLayout>
-
 
     </LinearLayout>
 

@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.ExpertPlayerListAdapter;
@@ -58,7 +60,8 @@ import roboguice.activity.RoboFragmentActivity;
 
 public class DashboardActivity
         extends RoboFragmentActivity
-        implements NavigationBarFragment.OnNavigationBarFragmentInteractionListener,
+        implements BillingProcessor.IBillingHandler,
+        NavigationBarFragment.OnNavigationBarFragmentInteractionListener,
         StatsFragment.OnStatsFragmentInteractionListener,
         DashboardFragment.OnDashboardFragmentInteractionListener,
         GetDollarsFragment.OnGetDollarsFragmentInteractionListener,
@@ -84,11 +87,15 @@ public class DashboardActivity
     SweetAlertDialog pDialog;
     SimpleFacebook simpleFacebook;
     OnPublishListener onPublishListener;
+    BillingProcessor bp;
+    ArrayList<Pick> showPurchasePicks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        bp = new BillingProcessor(this, this.getString(R.string.in_app_billing_public_key), this);
 
         addNavigationBarFragment();
         addStatsFragment();
@@ -143,7 +150,19 @@ public class DashboardActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         simpleFacebook.onActivityResult(this, requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+
+        if (!bp.handleActivityResult(requestCode, resultCode, data))
+            super.onActivityResult(requestCode, resultCode, data);
+
+//        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (bp != null)
+            bp.release();
+
+        super.onDestroy();
     }
 
     @Override
@@ -161,7 +180,7 @@ public class DashboardActivity
     }
 
     private void showBackButton() {
-        NavigationBarFragment fragment = (NavigationBarFragment)AndroidUtils.getFragmentByTag(this, StringConstants.TAG_FRAG_NAVIGATION);
+        NavigationBarFragment fragment = (NavigationBarFragment) AndroidUtils.getFragmentByTag(this, StringConstants.TAG_FRAG_NAVIGATION);
 
         fragment.showBackButton(true);
     }
@@ -451,9 +470,15 @@ public class DashboardActivity
     }
 
     @Override
-    public void onPicksOfPlayerAdapterListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks) {
+    public void onPicksOfPlayerAdapterListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks, boolean isPurchased) {
         if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
-            replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+            if (isPurchased) {
+                replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+            } else {
+                bp.purchase(this, "android.test.purchased");
+                bp.consumePurchase("android.test.purchased");
+                showPurchasePicks = new ArrayList<>(picks);
+            }
         }
     }
 
@@ -474,5 +499,30 @@ public class DashboardActivity
     @Override
     public void onMyPickShareInteraction(Feed feed) {
         simpleFacebook.publish(feed, true, onPublishListener);
+    }
+
+
+    @Override
+    public void onProductPurchased(String s, TransactionDetails transactionDetails) {
+        if (transactionDetails.productId.equals("android.test.purchased")) {
+            replaceFragment(MyPicksFragment.newInstance(new ArrayList<>(this.showPurchasePicks)), StringConstants.TAG_FRAG_MY_PICKS);
+            this.showPurchasePicks = null;
+
+        }
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int i, Throwable throwable) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
     }
 }

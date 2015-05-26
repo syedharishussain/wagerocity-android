@@ -16,6 +16,8 @@ import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.User;
 
+import java.text.DecimalFormat;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -29,6 +31,8 @@ public class StatsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    DecimalFormat formatter = new DecimalFormat("###,###,###,###.00");
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -109,13 +113,13 @@ public class StatsFragment extends Fragment {
         WagerocityPref pref = new WagerocityPref(getActivity());
         User user = pref.user();
         TextView availableCredit = (TextView) this.getView().findViewById(R.id.field_stats_available);
-        availableCredit.setText(user.getCredits().toString());
+        availableCredit.setText(formatter.format(user.getCredits()));
 
         TextView rank = (TextView) this.getView().findViewById(R.id.field_stats_rank);
         rank.setText(user.getOverallrank().equals("") ? "-" : user.getOverallrank());
 
         TextView record = (TextView) this.getView().findViewById(R.id.field_stats_record);
-        record.setText(user.getCurrentrecord().toString());
+        record.setText(formatter.format(user.getCurrentrecord()));
     }
 
     /**

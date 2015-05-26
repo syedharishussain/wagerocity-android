@@ -111,6 +111,11 @@ public class BetOnGameFragment extends Fragment {
         if (oddHolders.size() > 1) {
             createParlayOdd();
             if (oddHolders.get(0).getLeagueName().equals("nfl") || oddHolders.get(0).getLeagueName().equals("nba"))
+                if (oddHolders.size()!=2 &&
+                        !((oddHolders.get(0).getBetOT().equals("1") && oddHolders.get(1).getBetOT().equals("3")) ||
+                                (oddHolders.get(0).getBetOT().equals("3") && oddHolders.get(1).getBetOT().equals("1")) ||
+                                (oddHolders.get(0).getBetOT().equals("1") && oddHolders.get(1).getBetOT().equals("4")) ||
+                                (oddHolders.get(0).getBetOT().equals("4") && oddHolders.get(1).getBetOT().equals("1")) ))
                 createTeaserOdd();
         }
 

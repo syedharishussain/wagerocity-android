@@ -84,7 +84,10 @@
         android:textIsSelectable="false"
         android:layout_alignTop="@+id/field_container_left"
         android:layout_alignLeft="@+id/field_container_left"
-        android:layout_alignStart="@+id/field_container_left" />
+        android:layout_alignStart="@+id/field_container_left"
+        android:layout_alignRight="@id/field_container_left"
+        android:gravity="center"
+        />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -106,5 +109,8 @@
         android:textSize="7pt"
         android:layout_alignTop="@+id/field_container_right"
         android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText" />
+        android:layout_alignEnd="@+id/editText"
+        android:layout_alignLeft="@id/field_container_right"
+        android:gravity="center"
+        />
 </RelativeLayout>

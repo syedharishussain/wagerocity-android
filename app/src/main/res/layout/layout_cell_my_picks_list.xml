@@ -36,7 +36,6 @@
                         android:layout_alignParentTop="false"
                         android:layout_alignWithParentIfMissing="false"
                         android:layout_centerInParent="true"
-                        android:text="Monday, Jan 3rd, 2015"
                         android:textSize="14sp"
                         android:textIsSelectable="false" />
 

@@ -119,7 +119,12 @@ public class StatsFragment extends Fragment {
         rank.setText(user.getOverallrank().equals("") ? "-" : user.getOverallrank());
 
         TextView record = (TextView) this.getView().findViewById(R.id.field_stats_record);
+        if (user.getCurrentrecord() == 0.00) {
+            record.setText("0");
+        } else {
+
         record.setText(formatter.format(user.getCurrentrecord()));
+        }
     }
 
     /**

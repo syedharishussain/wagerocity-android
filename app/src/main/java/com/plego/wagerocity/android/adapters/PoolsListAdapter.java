@@ -72,7 +72,7 @@ public class PoolsListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
-        if (convertView == null) {
+//        if (convertView == null) {
 
             viewHolder = new ViewHolder();
 
@@ -146,11 +146,11 @@ public class PoolsListAdapter extends BaseAdapter {
             });
 
 
-            convertView.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+//            convertView.setTag(viewHolder);
+//
+//        } else {
+//            viewHolder = (ViewHolder) convertView.getTag();
+//        }
 
         Pool pool = this.pools.get(position);
 

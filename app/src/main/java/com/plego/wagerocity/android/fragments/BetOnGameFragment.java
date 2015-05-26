@@ -16,8 +16,10 @@ import android.widget.ListView;
 
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.activities.DashboardActivity;
 import com.plego.wagerocity.android.adapters.BetSlipAdapter;
 import com.plego.wagerocity.android.model.BetParent;
+import com.plego.wagerocity.android.model.Odd;
 import com.plego.wagerocity.android.model.OddHolder;
 import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.RestClient;
@@ -67,6 +69,7 @@ public class BetOnGameFragment extends Fragment {
     private ArrayList<OddHolder> oddHolders;
     private String poolId;
     private OnBetOnGameFragmentInteractionListener mListener;
+    private OddHolder shareOdd;
 
 
     public static BetOnGameFragment newInstance(ArrayList<OddHolder> oddHolders, String poolId) {
@@ -124,26 +127,27 @@ public class BetOnGameFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                OddHolder odd = null;
+
 
                 for (OddHolder oddHolder: oddHolders) {
                     if (oddHolder.getIsChecked()) {
-                        odd = oddHolder;
+                        shareOdd = oddHolder;
                     }
                 }
 
-                if (odd != null) {
-                    final OddHolder finalOdd = odd;
+                if (shareOdd != null) {
+                    final OddHolder finalOdd = shareOdd;
                     new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                            .setTitleText("Share with your Friends?")
-                            .setContentText("Do you want to share this bet on Facebook?")
+                            .setTitleText("Share This With Your Friends!")
+                            .setContentText("Earn $250 and Share This on Facebook With Your Friends.")
                             .setConfirmText("Yes do it!")
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sDialog) {
                                     sDialog.dismissWithAnimation();
-                                    sahreBet(finalOdd);
-                                processBet();
+                                    processBet();
+                                    ((DashboardActivity)getActivity()).shouldShare = true;
+                                    buyCreditsAPI((float) 250.00);
                                 }
                             })
                             .setCancelText("Cancel")
@@ -398,13 +402,6 @@ public class BetOnGameFragment extends Fragment {
     void processBet() {
         final RestClient restClient = new RestClient();
 
-//        int size = 0;
-//        for (OddHolder oddHolder : oddHolders) {
-//            if (oddHolder.getIsChecked()) size++;
-//        }
-//
-//        final float progressSize = (float) (100 / size);
-
         final SweetAlertDialog pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         pDialog.setTitleText("Placing Bet..");
@@ -474,7 +471,15 @@ public class BetOnGameFragment extends Fragment {
                                                     Collections.sort(picks, new Pick());
                                                     Uri uri = Uri.parse(getString(R.string.uri_open_my_picks_fragment));
                                                     mListener.onBetOnGameFragmentInteraction(uri, picks);
+                                                    Boolean shouldShare = ((DashboardActivity) getActivity()).shouldShare;
 
+                                                    if (shareOdd != null) {
+                                                        if (shouldShare) {
+                                                            sahreBet(shareOdd);
+                                                            ((DashboardActivity) getActivity()).shouldShare = false;
+                                                            shareOdd = null;
+                                                        }
+                                                    }
                                                 }
 
                                                 @Override
@@ -526,6 +531,25 @@ public class BetOnGameFragment extends Fragment {
                 });
             }
         }
+    }
+
+    public void buyCreditsAPI (Float credits) {
+
+        final WagerocityPref pref = new WagerocityPref(getActivity());
+        final User user = pref.user();
+
+        new RestClient().getApiService().buyCredits(user.getUserId(), credits, new Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                pref.setUser(user);
+                AndroidUtils.updateStats(getActivity());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                AndroidUtils.showErrorDialog(error, getActivity());
+            }
+        });
     }
 
 }

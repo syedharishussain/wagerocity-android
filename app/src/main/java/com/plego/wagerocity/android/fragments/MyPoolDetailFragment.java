@@ -97,14 +97,14 @@ public class MyPoolDetailFragment extends Fragment {
 
         TextView startDate = (TextView) view.findViewById(R.id.textView_my_pool_detail_pool_start_date);
         try {
-            startDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getRegStartDate()));
+            startDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getToDate()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         TextView endDate = (TextView) view.findViewById(R.id.textView_my_pool_detail_pool_end_date);
         try {
-            endDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getRegEndDate()));
+            endDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getFromDate()));
         } catch (ParseException e) {
             e.printStackTrace();
         }

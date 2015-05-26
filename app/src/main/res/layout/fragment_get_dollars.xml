@@ -15,15 +15,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
 
-            <EditText
+            <TextView
                 android:id="@+id/text_get_dollars_2000"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:text="@string/get_dollars_rookie"
                 android:background="#00000000"
                 android:textColor="#ffffff"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
+                android:minLines="2"
                 android:textSize="20dp"
                 android:layout_weight="1.0"
                 />
@@ -48,15 +49,16 @@
             android:layout_marginTop="20dp"
             android:layout_below="@id/get_dollars_01">
 
-            <EditText
+            <TextView
                 android:id="@+id/text_get_dollars_chaser"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:text="@string/get_dollars_chaser"
                 android:background="#00000000"
                 android:textColor="#ffffff"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
+                android:minLines="2"
                 android:textSize="20dp"
                 android:layout_weight="1.0"
                 />
@@ -81,13 +83,14 @@
             android:layout_marginTop="20dp"
             android:layout_below="@id/get_dollars_02">
 
-            <EditText
+            <TextView
                 android:id="@+id/text_get_dollars_player"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:text="@string/get_dollars_player"
                 android:background="#00000000"
                 android:textColor="#ffffff"
+                android:minLines="2"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
                 android:textSize="20dp"
@@ -114,15 +117,16 @@
             android:layout_marginTop="20dp"
             android:layout_below="@id/get_dollars_03">
 
-            <EditText
+            <TextView
                 android:id="@+id/text_get_dollars_guru"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:text="@string/get_dollars_guru"
                 android:background="#00000000"
                 android:textColor="#ffffff"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
+                android:minLines="2"
                 android:textSize="20dp"
                 android:layout_weight="1.0"
                 />
@@ -147,15 +151,16 @@
             android:layout_marginTop="20dp"
             android:layout_below="@id/get_dollars_04">
 
-            <EditText
+            <TextView
                 android:id="@+id/text_get_dollars_bawse"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:text="@string/get_dollars_bawse"
                 android:background="#00000000"
                 android:textColor="#ffffff"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
+                android:minLines="2"
                 android:textSize="20dp"
                 android:layout_weight="1.0"
                 />

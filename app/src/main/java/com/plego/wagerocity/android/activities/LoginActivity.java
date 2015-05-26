@@ -141,7 +141,9 @@ public class LoginActivity extends RoboFragmentActivity {
 
                         @Override
                         public void failure(RetrofitError error) {
+
                             if (error.getResponse().getStatus() == 404) {
+
                                 restClient.getApiService().createUser(
                                         user.getFirstName(),
                                         user.getLastName(),
@@ -167,6 +169,8 @@ public class LoginActivity extends RoboFragmentActivity {
 
                                     }
                                 });
+                            } else if (error.getResponse().getStatus() == 409) {
+                                pDialog.dismiss();
                             }
                         }
                     });

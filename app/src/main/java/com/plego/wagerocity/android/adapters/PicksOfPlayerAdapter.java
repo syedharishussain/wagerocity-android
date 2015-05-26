@@ -14,13 +14,10 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
-import com.plego.wagerocity.android.activities.DashboardActivity;
 import com.plego.wagerocity.android.model.Game;
-import com.plego.wagerocity.android.model.LeaderboardPlayer;
 import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.utils.AndroidUtils;
-import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.util.ArrayList;

@@ -16,6 +16,7 @@ import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.net.URI;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -65,40 +66,40 @@ public class MyPoolsListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
-        if (convertView == null) {
+//        if (convertView == null) {
 
-            viewHolder = new ViewHolder();
+        viewHolder = new ViewHolder();
 
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            convertView = inflater.inflate(R.layout.layout_cell_my_pools, parent, false);
+        convertView = inflater.inflate(R.layout.layout_cell_my_pools, parent, false);
 
-            viewHolder.textViewPoolName = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_name);
-            viewHolder.textViewStatus = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_pool_open_close_status);
-            viewHolder.textViewActive = (TextView) convertView.findViewById(R.id.textview_pool_cell_my_pools_members_active_inactive_status);
-            viewHolder.textViewStartDate = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_pool_start_date);
-            viewHolder.textViewEndDate = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_pool_end_date);
-            viewHolder.textViewMembersCount = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_pool_members_count);
+        viewHolder.textViewPoolName = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_name);
+        viewHolder.textViewStatus = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_pool_open_close_status);
+        viewHolder.textViewActive = (TextView) convertView.findViewById(R.id.textview_pool_cell_my_pools_members_active_inactive_status);
+        viewHolder.textViewStartDate = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_pool_start_date);
+        viewHolder.textViewEndDate = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_pool_end_date);
+        viewHolder.textViewMembersCount = (TextView) convertView.findViewById(R.id.textview_my_pools_cell_pool_members_count);
 
-            viewHolder.button = (Button) convertView.findViewById(R.id.button_my_pools_join_unjoin);
+        viewHolder.button = (Button) convertView.findViewById(R.id.button_my_pools_join_unjoin);
 
-            viewHolder.button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        viewHolder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    final MyPool pool = pools.get(position);
+                final MyPool pool = pools.get(position);
 
-                    Uri uri = Uri.parse(context.getString(R.string.uri_open_my_pool_detail_fragment));
-                    mListner.onMyPoolsListAdapterFragmentInteraction(uri, pool);
-                }
-            });
+                Uri uri = Uri.parse(context.getString(R.string.uri_open_my_pool_detail_fragment));
+                mListner.onMyPoolsListAdapterFragmentInteraction(uri, pool);
+            }
+        });
 
-            convertView.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+//            convertView.setTag(viewHolder);
+//
+//        } else {
+//            viewHolder = (ViewHolder) convertView.getTag();
+//        }
 
         MyPool pool = this.pools.get(position);
 
@@ -106,8 +107,12 @@ public class MyPoolsListAdapter extends BaseAdapter {
             viewHolder.textViewPoolName.setText(pool.getName());
             viewHolder.textViewMembersCount.setText(pool.getJoinedMembers());
             viewHolder.textViewStatus.setText(pool.getPrivacy());
-            viewHolder.textViewStartDate.setText(pool.getFromDate());
-            viewHolder.textViewEndDate.setText(pool.getToDate());
+            try {
+                viewHolder.textViewStartDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getFromDate()));
+                viewHolder.textViewEndDate.setText(AndroidUtils.getFormatedDateMMHHYYYY(pool.getToDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             viewHolder.textViewActive.setText(pool.getStatus());
 //            if (isMyPools) viewHolder.button.setVisibility(View.INVISIBLE);
         }

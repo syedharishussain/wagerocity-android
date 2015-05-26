@@ -46,6 +46,7 @@ public class DashboardFragment extends Fragment implements BillingProcessor.IBil
     private String mParam2;
 
     BillingProcessor bp;
+
     private OnDashboardFragmentInteractionListener mListener;
 
     /**

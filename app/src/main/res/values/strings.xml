@@ -11,11 +11,11 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="get_dollars_rookie">Rookie $2,000 \n Virtual Dollars</string>
-    <string name="get_dollars_chaser">Chaser $6,250 \n Virtual Dollars</string>
-    <string name="get_dollars_player">Player $30,000 \n Virtual Dollars</string>
-    <string name="get_dollars_guru">Guru $87,500 \n Virtual Dollars</string>
-    <string name="get_dollars_bawse">Bawse $200,000 \n Virtual Dollars</string>
+    <string name="get_dollars_rookie">Rookie\n$2,000 </string>
+    <string name="get_dollars_chaser">Chaser\n$6,250</string>
+    <string name="get_dollars_player">Player\n$30,000</string>
+    <string name="get_dollars_guru">Guru\n$87,500</string>
+    <string name="get_dollars_bawse">Bawse\n$200,000</string>
     <string name="uri_open_betting_portal_fragment">Open Betting Portal Fragment</string>
     <string name="uri_open_pools_fragment">Open Pools Fragment</string>
     <string name="uri_open_my_pools_fragment">Open My Pools Fragment</string>

@@ -113,17 +113,17 @@ public class StatsFragment extends Fragment {
         WagerocityPref pref = new WagerocityPref(getActivity());
         User user = pref.user();
         TextView availableCredit = (TextView) this.getView().findViewById(R.id.field_stats_available);
-        availableCredit.setText(formatter.format(user.getCredits()));
+        availableCredit.setText("$"+formatter.format(user.getCredits()));
 
         TextView rank = (TextView) this.getView().findViewById(R.id.field_stats_rank);
         rank.setText(user.getOverallrank().equals("") ? "-" : user.getOverallrank());
 
         TextView record = (TextView) this.getView().findViewById(R.id.field_stats_record);
         if (user.getCurrentrecord() == 0.00) {
-            record.setText("0");
+            record.setText("$0");
         } else {
 
-        record.setText(formatter.format(user.getCurrentrecord()));
+        record.setText("$"+formatter.format(user.getCurrentrecord()));
         }
     }
 

@@ -44,7 +44,7 @@ public class MyPoolDetailAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
-        if (convertView == null) {
+//        if (convertView == null) {
 
             viewHolder = new ViewHolder();
 
@@ -59,11 +59,11 @@ public class MyPoolDetailAdapter extends BaseAdapter {
             viewHolder.wlt = (TextView) convertView.findViewById(R.id.textView_pool_members_player_wlt);
 //            viewHolder.status = (TextView) convertView.findViewById(R.id.textView_pool_members_player_status);
 
-            convertView.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+//            convertView.setTag(viewHolder);
+//
+//        } else {
+//            viewHolder = (ViewHolder) convertView.getTag();
+//        }
 
         PoolMember poolMember = this.poolMembers.get(position);
 

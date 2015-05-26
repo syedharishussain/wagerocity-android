@@ -89,6 +89,7 @@ public class DashboardActivity
     OnPublishListener onPublishListener;
     BillingProcessor bp;
     ArrayList<Pick> showPurchasePicks;
+    public Boolean shouldShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +155,7 @@ public class DashboardActivity
         if (!bp.handleActivityResult(requestCode, resultCode, data))
             super.onActivityResult(requestCode, resultCode, data);
 
-//        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

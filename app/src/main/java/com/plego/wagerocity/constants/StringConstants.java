@@ -21,7 +21,14 @@ public class StringConstants {
     public static final String TAG_FRAG_PICKS_OF_PLAYER = "tag-fragment-picks_of_player";
     public static final String TAG_FRAG_MY_POOL_DETAILS = "tag-fragment-my-pool-details";
 
+    public static final String IAB_ROOKIE = "com.wagerocity.rookie";
+    public static final String IAB_CHASER = "com.wagerocity.chaser";
+    public static final String IAB_PLAYER = "com.wagerocity.player";
+    public static final String IAB_GURU = "com.wagerocity.guru";
+    public static final String IAB_BAWSE = "com.wagerocity.bawse";
 
+    public static final String IAB_PURCHASE_PICK = "com.wagerocity.purchase_pick";
+    public static final String IAB_CLEAR_RECORD = "com.wagerocity.clear_record";
 
 
 

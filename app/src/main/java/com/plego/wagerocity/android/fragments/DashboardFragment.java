@@ -102,7 +102,7 @@ public class DashboardFragment extends Fragment implements BillingProcessor.IBil
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
         Log.i("In App Billing", s + " " + transactionDetails.productId);
 
-        if (transactionDetails.productId.equals("android.test.purchased")) {
+        if (transactionDetails.productId.equals(StringConstants.IAB_CLEAR_RECORD)) {
             final WagerocityPref pref = new WagerocityPref(getActivity());
 
             final SweetAlertDialog pDialog = AndroidUtils.showDialog(
@@ -174,8 +174,8 @@ public class DashboardFragment extends Fragment implements BillingProcessor.IBil
                             public void onClick(SweetAlertDialog sDialog) {
                                 sDialog.dismissWithAnimation();
 
-                                bp.purchase(getActivity(), "android.test.purchased");
-                                bp.consumePurchase("android.test.purchased");
+                                bp.purchase(getActivity(), StringConstants.IAB_CLEAR_RECORD);
+                                bp.consumePurchase(StringConstants.IAB_CLEAR_RECORD);
 
                             }
                         })

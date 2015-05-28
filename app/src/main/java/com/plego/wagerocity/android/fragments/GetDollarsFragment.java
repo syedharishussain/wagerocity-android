@@ -85,13 +85,13 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.consumePurchase("android.test.purchased");
-                boolean isPurchased = bp.isPurchased("android.test.purchased");
+                bp.consumePurchase(StringConstants.IAB_ROOKIE);
+                boolean isPurchased = bp.isPurchased(StringConstants.IAB_ROOKIE);
 
                 if (isPurchased) {
                 }
 //                bp.purchase(getActivity(), getActivity().getString(R.string.in_app_billing_rookie));
-                bp.purchase(getActivity(), "android.test.purchased");
+                bp.purchase(getActivity(), StringConstants.IAB_ROOKIE);
 
             }
         });
@@ -101,8 +101,8 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.purchase(getActivity(), "android.test.purchased");
-                bp.consumePurchase("android.test.purchased");
+                bp.purchase(getActivity(), StringConstants.IAB_CHASER);
+                bp.consumePurchase(StringConstants.IAB_CHASER);
 //                buyCreditsAPI((float)6250.0);
             }
         });
@@ -112,8 +112,8 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.purchase(getActivity(), "android.test.purchased");
-                bp.consumePurchase("android.test.purchased");
+                bp.purchase(getActivity(), StringConstants.IAB_PLAYER);
+                bp.consumePurchase(StringConstants.IAB_PLAYER);
 //                buyCreditsAPI((float)30000.0);
             }
         });
@@ -123,8 +123,8 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.purchase(getActivity(), "android.test.purchased");
-                bp.consumePurchase("android.test.purchased");
+                bp.purchase(getActivity(), StringConstants.IAB_GURU);
+                bp.consumePurchase(StringConstants.IAB_GURU);
 //                buyCreditsAPI((float)87500.0);
             }
         });
@@ -134,8 +134,8 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.purchase(getActivity(), "android.test.purchased");
-                bp.consumePurchase("android.test.purchased");
+                bp.purchase(getActivity(), StringConstants.IAB_BAWSE);
+                bp.consumePurchase(StringConstants.IAB_BAWSE);
 //                buyCreditsAPI((float)200000.0);
             }
         });
@@ -216,6 +216,21 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
         Log.i("In App Billing", s + " " + transactionDetails.productId);
         if (transactionDetails.productId.equals("android.test.purchased")) buyCreditsAPI((float)2000.0);
+
+        String productId = transactionDetails.productId;
+
+        if (productId.equals(StringConstants.IAB_ROOKIE)) {
+            buyCreditsAPI((float)2000.0);
+        } else if (productId.equals(StringConstants.IAB_CHASER)) {
+            buyCreditsAPI((float)6500.0);
+        } else if (productId.equals(StringConstants.IAB_PLAYER)) {
+            buyCreditsAPI((float)30000.0);
+        } else if (productId.equals(StringConstants.IAB_GURU)) {
+            buyCreditsAPI((float)87500.0);
+        } else if (productId.equals(StringConstants.IAB_BAWSE)) {
+            buyCreditsAPI((float)200000.0);
+        }
+
     }
 
     @Override

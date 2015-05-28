@@ -476,8 +476,8 @@ public class DashboardActivity
             if (isPurchased) {
                 replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
             } else {
-                bp.purchase(this, "android.test.purchased");
-                bp.consumePurchase("android.test.purchased");
+                bp.purchase(this, StringConstants.IAB_PURCHASE_PICK);
+                bp.consumePurchase(StringConstants.IAB_PURCHASE_PICK);
                 showPurchasePicks = new ArrayList<>(picks);
             }
         }
@@ -505,10 +505,9 @@ public class DashboardActivity
 
     @Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
-        if (transactionDetails.productId.equals("android.test.purchased")) {
+        if (transactionDetails.productId.equals(StringConstants.IAB_PURCHASE_PICK)) {
             replaceFragment(MyPicksFragment.newInstance(new ArrayList<>(this.showPurchasePicks)), StringConstants.TAG_FRAG_MY_PICKS);
             this.showPurchasePicks = null;
-
         }
     }
 

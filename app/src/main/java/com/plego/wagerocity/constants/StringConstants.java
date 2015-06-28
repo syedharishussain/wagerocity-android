@@ -30,6 +30,9 @@ public class StringConstants {
     public static final String IAB_PURCHASE_PICK = "com.wagerocity.purchase_pick";
     public static final String IAB_CLEAR_RECORD = "com.wagerocity.clear_record";
 
+    public static final String IAB_TEST = "android.test.purchased";
+
+
 
 
 

@@ -17,7 +17,7 @@ public class OddHolder implements Parcelable, Cloneable {
     public OddHolder() {
     }
 
-    public OddHolder(Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString, String leagueName) {
+    public OddHolder(Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString, String leagueName, boolean isTeamA) {
         this.stake = stake;
         this.teamId = teamId;
         this.oddId = oddId;
@@ -35,6 +35,7 @@ public class OddHolder implements Parcelable, Cloneable {
         this.teaser2 = 0;
         this.teaser3 = 0;
         this.teaserString = "";
+        this.isTeamA = isTeamA;
     }
 
     Double stake;
@@ -55,6 +56,15 @@ public class OddHolder implements Parcelable, Cloneable {
     Integer teaser1;
     Integer teaser2;
     Integer teaser3;
+    boolean isTeamA;
+
+    public boolean isTeamA() {
+        return isTeamA;
+    }
+
+    public void setTeamA(boolean isTeamA) {
+        this.isTeamA = isTeamA;
+    }
 
     public String getTeaserString() {
         return teaserString;
@@ -237,14 +247,15 @@ public class OddHolder implements Parcelable, Cloneable {
         dest.writeString(this.betOT);
         dest.writeString(this.betTypeString);
         dest.writeString(this.pointSpreadString);
+        dest.writeString(this.teaserString);
         dest.writeValue(this.isChecked);
         dest.writeString(this.leagueName);
-        dest.writeString(this.teaserString);
         dest.writeString(this.riskValue);
         dest.writeValue(this.parlayValue);
         dest.writeValue(this.teaser1);
         dest.writeValue(this.teaser2);
         dest.writeValue(this.teaser3);
+        dest.writeByte(isTeamA ? (byte) 1 : (byte) 0);
     }
 
     private OddHolder(Parcel in) {
@@ -258,14 +269,15 @@ public class OddHolder implements Parcelable, Cloneable {
         this.betOT = in.readString();
         this.betTypeString = in.readString();
         this.pointSpreadString = in.readString();
+        this.teaserString = in.readString();
         this.isChecked = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.leagueName = in.readString();
         this.riskValue = in.readString();
-        this.teaserString = in.readString();
         this.parlayValue = (Double) in.readValue(Double.class.getClassLoader());
         this.teaser1 = (Integer) in.readValue(Integer.class.getClassLoader());
         this.teaser2 = (Integer) in.readValue(Integer.class.getClassLoader());
         this.teaser3 = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.isTeamA = in.readByte() != 0;
     }
 
     public static final Creator<OddHolder> CREATOR = new Creator<OddHolder>() {

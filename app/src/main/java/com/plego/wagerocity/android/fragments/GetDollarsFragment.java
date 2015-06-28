@@ -20,6 +20,8 @@ import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.android.util.IabException;
+import com.plego.wagerocity.android.util.IabHelper;
 import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
 
@@ -27,6 +29,9 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import roboguice.activity.event.OnActivityResultEvent;
+import roboguice.event.Observes;
+import roboguice.fragment.RoboFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,14 +41,13 @@ import retrofit.client.Response;
  * Use the {@link GetDollarsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GetDollarsFragment extends Fragment implements BillingProcessor.IBillingHandler {
+public class GetDollarsFragment extends RoboFragment implements BillingProcessor.IBillingHandler {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
     private OnGetDollarsFragmentInteractionListener mListener;
     BillingProcessor bp;
-
 
     /**
      * Use this factory method to create a new instance of
@@ -85,13 +89,15 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.consumePurchase(StringConstants.IAB_ROOKIE);
-                boolean isPurchased = bp.isPurchased(StringConstants.IAB_ROOKIE);
+//                bp.consumePurchase(StringConstants.IAB_TEST);
+//                boolean isPurchased = bp.isPurchased(StringConstants.IAB_TEST);
+//
+//                if (isPurchased) {
+//                }
+////                bp.purchase(getActivity(), getActivity().getString(R.string.in_app_billing_rookie));
+//                bp.purchase(getActivity(), StringConstants.IAB_TEST);
 
-                if (isPurchased) {
-                }
-//                bp.purchase(getActivity(), getActivity().getString(R.string.in_app_billing_rookie));
-                bp.purchase(getActivity(), StringConstants.IAB_ROOKIE);
+                mListener.onGetDollarsFragmentInteraction(StringConstants.IAB_ROOKIE);
 
             }
         });
@@ -101,9 +107,10 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.purchase(getActivity(), StringConstants.IAB_CHASER);
-                bp.consumePurchase(StringConstants.IAB_CHASER);
+//                bp.purchase(getActivity(), StringConstants.IAB_CHASER);
+//                bp.consumePurchase(StringConstants.IAB_CHASER);
 //                buyCreditsAPI((float)6250.0);
+                mListener.onGetDollarsFragmentInteraction(StringConstants.IAB_CHASER);
             }
         });
 
@@ -112,9 +119,10 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.purchase(getActivity(), StringConstants.IAB_PLAYER);
-                bp.consumePurchase(StringConstants.IAB_PLAYER);
+//                bp.purchase(getActivity(), StringConstants.IAB_PLAYER);
+//                bp.consumePurchase(StringConstants.IAB_PLAYER);
 //                buyCreditsAPI((float)30000.0);
+                mListener.onGetDollarsFragmentInteraction(StringConstants.IAB_PLAYER);
             }
         });
 
@@ -123,9 +131,10 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.purchase(getActivity(), StringConstants.IAB_GURU);
-                bp.consumePurchase(StringConstants.IAB_GURU);
+//                bp.purchase(getActivity(), StringConstants.IAB_GURU);
+//                bp.consumePurchase(StringConstants.IAB_GURU);
 //                buyCreditsAPI((float)87500.0);
+                mListener.onGetDollarsFragmentInteraction(StringConstants.IAB_GURU);
             }
         });
 
@@ -134,9 +143,10 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
             @Override
             public void onClick(View v) {
 
-                bp.purchase(getActivity(), StringConstants.IAB_BAWSE);
-                bp.consumePurchase(StringConstants.IAB_BAWSE);
+//                bp.purchase(getActivity(), StringConstants.IAB_BAWSE);
+//                bp.consumePurchase(StringConstants.IAB_BAWSE);
 //                buyCreditsAPI((float)200000.0);
+                mListener.onGetDollarsFragmentInteraction(StringConstants.IAB_BAWSE);
             }
         });
     }
@@ -193,9 +203,19 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
         });
     }
 
+    public void onActivityResultFromActivity (@Observes OnActivityResultEvent onActivityResultEvent) {
+        Log.i("@Observes", "In GetDollars Fragment:" + onActivityResultEvent.getRequestCode());
+        if (!bp.handleActivityResult(onActivityResultEvent.getRequestCode(), onActivityResultEvent.getResultCode(), onActivityResultEvent.getData()))
+            super.onActivityResult(onActivityResultEvent.getRequestCode(), onActivityResultEvent.getResultCode(), onActivityResultEvent.getData());
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.i("In App Billing", "On Activity Result in Fragment Request Code:" + requestCode);
+
         super.onActivityResult(requestCode, resultCode, data);
+
         FragmentManager fragmentManager = getFragmentManager();
         GetDollarsFragment fragment = (GetDollarsFragment) fragmentManager.findFragmentByTag(StringConstants.TAG_FRAG_GET_DOLLARS);
         if (fragment != null)
@@ -214,7 +234,7 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
 
     @Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
-        Log.i("In App Billing", s + " " + transactionDetails.productId);
+        Log.i("In App Billing", transactionDetails.productId);
         if (transactionDetails.productId.equals("android.test.purchased")) buyCreditsAPI((float)2000.0);
 
         String productId = transactionDetails.productId;
@@ -230,7 +250,6 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
         } else if (productId.equals(StringConstants.IAB_BAWSE)) {
             buyCreditsAPI((float)200000.0);
         }
-
     }
 
     @Override
@@ -260,7 +279,7 @@ public class GetDollarsFragment extends Fragment implements BillingProcessor.IBi
      */
     public interface OnGetDollarsFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onGetDollarsFragmentInteraction(Uri uri);
+        public void onGetDollarsFragmentInteraction(String purchaseID);
     }
 
 }

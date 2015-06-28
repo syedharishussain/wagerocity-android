@@ -103,39 +103,7 @@ public class DashboardFragment extends Fragment implements BillingProcessor.IBil
         Log.i("In App Billing", s + " " + transactionDetails.productId);
 
         if (transactionDetails.productId.equals(StringConstants.IAB_CLEAR_RECORD)) {
-            final WagerocityPref pref = new WagerocityPref(getActivity());
 
-            final SweetAlertDialog pDialog = AndroidUtils.showDialog(
-                    "Loading",
-                    null,
-                    SweetAlertDialog.PROGRESS_TYPE,
-                    getActivity()
-            );
-
-            final RestClient restClient = new RestClient();
-            restClient.getApiService().clearRecord(pref.user().getUserId(), new Callback<Response>() {
-                @Override
-                public void success(Response response, Response response2) {
-                    restClient.getApiService().getUser(pref.facebookID(), new Callback<User>() {
-                        @Override
-                        public void success(User user, Response response) {
-                            pref.setUser(user);
-                            AndroidUtils.updateStats(getActivity());
-                            pDialog.dismiss();
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-
-                        }
-                    });
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-
-                }
-            });
         }
     }
 
@@ -164,32 +132,7 @@ public class DashboardFragment extends Fragment implements BillingProcessor.IBil
         clearRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Clear Records for $1.99?")
-                        .setContentText("You will be charged $1.99 to clear you record.?")
-                        .setConfirmText("Yes do it!")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.dismissWithAnimation();
-
-                                bp.purchase(getActivity(), StringConstants.IAB_CLEAR_RECORD);
-                                bp.consumePurchase(StringConstants.IAB_CLEAR_RECORD);
-
-                            }
-                        })
-                        .setCancelText("Cancel")
-                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog dialog) {
-                                dialog.cancel();
-                            }
-                        })
-                        .showCancelButton(true)
-                        .show();
-
-
+                mListener.onDashboardFragmentClearRecordInteraction();
             }
         });
 
@@ -308,6 +251,8 @@ public class DashboardFragment extends Fragment implements BillingProcessor.IBil
     public interface OnDashboardFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onDashboardFragmentInteraction(Uri uri);
+
+        public void onDashboardFragmentClearRecordInteraction();
     }
 
 }

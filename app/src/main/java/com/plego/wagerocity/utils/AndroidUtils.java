@@ -14,7 +14,12 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.activities.DashboardActivity;
 import com.plego.wagerocity.android.fragments.StatsFragment;
+import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.android.util.IabHelper;
 import com.plego.wagerocity.constants.StringConstants;
 
 import junit.framework.Assert;
@@ -26,7 +31,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 import static java.lang.String.valueOf;
 

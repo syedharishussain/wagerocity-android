@@ -50,7 +50,7 @@
         <activity
             android:name=".android.activities.DashboardActivity"
             android:label="@string/title_activity_dashboard"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             >
         </activity>

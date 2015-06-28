@@ -417,7 +417,8 @@ public class BetOnGameFragment extends Fragment {
                 final String userId = new WagerocityPref(getActivity()).user().getUserId();
                 final String oddId = oddHolder.getOddId();
                 final String oddValue = oddHolder.getBetTypeSPT().equals(PARLAY) ? oddHolder.getParlayValue().toString() : oddHolder.getOddValue();
-                final String position = oddHolder.getBetTypeSPT().equals(SINGLE) ? oddHolder.getBetTypeString().equals(OVER) || oddHolder.getBetTypeString().equals(UNDER) ? oddHolder.getBetTypeString().toLowerCase() : "-" : "-";
+//                final String position = oddHolder.getBetTypeSPT().equals(SINGLE) ? oddHolder.getBetTypeString().equals(OVER) || oddHolder.getBetTypeString().equals(UNDER) ? oddHolder.getBetTypeString().toLowerCase() : "-" : "-";
+                final String position = oddHolder.isTeamA() ? "over" : "under";
                 final String matchDetail = oddHolder.getTeamVsteam();
                 final String oddType = "ao";
                 final String stake = oddHolder.getRiskValue();
@@ -471,7 +472,7 @@ public class BetOnGameFragment extends Fragment {
                                                     Collections.sort(picks, new Pick());
                                                     Uri uri = Uri.parse(getString(R.string.uri_open_my_picks_fragment));
                                                     mListener.onBetOnGameFragmentInteraction(uri, picks);
-                                                    Boolean shouldShare = ((DashboardActivity) getActivity()).shouldShare;
+                                                    boolean shouldShare = ((DashboardActivity) getActivity()).shouldShare;
 
                                                     if (shareOdd != null) {
                                                         if (shouldShare) {

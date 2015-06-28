@@ -1,12 +1,19 @@
 package com.plego.wagerocity.android.activities;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.plego.wagerocity.R;
@@ -41,6 +48,12 @@ import com.plego.wagerocity.android.model.OddHolder;
 import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.android.util.IabException;
+import com.plego.wagerocity.android.util.IabHelper;
+import com.plego.wagerocity.android.util.IabResult;
+import com.plego.wagerocity.android.util.Inventory;
+import com.plego.wagerocity.android.util.Purchase;
 import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
 import com.sromku.simple.fb.Permission;
@@ -51,12 +64,16 @@ import com.sromku.simple.fb.listeners.OnPublishListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import roboguice.RoboGuice;
 import roboguice.activity.RoboFragmentActivity;
+import roboguice.event.EventManager;
+import roboguice.inject.RoboInjector;
 
 public class DashboardActivity
         extends RoboFragmentActivity
@@ -89,7 +106,10 @@ public class DashboardActivity
     OnPublishListener onPublishListener;
     BillingProcessor bp;
     ArrayList<Pick> showPurchasePicks;
-    public Boolean shouldShare;
+    public boolean shouldShare;
+    EventManager eventManager;
+    IabHelper mHelper;
+    IInAppBillingService mService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +127,7 @@ public class DashboardActivity
             Log.e("FACEBOOKID", facebokoID);
         }
 
-        Permission[] permissions = new Permission[] {
+        Permission[] permissions = new Permission[]{
                 Permission.BASIC_INFO,
                 Permission.USER_ABOUT_ME,
                 Permission.EMAIL,
@@ -140,6 +160,48 @@ public class DashboardActivity
             }
         };
 
+        final RoboInjector injector = RoboGuice.getInjector(this);
+        eventManager = injector.getInstance(EventManager.class);
+
+        mHelper = new IabHelper(this, getString(R.string.in_app_billing_public_key));
+
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    Log.d("IabHelper Setup", "In-app Billing setup failed: " +
+                            result);
+
+                } else {
+                    Log.d("IabHelper Setup", "In-app Billing is set up OK");
+                    mHelper.queryInventoryAsync(mReceivedInventoryListener);
+                }
+            }
+        });
+
+
+
+        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+
+
+    }
+
+    ServiceConnection mServiceConn = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name,
+                                       IBinder service) {
+            mService = IInAppBillingService.Stub.asInterface(service);
+        }
+    };
+
+    private void checkForPurchases () {
+
     }
 
     @Override
@@ -150,18 +212,37 @@ public class DashboardActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+            if (!mHelper.handleActivityResult(requestCode,
+                    resultCode, data)) {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+
         simpleFacebook.onActivityResult(this, requestCode, resultCode, data);
+
 
         if (!bp.handleActivityResult(requestCode, resultCode, data))
             super.onActivityResult(requestCode, resultCode, data);
-
-        super.onActivityResult(requestCode, resultCode, data);
+//
+//        Log.i("In App Billing", "On Activity Result in Activity Request Code:" + requestCode);
+//        eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
+//
+//        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onDestroy() {
         if (bp != null)
             bp.release();
+
+        if (mHelper != null)
+            mHelper.dispose();
+
+        if (mService != null) {
+            unbindService(mServiceConn);
+        }
+
+        mHelper = null;
 
         super.onDestroy();
     }
@@ -187,7 +268,7 @@ public class DashboardActivity
     }
 
     private void hideBackButton() {
-        NavigationBarFragment fragment = (NavigationBarFragment)AndroidUtils.getFragmentByTag(this, StringConstants.TAG_FRAG_NAVIGATION);
+        NavigationBarFragment fragment = (NavigationBarFragment) AndroidUtils.getFragmentByTag(this, StringConstants.TAG_FRAG_NAVIGATION);
 
         fragment.showBackButton(false);
     }
@@ -348,6 +429,36 @@ public class DashboardActivity
         }
     }
 
+    @Override
+    public  void onDashboardFragmentClearRecordInteraction() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Clear Records for $1.99?")
+                .setContentText("You will be charged $1.99 to clear you record.?")
+                .setConfirmText("Yes do it!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+
+                        mHelper.launchPurchaseFlow(DashboardActivity.this, StringConstants.IAB_CLEAR_RECORD, 10001,
+                                mPurchaseFinishedListener, StringConstants.IAB_CLEAR_RECORD);
+//
+//                        bp.purchase(this, StringConstants.IAB_CLEAR_RECORD);
+//                        bp.consumePurchase(StringConstants.IAB_CLEAR_RECORD);
+
+                    }
+                })
+                .setCancelText("Cancel")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog dialog) {
+                        dialog.cancel();
+                    }
+                })
+                .showCancelButton(true)
+                .show();
+    }
+
     private void replaceGetDollarsFragment() {
         replaceFragment(new GetDollarsFragment(), StringConstants.TAG_FRAG_GET_DOLLARS);
     }
@@ -357,11 +468,6 @@ public class DashboardActivity
         transaction.replace(R.id.fragment_container_dashboard, fragment, TAG);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-    @Override
-    public void onGetDollarsFragmentInteraction(Uri uri) {
-
     }
 
     @Override
@@ -476,8 +582,10 @@ public class DashboardActivity
             if (isPurchased) {
                 replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
             } else {
-                bp.purchase(this, StringConstants.IAB_PURCHASE_PICK);
-                bp.consumePurchase(StringConstants.IAB_PURCHASE_PICK);
+//                bp.purchase(this, StringConstants.IAB_PURCHASE_PICK);
+//                bp.consumePurchase(StringConstants.IAB_PURCHASE_PICK);
+                mHelper.launchPurchaseFlow(this, StringConstants.IAB_PURCHASE_PICK, 10001,
+                        mPurchaseFinishedListener, StringConstants.IAB_PURCHASE_PICK);
                 showPurchasePicks = new ArrayList<>(picks);
             }
         }
@@ -502,12 +610,53 @@ public class DashboardActivity
         simpleFacebook.publish(feed, true, onPublishListener);
     }
 
+    public void buyCreditsAPI (int credits) {
+
+        final WagerocityPref pref = new WagerocityPref(this);
+        final User user = pref.user();
+
+        final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                getString(R.string.loading),
+                null,
+                SweetAlertDialog.PROGRESS_TYPE,
+                this
+        );
+
+        new RestClient().getApiService().buyCredits(user.getUserId(), (float) credits, new Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                pDialog.dismiss();
+                pref.setUser(user);
+                AndroidUtils.updateStats(DashboardActivity.this);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                pDialog.dismiss();
+                AndroidUtils.showErrorDialog(error, DashboardActivity.this);
+            }
+        });
+    }
 
     @Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
+        Log.i("bp Jelly", s);
+
         if (transactionDetails.productId.equals(StringConstants.IAB_PURCHASE_PICK)) {
-            replaceFragment(MyPicksFragment.newInstance(new ArrayList<>(this.showPurchasePicks)), StringConstants.TAG_FRAG_MY_PICKS);
-            this.showPurchasePicks = null;
+
+            replaceFragment(MyPicksFragment.newInstance(new ArrayList<>(showPurchasePicks)), StringConstants.TAG_FRAG_MY_PICKS);
+            showPurchasePicks = null;
+        }
+
+        if (transactionDetails.productId.equals(StringConstants.IAB_TEST)) {
+                buyCreditsAPI(2000);
+//            if (bp.isPurchased(StringConstants.IAB_TEST)) {
+                bp.consumePurchase(StringConstants.IAB_TEST);
+//            } else {
+//
+//
+//
+//            }
         }
     }
 
@@ -525,4 +674,134 @@ public class DashboardActivity
     public void onBillingInitialized() {
 
     }
+
+    @Override
+    public void onGetDollarsFragmentInteraction(String purchaseID) {
+
+
+
+
+
+        mHelper.launchPurchaseFlow(this, purchaseID, 10001,
+                mPurchaseFinishedListener, purchaseID);
+    }
+
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        @Override
+        public void onIabPurchaseFinished(IabResult result, Purchase info) {
+            Log.e("IabHelper + Message", result.getMessage());
+            Log.e("IabHelper + Info", String.valueOf(info));
+
+            if (result.isFailure()) {
+                // Handle error
+
+                return;
+            } else if (info.getSku().equals(StringConstants.IAB_ROOKIE)) {
+                mHelper.consumeAsync(info, mConsumeFinishedListener);
+                buyCreditsAPI(2000);
+            } else if (info.getSku().equals(StringConstants.IAB_CHASER)) {
+                mHelper.consumeAsync(info, mConsumeFinishedListener);
+                buyCreditsAPI(6250);
+            } else if (info.getSku().equals(StringConstants.IAB_PLAYER)) {
+                mHelper.consumeAsync(info, mConsumeFinishedListener);
+                buyCreditsAPI(30000);
+            } else if (info.getSku().equals(StringConstants.IAB_GURU)) {
+                mHelper.consumeAsync(info, mConsumeFinishedListener);
+                buyCreditsAPI(87500);
+            } else if (info.getSku().equals(StringConstants.IAB_BAWSE)) {
+                mHelper.consumeAsync(info, mConsumeFinishedListener);
+                buyCreditsAPI(200000);
+            } else if (info.getSku().equals(StringConstants.IAB_PURCHASE_PICK)) {
+                mHelper.consumeAsync(info, mConsumeFinishedListener);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        replaceFragment(MyPicksFragment.newInstance(new ArrayList<>(showPurchasePicks)), StringConstants.TAG_FRAG_MY_PICKS);
+                    }
+                }, 100);
+
+                showPurchasePicks = null;
+            } else if (info.getSku().equals(StringConstants.IAB_CLEAR_RECORD)) {
+                mHelper.consumeAsync(info, mConsumeFinishedListener);
+
+                final WagerocityPref pref = new WagerocityPref(DashboardActivity.this);
+
+                final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                        "Loading",
+                        null,
+                        SweetAlertDialog.PROGRESS_TYPE,
+                        DashboardActivity.this
+                );
+
+                final RestClient restClient = new RestClient();
+                restClient.getApiService().clearRecord(pref.user().getUserId(), new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+                        restClient.getApiService().getUser(pref.facebookID(), new Callback<User>() {
+                            @Override
+                            public void success(User user, Response response) {
+                                pref.setUser(user);
+                                AndroidUtils.updateStats(DashboardActivity.this);
+                                pDialog.dismiss();
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
+            }
+
+        }
+    };
+
+    IabHelper.QueryInventoryFinishedListener mReceivedInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+
+            if (result.isFailure()) {
+                // Handle failure
+            } else {
+                ArrayList<String> skus = new ArrayList<>();
+                skus.add(StringConstants.IAB_ROOKIE);
+                skus.add(StringConstants.IAB_CHASER);
+                skus.add(StringConstants.IAB_PLAYER);
+                skus.add(StringConstants.IAB_GURU);
+                skus.add(StringConstants.IAB_BAWSE);
+                skus.add(StringConstants.IAB_CLEAR_RECORD);
+                skus.add(StringConstants.IAB_PURCHASE_PICK);
+
+                for (String sku : skus) {
+
+                    Purchase purchase = inventory.getPurchase(sku);
+                    if (purchase != null) {
+                        mHelper.consumeAsync(purchase, mConsumeFinishedListener);
+                    }
+                }
+            }
+        }
+    };
+
+    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener =
+            new IabHelper.OnConsumeFinishedListener() {
+                public void onConsumeFinished(Purchase purchase,
+                                              IabResult result) {
+
+                    if (result.isSuccess()) {
+                        Log.i("Consumed Purchase", purchase.toString());
+                    } else {
+                        // handle error
+                    }
+                }
+            };
+
+
 }

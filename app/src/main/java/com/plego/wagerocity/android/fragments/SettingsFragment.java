@@ -96,6 +96,25 @@ public class SettingsFragment extends Fragment {
         authButton.setFragment(this);
 //        authButton.setReadPermissions(permissions);
 
+        Button inviteButton = (Button) view.findViewById(R.id.button_settings_invite_friends);
+        inviteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                String appLinkUrl, previewImageUrl;
+//
+//                appLinkUrl = "https://www.mydomain.com/myapplink";
+//                previewImageUrl = "https://www.mydomain.com/my_invite_image.jpg";
+//
+//                if (AppInviteDialog.canShow()) {
+//                    AppInviteContent content = new AppInviteContent.Builder()
+//                            .setApplinkUrl(appLinkUrl)
+//                            .setPreviewImageUrl(previewImageUrl)
+//                            .build();
+//                    AppInviteDialog.show(this, content);
+//                }
+            }
+        });
+
         return view;
     }
 

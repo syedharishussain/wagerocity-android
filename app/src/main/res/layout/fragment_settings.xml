@@ -126,14 +126,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.facebook.widget.LoginButton
-                android:id="@+id/authButton"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
+                android:orientation="vertical"
+                >
+
+
+
+
+            <Button
+                android:id="@+id/button_settings_invite_friends"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue_button"
+                android:text="Invite Friends"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:layout_marginBottom="20dp"
+
                 />
+
+            <com.facebook.widget.LoginButton
+                android:id="@+id/authButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+
+            </LinearLayout>
 
             </RelativeLayout>
 

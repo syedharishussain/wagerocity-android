@@ -32,8 +32,4 @@ public class StringConstants {
 
     public static final String IAB_TEST = "android.test.purchased";
 
-
-
-
-
 }

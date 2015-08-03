@@ -272,8 +272,8 @@ public class BetOnGameFragment extends Fragment {
             String firstTeaserValue = ((Integer) map.get(oddHolders.get(0).getLeagueName().equals("nfl") ? 6.0 : 4.0)).toString();
 
             OddHolder oddHolder = new OddHolder();
-            oddHolder.setTeamId(oddHolders.get(0).getOddId());
-            oddHolder.setOddId(oddHolders.get(0).getTeamId());
+            oddHolder.setTeamId(oddHolders.get(0).getTeamId());
+            oddHolder.setOddId(oddHolders.get(0).getOddId());
             oddHolder.setTeamName("Teaser");
             oddHolder.setTeamVsteam(oddHolders.get(0).getLeagueName().equals("nfl") ? "+6.0 pts " : "+4.0 pts " + firstTeaserValue + "( " + count + " teams )");
             oddHolder.setOddValue("");

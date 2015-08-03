@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.plego.wagerocity"
+        applicationId "com.plegotech.wagerocity"
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 8

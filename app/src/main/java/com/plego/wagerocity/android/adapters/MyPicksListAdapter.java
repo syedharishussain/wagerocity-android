@@ -100,12 +100,6 @@ public class MyPicksListAdapter extends BaseAdapter {
             viewHolder.share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-//                    sharingIntent.setType("text/plain");
-//                    String shareBody = "Share your Pick!";
-//                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-//                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, picks.get(position).getMatchDet());
-//                    context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
                     String name = pick.getMatchDet();
                     String caption = "I have put my stakes " + "$" + pick.getStake() + " on " + pick.getTeamName() + " " + betTypeString + " " + pick.getOddsVal();
@@ -123,13 +117,6 @@ public class MyPicksListAdapter extends BaseAdapter {
 
                 }
             });
-
-//            convertView.setTag(viewHolder);
-//
-//        } else {
-//            viewHolder = (ViewHolder) convertView.getTag();
-//        }
-
 
 
         if (pick != null) {

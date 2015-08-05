@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.facebook.FacebookException;
+import com.facebook.Session;
+import com.facebook.widget.WebDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.RestClient;
@@ -147,6 +150,32 @@ public class GetDollarsFragment extends RoboFragment implements BillingProcessor
 //                bp.consumePurchase(StringConstants.IAB_BAWSE);
 //                buyCreditsAPI((float)200000.0);
                 mListener.onGetDollarsFragmentInteraction(StringConstants.IAB_BAWSE);
+            }
+        });
+
+        Button inviteButton = (Button) view.findViewById(R.id.button_settings_invite_friends);
+        inviteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle params = new Bundle();
+                params.putString("message",
+                        "Learn how to make your Android apps social");
+//                params.putStrin;
+                WebDialog requestsDialog = (new WebDialog.RequestsDialogBuilder(
+                        getActivity(), Session.getActiveSession(), params))
+                        .setOnCompleteListener(new WebDialog.OnCompleteListener() {
+
+                            @Override
+                            public void onComplete(Bundle values,
+                                                   FacebookException error) {
+
+                                if (error == null) {
+//                                    if (!error.getClass().getName().equals("com.facebook.FacebookOperationCanceledException")) {
+                                    buyCreditsAPI((float) 2500.00);
+                                }
+                            }
+                        }).build();
+                requestsDialog.show();
             }
         });
     }

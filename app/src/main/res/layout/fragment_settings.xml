@@ -1,47 +1,44 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.plego.wagerocity.android.fragments.SettingsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imageview_settings"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_gravity="center"
-            />
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/textview_settings_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Saad Yusuf"
-            android:textSize="20sp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:minLines="2"
-            android:maxLines="2"
             android:layout_marginBottom="10dp"
-            />
+            android:layout_marginTop="10dp"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="Saad Yusuf"
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            >
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -55,24 +52,22 @@
                 android:id="@+id/textview_settings_credits_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:text="$10000"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_alignParentRight="true"
-                />
+                android:textStyle="bold" />
 
-            </RelativeLayout>
+        </RelativeLayout>
 
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            >
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,21 +81,20 @@
                 android:id="@+id/textview_settings_current_rank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:text="100th"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_alignParentRight="true"
-                />
+                android:textStyle="bold" />
 
-            </RelativeLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -114,52 +108,27 @@
                 android:id="@+id/textview_settings_current_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:text="1000.23"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_alignParentRight="true"
-                />
+                android:textStyle="bold" />
 
-            </RelativeLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="20dp"
-                android:orientation="vertical"
-                >
+                <com.facebook.widget.LoginButton
+                    android:id="@+id/authButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    />
 
-
-
-
-            <Button
-                android:id="@+id/button_settings_invite_friends"
-                android:layout_width="175dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/blue_button"
-                android:text="Invite Friends"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                android:layout_marginBottom="20dp"
-
-                />
-
-            <com.facebook.widget.LoginButton
-                android:id="@+id/authButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                />
-
-            </LinearLayout>
-
-            </RelativeLayout>
+        </RelativeLayout>
 
 
     </LinearLayout>

@@ -46,11 +46,13 @@ public class BetSlipAdapter extends BaseAdapter {
         this.oddHolders = new ArrayList<>(oddHolders);
         this.context = context;
         riskTextWatcherMap = new HashMap<>();
+        riskTextWatcherMapToWin = new HashMap<>();
     }
 
     private ArrayList<OddHolder> oddHolders;
     private Context context;
     private Map<Integer, RiskTextWatcher> riskTextWatcherMap;
+    private Map<Integer, RiskTextWatcherToWin> riskTextWatcherMapToWin;
 //    private BetOnGameFragment.OnBetOnGameFragmentInteractionListener mListener;
 
     @Override
@@ -107,8 +109,6 @@ public class BetSlipAdapter extends BaseAdapter {
                 arrayList.add("+4.5 pts " + oddHolder.getTeaser2());
                 arrayList.add("+5 pts " + oddHolder.getTeaser3());
             }
-
-
 
             ArrayAdapter arrayAdapter = new ArrayAdapter(context, R.layout.abc_simple_dropdown_hint, arrayList);
             viewHolder.spinner.setAdapter(arrayAdapter);
@@ -186,6 +186,11 @@ public class BetSlipAdapter extends BaseAdapter {
             riskTextWatcherMap.put(position, riskTextWatcher1);
             viewHolder.risk.addTextChangedListener(riskTextWatcher1);
 
+            RiskTextWatcherToWin riskTextWatcher2;
+            riskTextWatcher2 = new RiskTextWatcherToWin(position, viewHolder);
+            riskTextWatcherMapToWin.put(position, riskTextWatcher2);
+            viewHolder.toWin.addTextChangedListener(riskTextWatcher2);
+
         }
 
         return convertView;
@@ -221,16 +226,19 @@ public class BetSlipAdapter extends BaseAdapter {
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            if (!this.viewHolder.risk.isFocused()) return;
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            if (!this.viewHolder.risk.isFocused()) return;
         }
 
         @Override
         public void afterTextChanged(Editable s) {
+
+            if (!this.viewHolder.risk.isFocused()) return;
+
             double result = 0.0;
             String string = s.toString();
 
@@ -261,6 +269,68 @@ public class BetSlipAdapter extends BaseAdapter {
                     viewHolder.toWin.setText(String.valueOf(f.format(result)));
 
                     oddHolder.setRiskValue(f.format(Double.parseDouble(s.toString())));
+
+                    oddHolders.set(position, oddHolder);
+
+                }
+
+            }
+        }
+    }
+
+    private class RiskTextWatcherToWin implements TextWatcher {
+
+        private int position;
+        private ViewHolder viewHolder;
+
+        private RiskTextWatcherToWin(int position, ViewHolder viewHolder) {
+            this.position = position;
+            this.viewHolder = viewHolder;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            if (!this.viewHolder.toWin.isFocused()) return;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (!this.viewHolder.toWin.isFocused()) return;
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (!this.viewHolder.toWin.isFocused()) return;
+            double result = 0.0;
+            String string = s.toString();
+
+            OddHolder oddHolder = oddHolders.get(position);
+
+            if (string.length() > 0) {
+
+//                if (!viewHolder.risk.isFocused()) {
+//                    return;
+//                }
+
+                if (oddHolder.getBetTypeSPT().equals(PARLAY)) {
+                    Double value = Double.parseDouble(s.toString());
+
+                    result = oddHolder.getParlayValue() / value;
+
+                    viewHolder.risk.setText(String.valueOf(f.format(result)));
+
+                    oddHolder.setRiskValue(f.format(Double.parseDouble(viewHolder.risk.getText().toString())));
+
+                    oddHolders.set(position, oddHolder);
+                } else {
+
+                    Double value = Double.parseDouble(s.toString());
+
+                    result = AndroidUtils.getRiskAmount(value, Double.parseDouble(oddHolder.getOddValue()));
+
+                    viewHolder.risk.setText(String.valueOf(f.format(result)));
+
+                    oddHolder.setRiskValue(f.format(result));
 
                     oddHolders.set(position, oddHolder);
 

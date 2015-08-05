@@ -178,6 +178,19 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/button_settings_invite_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_button"
+            android:text="Invite Friends"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            />
+
     </RelativeLayout>
 
 

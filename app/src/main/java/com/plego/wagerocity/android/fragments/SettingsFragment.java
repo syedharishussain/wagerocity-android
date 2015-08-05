@@ -15,20 +15,31 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.FacebookException;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.android.Util;
+import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;
+import com.facebook.widget.WebDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.activities.LoginActivity;
+import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.utils.AndroidUtils;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.List;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +59,7 @@ public class SettingsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private UiLifecycleHelper uiHelper;
-    private  List<String> permissions;
+    private List<String> permissions;
     private OnSettingFragmentInteractionListener mListener;
 
     /**
@@ -86,7 +97,6 @@ public class SettingsFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -96,24 +106,7 @@ public class SettingsFragment extends Fragment {
         authButton.setFragment(this);
 //        authButton.setReadPermissions(permissions);
 
-        Button inviteButton = (Button) view.findViewById(R.id.button_settings_invite_friends);
-        inviteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                String appLinkUrl, previewImageUrl;
-//
-//                appLinkUrl = "https://www.mydomain.com/myapplink";
-//                previewImageUrl = "https://www.mydomain.com/my_invite_image.jpg";
-//
-//                if (AppInviteDialog.canShow()) {
-//                    AppInviteContent content = new AppInviteContent.Builder()
-//                            .setApplinkUrl(appLinkUrl)
-//                            .setPreviewImageUrl(previewImageUrl)
-//                            .build();
-//                    AppInviteDialog.show(this, content);
-//                }
-            }
-        });
+
 
         return view;
     }
@@ -168,7 +161,7 @@ public class SettingsFragment extends Fragment {
         // may not be triggered. Trigger it if it's open/closed.
         Session session = Session.getActiveSession();
         if (session != null &&
-                (session.isOpened() || session.isClosed()) ) {
+                (session.isOpened() || session.isClosed())) {
             onSessionStateChange(session, session.getState(), null);
         }
 
@@ -223,7 +216,6 @@ public class SettingsFragment extends Fragment {
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
             Log.e("Settings -- Facebook", "Logged IN...");
-
 
 
         } else if (state.isClosed()) {

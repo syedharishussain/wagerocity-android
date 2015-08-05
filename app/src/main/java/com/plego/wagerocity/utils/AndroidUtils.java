@@ -155,6 +155,28 @@ public class AndroidUtils {
         return result.intValue();
     }
 
+    public static int getRiskAmount(double value, double betOddValue) {
+        Double result;
+        if (betOddValue > 0) {
+            double amountNeedToWinADollar = Math.abs(betOddValue) / (double) 100;
+
+            double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
+
+            double percentageBasedValue = value * percentage;
+
+            result = Math.ceil(value - percentageBasedValue);
+        } else {
+            double amountNeedToWinADollar = (double) 100 / Math.abs(betOddValue);
+
+            double percentage = Math.abs(amountNeedToWinADollar - 1) / amountNeedToWinADollar;
+
+            double percentageBasedValue = value * percentage;
+
+            result = Math.ceil(value + percentageBasedValue);
+        }
+        return result.intValue();
+    }
+
     public static void showErrorDialog (RetrofitError error, Context context) {
 
         Boolean isTimedOut = (error.getKind() == RetrofitError.Kind.NETWORK);

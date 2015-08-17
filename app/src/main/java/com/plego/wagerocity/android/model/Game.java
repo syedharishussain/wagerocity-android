@@ -76,10 +76,20 @@ public class Game implements Parcelable {
     @Expose
     private String teamAPitcher;
 
-
     @SerializedName("team_B_pitcher")
     @Expose
     private String teamBPitcher;
+
+    private Double poolCredits;
+
+    public Double getPoolCredits() {
+        return poolCredits;
+    }
+
+    public void setPoolCredits(Double poolCredits) {
+        this.poolCredits = poolCredits;
+    }
+
 
     public String getTeamAPitcher() {
         return teamAPitcher;
@@ -434,6 +444,7 @@ public class Game implements Parcelable {
         dest.writeList(this.oddHolders);
         dest.writeString(this.teamAPitcher);
         dest.writeString(this.teamBPitcher);
+        dest.writeValue(this.poolCredits);
     }
 
     public Game() {
@@ -463,6 +474,7 @@ public class Game implements Parcelable {
         this.leagueName = in.readString();
         this.teamAPitcher = in.readString();
         this.teamBPitcher = in.readString();
+        this.poolCredits = (Double) in.readValue(Double.class.getClassLoader());
         this.oddHolders = new ArrayList<OddHolder>();
     }
 

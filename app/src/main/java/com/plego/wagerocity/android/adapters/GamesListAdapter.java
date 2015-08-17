@@ -146,7 +146,8 @@ public class GamesListAdapter extends BaseAdapter {
                                         POINT_SPREAD,
                                         game.getTeamAOdd().getPointSpreadString(),
                                         sportsName,
-                                        true
+                                        true,
+                                        game.getPoolCredits()
                                 ));
                     } else {
                         if (game.getOddHolders() != null)
@@ -178,7 +179,8 @@ public class GamesListAdapter extends BaseAdapter {
                                         POINT_SPREAD,
                                         game.getTeamBOdd().getPointSpreadString(),
                                         sportsName,
-                                        false
+                                        false,
+                                        game.getPoolCredits()
                                 ));
                     } else {
                         if (game.getOddHolders() != null)
@@ -209,7 +211,8 @@ public class GamesListAdapter extends BaseAdapter {
                                         MONEY_LINE,
                                         game.getTeamAOdd().getMoney(),
                                         sportsName,
-                                        true
+                                        true,
+                                        game.getPoolCredits()
                                 ));
                     } else {
                         if (game.getOddHolders() != null)
@@ -240,7 +243,8 @@ public class GamesListAdapter extends BaseAdapter {
                                         MONEY_LINE,
                                         game.getTeamBOdd().getMoney(),
                                         sportsName,
-                                        false
+                                        false,
+                                        game.getPoolCredits()
                                 ));
                     } else {
                         if (game.getOddHolders() != null)
@@ -271,7 +275,8 @@ public class GamesListAdapter extends BaseAdapter {
                                         OVER,
                                         game.getTeamAOdd().getPointSpreadString(),
                                         sportsName,
-                                        true
+                                        true,
+                                        game.getPoolCredits()
                                 ));
                     } else {
                         if (game.getOddHolders() != null)
@@ -302,7 +307,8 @@ public class GamesListAdapter extends BaseAdapter {
                                         UNDER,
                                         game.getTeamAOdd().getPointSpreadString(),
                                         sportsName,
-                                        false
+                                        false,
+                                        game.getPoolCredits()
                                 ));
                     } else {
                         if (game.getOddHolders() != null)

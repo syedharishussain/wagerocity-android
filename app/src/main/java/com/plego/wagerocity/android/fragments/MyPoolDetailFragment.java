@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.MyPoolDetailAdapter;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.MyPool;
@@ -86,6 +87,15 @@ public class MyPoolDetailFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Double poolCredits = 0.0;
+        String userId = new WagerocityPref(this.getActivity()).user().getUserId();
+
+        for (PoolMember member : pool.getPoolMembers()) {
+            if (member.getUserId().equals(userId)) {
+                poolCredits = member.getDollars();
+            }
+        }
+
         TextView poolName = (TextView) view.findViewById(R.id.textView_my_pool_detail_pool_name);
         poolName.setText(pool.getName());
 
@@ -122,6 +132,7 @@ public class MyPoolDetailFragment extends Fragment {
         amount.setText(pool.getAmount());
 
         Button button = (Button) view.findViewById(R.id.button_my_pool_detail_pool_view_game);
+        final Double finalPoolCredits = poolCredits;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +143,9 @@ public class MyPoolDetailFragment extends Fragment {
 
                         if (games.size() > 0) {
 
+                            for (Game game: games) {
+                                game.setPoolCredits(finalPoolCredits);
+                            }
 
                             Uri uri = Uri.parse(getActivity().getString(R.string.uri_open_games_list_fragment));
                             mListener.onMyPoolDetailFragmentInteraction(uri, games, pool.getPoolLeague(), pool.getPoolId());

@@ -114,12 +114,12 @@ public class BetOnGameFragment extends Fragment {
         if (oddHolders.size() > 1) {
             createParlayOdd();
             if (oddHolders.get(0).getLeagueName().equals("nfl") || oddHolders.get(0).getLeagueName().equals("nba"))
-                if (oddHolders.size()!=2 &&
+                if (oddHolders.size() != 2 &&
                         !((oddHolders.get(0).getBetOT().equals("1") && oddHolders.get(1).getBetOT().equals("3")) ||
                                 (oddHolders.get(0).getBetOT().equals("3") && oddHolders.get(1).getBetOT().equals("1")) ||
                                 (oddHolders.get(0).getBetOT().equals("1") && oddHolders.get(1).getBetOT().equals("4")) ||
-                                (oddHolders.get(0).getBetOT().equals("4") && oddHolders.get(1).getBetOT().equals("1")) ))
-                createTeaserOdd();
+                                (oddHolders.get(0).getBetOT().equals("4") && oddHolders.get(1).getBetOT().equals("1"))))
+                    createTeaserOdd();
         }
 
         Button placeBet = (Button) view.findViewById(R.id.button_cell_betongame_place_bet);
@@ -128,8 +128,7 @@ public class BetOnGameFragment extends Fragment {
             public void onClick(View v) {
 
 
-
-                for (OddHolder oddHolder: oddHolders) {
+                for (OddHolder oddHolder : oddHolders) {
                     if (oddHolder.getIsChecked()) {
                         shareOdd = oddHolder;
                     }
@@ -146,7 +145,7 @@ public class BetOnGameFragment extends Fragment {
                                 public void onClick(SweetAlertDialog sDialog) {
                                     sDialog.dismissWithAnimation();
                                     processBet();
-                                    ((DashboardActivity)getActivity()).shouldShare = true;
+                                    ((DashboardActivity) getActivity()).shouldShare = true;
                                     buyCreditsAPI((float) 250.00);
                                 }
                             })
@@ -200,11 +199,11 @@ public class BetOnGameFragment extends Fragment {
     private void createParlayOdd() {
 
         if (oddHolders.size() == 2)
-            if ( oddHolders.get(0).getTeamId().equals(oddHolders.get(1).getTeamId()))
-             if (( oddHolders.get(0).getBetOT().equals("1") && oddHolders.get(1).getBetOT().equals("3") ) ||
-                ( oddHolders.get(0).getBetOT().equals("3") && oddHolders.get(1).getBetOT().equals("1") ))
+            if (oddHolders.get(0).getTeamId().equals(oddHolders.get(1).getTeamId()))
+                if ((oddHolders.get(0).getBetOT().equals("1") && oddHolders.get(1).getBetOT().equals("3")) ||
+                        (oddHolders.get(0).getBetOT().equals("3") && oddHolders.get(1).getBetOT().equals("1")))
 
-                 return;
+                    return;
 
         if (oddHolders.size() > 1) {
 
@@ -237,7 +236,7 @@ public class BetOnGameFragment extends Fragment {
             oddHolder.setTeamId(teamId);
             oddHolder.setOddId(oddId);
             oddHolder.setTeamName("Parlay");
-            oddHolder.setTeamVsteam(teams+  " ( " + oddHolders.size() + " teams )");
+            oddHolder.setTeamVsteam(teams + " ( " + oddHolders.size() + " teams )");
             oddHolder.setOddValue("");
             oddHolder.setBetTypeSPT(PARLAY);
             oddHolder.setBetOT("1");
@@ -398,6 +397,7 @@ public class BetOnGameFragment extends Fragment {
         public void onBetOnGameFragmentInteraction(Uri uri, ArrayList<Pick> picks);
 
         public void onBetOnGameGoBackFragmentInteraction();
+
         public void onBetOnGameShareFragmentInteraction(Feed feed);
     }
 
@@ -415,10 +415,22 @@ public class BetOnGameFragment extends Fragment {
             if (!oddHolder.getRiskValue().equals("0") && oddHolder.getIsChecked()) {
 
                 Float credits = new WagerocityPref(this.getActivity()).user().getCredits();
-                if (credits < Float.parseFloat(oddHolder.getRiskValue())) {
-                    AndroidUtils.showDialog("Not Enough Credits","You do not have enough cresits to place this bet.", SweetAlertDialog.ERROR_TYPE, this.getActivity());
-                    return;
+
+                if (poolId != null) {
+                    if (poolId.equals("0") || poolId.equals("")) {
+                        if (credits < Float.parseFloat(oddHolder.getRiskValue())) {
+                            AndroidUtils.showDialog("Not Enough Credits", "You do not have enough credits to place this bet.", SweetAlertDialog.ERROR_TYPE, this.getActivity());
+                            continue;
+                        }
+                    } else {
+                        if (oddHolder.getPoolCredits() < Float.parseFloat(oddHolder.getRiskValue())) {
+                            AndroidUtils.showDialog("Not Enough Pool Credits", "You do not have enough pool credits to place this bet.", SweetAlertDialog.ERROR_TYPE, this.getActivity());
+                            continue;
+                        }
+                    }
                 }
+
+
 
                 if (!pDialog.isShowing()) pDialog.show();
 
@@ -512,7 +524,7 @@ public class BetOnGameFragment extends Fragment {
                         );
 
                         if (poolId != null) {
-                            if (poolId.equals("0") || poolId.equals("") ) {
+                            if (poolId.equals("0") || poolId.equals("")) {
                                 restClient.getApiService().consumeCredits(new WagerocityPref(getActivity()).user().getUserId(),
                                         Float.parseFloat(stake),
                                         new Callback<User>() {
@@ -542,7 +554,7 @@ public class BetOnGameFragment extends Fragment {
         }
     }
 
-    public void buyCreditsAPI (Float credits) {
+    public void buyCreditsAPI(Float credits) {
 
         final WagerocityPref pref = new WagerocityPref(getActivity());
         final User user = pref.user();

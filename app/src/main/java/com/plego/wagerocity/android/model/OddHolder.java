@@ -17,7 +17,7 @@ public class OddHolder implements Parcelable, Cloneable {
     public OddHolder() {
     }
 
-    public OddHolder(Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString, String leagueName, boolean isTeamA) {
+    public OddHolder(Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString, String leagueName, boolean isTeamA, Double poolCredits) {
         this.stake = stake;
         this.teamId = teamId;
         this.oddId = oddId;
@@ -36,6 +36,7 @@ public class OddHolder implements Parcelable, Cloneable {
         this.teaser3 = 0;
         this.teaserString = "";
         this.isTeamA = isTeamA;
+        this.poolCredits = poolCredits;
     }
 
     Double stake;
@@ -53,11 +54,21 @@ public class OddHolder implements Parcelable, Cloneable {
     String leagueName;
     String riskValue;
     Double parlayValue;
+
+
+    Double poolCredits;
     Integer teaser1;
     Integer teaser2;
     Integer teaser3;
     boolean isTeamA;
 
+    public Double getPoolCredits() {
+        return poolCredits;
+    }
+
+    public void setPoolCredits(Double poolCredits) {
+        this.poolCredits = poolCredits;
+    }
     public boolean isTeamA() {
         return isTeamA;
     }
@@ -252,6 +263,7 @@ public class OddHolder implements Parcelable, Cloneable {
         dest.writeString(this.leagueName);
         dest.writeString(this.riskValue);
         dest.writeValue(this.parlayValue);
+        dest.writeValue(this.poolCredits);
         dest.writeValue(this.teaser1);
         dest.writeValue(this.teaser2);
         dest.writeValue(this.teaser3);
@@ -274,6 +286,7 @@ public class OddHolder implements Parcelable, Cloneable {
         this.leagueName = in.readString();
         this.riskValue = in.readString();
         this.parlayValue = (Double) in.readValue(Double.class.getClassLoader());
+        this.poolCredits = (Double) in.readValue(Double.class.getClassLoader());
         this.teaser1 = (Integer) in.readValue(Integer.class.getClassLoader());
         this.teaser2 = (Integer) in.readValue(Integer.class.getClassLoader());
         this.teaser3 = (Integer) in.readValue(Integer.class.getClassLoader());

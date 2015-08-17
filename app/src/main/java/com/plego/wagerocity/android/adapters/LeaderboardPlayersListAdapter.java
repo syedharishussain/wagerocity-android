@@ -69,7 +69,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
-        LeaderboardPlayer leaderboardPlayer = this.leaderboardPlayers.get(position);
+        final LeaderboardPlayer leaderboardPlayer = this.leaderboardPlayers.get(position);
 //        if (convertView == null) {
 
             viewHolder = new ViewHolder();
@@ -84,11 +84,18 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
             viewHolder.textViewUserStats = (TextView) convertView.findViewById(R.id.textview_leaderboard_user_stats);
             viewHolder.imageViewUserImage = (ImageView) convertView.findViewById(R.id.imageview_leaderboard_user);
             viewHolder.button = (Button) convertView.findViewById(R.id.button_leaderboard_user_buy_picks);
+            viewHolder.follow = (Button) convertView.findViewById(R.id.button_leaderboard_follow_unfollow);
 
             if (Integer.parseInt(leaderboardPlayer.getTotalPicks()) == 0) {
                 viewHolder.button.setEnabled(false);
                 viewHolder.button.setBackgroundResource(R.drawable.blue_button_grey);
             }
+
+        if (leaderboardPlayer.getIsFollowing()) {
+            viewHolder.follow.setText("Unfollow");
+        } else {
+            viewHolder.follow.setText("Follow");
+        }
 
             viewHolder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -125,6 +132,48 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
 
                 }
             });
+
+        final ViewHolder finalViewHolder = viewHolder;
+        viewHolder.follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RestClient restClient = new RestClient();
+                if (leaderboardPlayer.getIsFollowing()) {
+                        restClient.getApiService().unfollowPlayer(
+                                new WagerocityPref(context).user().getUserId(),
+                                leaderboardPlayer.getUsrId(),
+                                new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                finalViewHolder.follow.setText("Follow");
+                                leaderboardPlayer.setIsFollowing(false);
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+                } else {
+                    restClient.getApiService().followPlayer(
+                            new WagerocityPref(context).user().getUserId(),
+                            leaderboardPlayer.getUsrId(),
+                            new Callback<Response>() {
+                                @Override
+                                public void success(Response response, Response response2) {
+                                    finalViewHolder.follow.setText("Unfollow");
+                                    leaderboardPlayer.setIsFollowing(true);
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+
+                                }
+                            });
+                }
+
+            }
+        });
 
 //            convertView.setTag(viewHolder);
 //
@@ -163,6 +212,7 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
         TextView textViewUserStats;
         ImageView imageViewUserImage;
         Button button;
+        Button follow;
     }
 
     public interface OnLeaderboardPlayerListAdapterFragmentInteractionListener {

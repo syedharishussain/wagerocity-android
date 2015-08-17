@@ -24,7 +24,7 @@ public interface ServiceModel {
     public void getAllPools(@Query("userId") String userId, Callback<ArrayList<Pool>> callback);
 
     @GET("/getLeaderboards")
-    public void getLeaderboards(@Query("leagueName") String leagueName, @Query("year") String year, Callback<ArrayList<LeaderboardPlayer>> callback);
+    public void getLeaderboards(@Query("leagueName") String leagueName, @Query("year") String year,  @Query("userId") String userId, Callback<ArrayList<LeaderboardPlayer>> callback);
 
     @GET("/getExperts")
     public void getExperts(@Query("userId") String userId, Callback<ArrayList<ExpertPlayer>> callback);
@@ -105,7 +105,13 @@ public interface ServiceModel {
     @POST("/clearRecord")
     public void clearRecord(@Part("userId") String userId, Callback<Response> callback);
 
+    @Multipart
+    @POST("/followPlayer")
+    public void followPlayer(@Part("userId") String userId, @Part("playerId") String playerId, Callback<Response> callback);
 
+    @Multipart
+    @POST("/unfollowPlayer")
+    public void unfollowPlayer(@Part("userId") String userId, @Part("playerId") String playerId, Callback<Response> callback);
 
 }
 

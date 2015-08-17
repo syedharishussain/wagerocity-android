@@ -210,11 +210,13 @@ public class BetOnGameFragment extends Fragment {
 
             String teamId = null;
             String oddId = null;
+            String teams = "";
 
             double parlayValue = 1.0;
             for (OddHolder oddHolder : oddHolders) {
                 oddId = oddHolder.getOddId();
                 teamId = oddHolder.getTeamId();
+                teams = teams + " - " + oddHolder.getTeamName();
                 double oddValue = Double.parseDouble(oddHolder.getOddValue());
                 if (oddValue > 0) {
                     Double multipliyer = (oddValue + 100.0) / 100.00;
@@ -235,7 +237,7 @@ public class BetOnGameFragment extends Fragment {
             oddHolder.setTeamId(teamId);
             oddHolder.setOddId(oddId);
             oddHolder.setTeamName("Parlay");
-            oddHolder.setTeamVsteam("( " + oddHolders.size() + " teams )");
+            oddHolder.setTeamVsteam(teams+  " ( " + oddHolders.size() + " teams )");
             oddHolder.setOddValue("");
             oddHolder.setBetTypeSPT(PARLAY);
             oddHolder.setBetOT("1");

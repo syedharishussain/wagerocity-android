@@ -31,6 +31,18 @@ public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlay
     @SerializedName("total_picks")
     @Expose
     private String totalPicks;
+    @SerializedName("is_follow")
+    @Expose
+    private Boolean isFollowing;
+
+    public Boolean getIsFollowing() {
+        return isFollowing;
+    }
+
+    public void setIsFollowing(Boolean isFollowing) {
+        this.isFollowing = isFollowing;
+    }
+
 
     public String getTotalPicks() {
         return totalPicks;
@@ -191,6 +203,7 @@ public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlay
         dest.writeString(this.imageUrl);
         dest.writeString(this.winPercentage);
         dest.writeString(this.totalPicks);
+        dest.writeValue(this.isFollowing);
     }
 
     public LeaderboardPlayer() {
@@ -205,6 +218,7 @@ public class LeaderboardPlayer implements Parcelable, Comparator<LeaderboardPlay
         this.imageUrl = in.readString();
         this.winPercentage = in.readString();
         this.totalPicks = in.readString();
+        this.isFollowing = (Boolean) in.readValue(Boolean.class.getClassLoader());
     }
 
     public static final Creator<LeaderboardPlayer> CREATOR = new Creator<LeaderboardPlayer>() {

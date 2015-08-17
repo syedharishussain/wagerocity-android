@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.SportsListAdapter;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.LeaderboardPlayer;
@@ -212,7 +213,7 @@ public class SportsListFragment extends Fragment {
         String leagaeName1 = (leagueName.equals("Overall")? "all" : AndroidUtils.getSportsNameForParam(leagueName));
 
         RestClient restClient = new RestClient();
-        restClient.getApiService().getLeaderboards(leagaeName1, "2015", new Callback<ArrayList<LeaderboardPlayer>>() {
+        restClient.getApiService().getLeaderboards(leagaeName1, "2015", new WagerocityPref(this.getActivity()).user().getUserId(), new Callback<ArrayList<LeaderboardPlayer>>() {
             @Override
             public void success(ArrayList<LeaderboardPlayer> leaderboardPlayers, Response response) {
                 pDialog.dismiss();

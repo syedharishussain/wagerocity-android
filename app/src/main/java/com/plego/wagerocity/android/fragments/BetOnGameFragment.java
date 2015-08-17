@@ -414,6 +414,12 @@ public class BetOnGameFragment extends Fragment {
         for (final OddHolder oddHolder : oddHolders) {
             if (!oddHolder.getRiskValue().equals("0") && oddHolder.getIsChecked()) {
 
+                Float credits = new WagerocityPref(this.getActivity()).user().getCredits();
+                if (credits < Float.parseFloat(oddHolder.getRiskValue())) {
+                    AndroidUtils.showDialog("Not Enough Credits","You do not have enough cresits to place this bet.", SweetAlertDialog.ERROR_TYPE, this.getActivity());
+                    return;
+                }
+
                 if (!pDialog.isShowing()) pDialog.show();
 
                 final String userId = new WagerocityPref(getActivity()).user().getUserId();

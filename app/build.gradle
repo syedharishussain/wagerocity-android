@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "com.plegotech.wagerocity"
         minSdkVersion 16
-        targetSdkVersion 21
+        targetSdkVersion 23
         versionCode 8
         versionName "1.0"
     }
@@ -31,7 +31,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21'
     compile 'org.roboguice:roboguice:2.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.retrofit:retrofit:1.7.1'
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
@@ -43,5 +42,5 @@ dependencies {
 //    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile project(':libs:facebook')
     compile files('libs/simple.facebook.jar')
-    compile files('/Users/haris/AndroidStudioProjects/wagerocity-android/libs/simple.facebook.jar')
+//    compile files('/Users/haris/AndroidStudioProjects/wagerocity-android/libs/simple.facebook.jar')
 }

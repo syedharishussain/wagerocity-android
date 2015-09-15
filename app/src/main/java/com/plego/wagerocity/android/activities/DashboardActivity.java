@@ -1,72 +1,26 @@
 package com.plego.wagerocity.android.activities;
 
-import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.*;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
+import android.os.*;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.android.vending.billing.IInAppBillingService;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
-import com.plego.wagerocity.android.adapters.ExpertPlayerListAdapter;
-import com.plego.wagerocity.android.adapters.GamesListAdapter;
-import com.plego.wagerocity.android.adapters.LeaderboardPlayersListAdapter;
-import com.plego.wagerocity.android.adapters.MyPicksListAdapter;
-import com.plego.wagerocity.android.adapters.MyPoolsListAdapter;
-import com.plego.wagerocity.android.adapters.PicksOfPlayerAdapter;
-import com.plego.wagerocity.android.adapters.PoolsListAdapter;
-import com.plego.wagerocity.android.fragments.BetOnGameFragment;
-import com.plego.wagerocity.android.fragments.DashboardFragment;
-import com.plego.wagerocity.android.fragments.ExpertsFragment;
-import com.plego.wagerocity.android.fragments.GamesListFragment;
-import com.plego.wagerocity.android.fragments.GetDollarsFragment;
-import com.plego.wagerocity.android.fragments.LeaderBoardListFragment;
-import com.plego.wagerocity.android.fragments.MyPicksFragment;
-import com.plego.wagerocity.android.fragments.MyPoolDetailFragment;
-import com.plego.wagerocity.android.fragments.MyPoolsFragment;
-import com.plego.wagerocity.android.fragments.NavigationBarFragment;
-import com.plego.wagerocity.android.fragments.PicksOfPlayerFragment;
-import com.plego.wagerocity.android.fragments.PoolsFragment;
-import com.plego.wagerocity.android.fragments.SettingsFragment;
-import com.plego.wagerocity.android.fragments.SportsListFragment;
-import com.plego.wagerocity.android.fragments.StatsFragment;
-import com.plego.wagerocity.android.model.ExpertPlayer;
-import com.plego.wagerocity.android.model.Game;
-import com.plego.wagerocity.android.model.LeaderboardPlayer;
-import com.plego.wagerocity.android.model.MyPool;
-import com.plego.wagerocity.android.model.OddHolder;
-import com.plego.wagerocity.android.model.Pick;
-import com.plego.wagerocity.android.model.Pool;
-import com.plego.wagerocity.android.model.RestClient;
-import com.plego.wagerocity.android.model.User;
-import com.plego.wagerocity.android.util.IabException;
-import com.plego.wagerocity.android.util.IabHelper;
-import com.plego.wagerocity.android.util.IabResult;
-import com.plego.wagerocity.android.util.Inventory;
-import com.plego.wagerocity.android.util.Purchase;
+import com.plego.wagerocity.android.adapters.*;
+import com.plego.wagerocity.android.fragments.*;
+import com.plego.wagerocity.android.model.*;
+import com.plego.wagerocity.android.util.*;
 import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
-import com.sromku.simple.fb.Permission;
-import com.sromku.simple.fb.SimpleFacebook;
-import com.sromku.simple.fb.SimpleFacebookConfiguration;
+import com.sromku.simple.fb.*;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.listeners.OnPublishListener;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -74,6 +28,9 @@ import roboguice.RoboGuice;
 import roboguice.activity.RoboFragmentActivity;
 import roboguice.event.EventManager;
 import roboguice.inject.RoboInjector;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class DashboardActivity
         extends RoboFragmentActivity
@@ -101,30 +58,157 @@ public class DashboardActivity
         MyPoolDetailFragment.OnMyPoolDetailFragmentInteractionListener,
         MyPicksListAdapter.OnMyPickShareInteractionListener {
 
-    SweetAlertDialog pDialog;
-    SimpleFacebook simpleFacebook;
-    OnPublishListener onPublishListener;
-    BillingProcessor bp;
-    ArrayList<Pick> showPurchasePicks;
     public boolean shouldShare;
-    EventManager eventManager;
-    IabHelper mHelper;
+    SweetAlertDialog     pDialog;
+    SimpleFacebook       simpleFacebook;
+    OnPublishListener    onPublishListener;
+    BillingProcessor     bp;
+    ArrayList<Pick>      showPurchasePicks;
+    EventManager         eventManager;
+    IabHelper            mHelper;
     IInAppBillingService mService;
+    ServiceConnection                        mServiceConn               = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected (ComponentName name) {
+            mService = null;
+        }
+
+        @Override
+        public void onServiceConnected (ComponentName name,
+                                        IBinder service) {
+            mService = IInAppBillingService.Stub.asInterface( service );
+        }
+    };
+    IabHelper.OnConsumeFinishedListener      mConsumeFinishedListener   =
+            new IabHelper.OnConsumeFinishedListener() {
+                public void onConsumeFinished (Purchase purchase,
+                                               IabResult result) {
+
+                    if (result.isSuccess()) {
+                        Log.i( "Consumed Purchase", purchase.toString() );
+                    } else {
+                        // handle error
+                    }
+                }
+            };
+    IabHelper.OnIabPurchaseFinishedListener  mPurchaseFinishedListener  = new IabHelper.OnIabPurchaseFinishedListener() {
+        @Override
+        public void onIabPurchaseFinished (IabResult result, Purchase info) {
+            Log.e( "IabHelper + Message", result.getMessage() );
+            Log.e( "IabHelper + Info", String.valueOf( info ) );
+
+            if (result.isFailure()) {
+                // Handle error
+
+                return;
+            } else if (info.getSku().equals( StringConstants.IAB_ROOKIE )) {
+                mHelper.consumeAsync( info, mConsumeFinishedListener );
+                buyCreditsAPI( 2000 );
+            } else if (info.getSku().equals( StringConstants.IAB_CHASER )) {
+                mHelper.consumeAsync( info, mConsumeFinishedListener );
+                buyCreditsAPI( 6250 );
+            } else if (info.getSku().equals( StringConstants.IAB_PLAYER )) {
+                mHelper.consumeAsync( info, mConsumeFinishedListener );
+                buyCreditsAPI( 30000 );
+            } else if (info.getSku().equals( StringConstants.IAB_GURU )) {
+                mHelper.consumeAsync( info, mConsumeFinishedListener );
+                buyCreditsAPI( 87500 );
+            } else if (info.getSku().equals( StringConstants.IAB_BAWSE )) {
+                mHelper.consumeAsync( info, mConsumeFinishedListener );
+                buyCreditsAPI( 200000 );
+            } else if (info.getSku().equals( StringConstants.IAB_PURCHASE_PICK )) {
+                mHelper.consumeAsync( info, mConsumeFinishedListener );
+
+                new Handler().postDelayed( new Runnable() {
+                    @Override
+                    public void run () {
+                        replaceFragment( MyPicksFragment
+                                .newInstance( new ArrayList<>( showPurchasePicks ) ), StringConstants.TAG_FRAG_MY_PICKS );
+                    }
+                }, 100 );
+
+                showPurchasePicks = null;
+            } else if (info.getSku().equals( StringConstants.IAB_CLEAR_RECORD )) {
+                mHelper.consumeAsync( info, mConsumeFinishedListener );
+
+                final WagerocityPref pref = new WagerocityPref( DashboardActivity.this );
+
+                final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                        "Loading",
+                        null,
+                        SweetAlertDialog.PROGRESS_TYPE,
+                        DashboardActivity.this
+                );
+
+                final RestClient restClient = new RestClient();
+                restClient.getApiService().clearRecord( pref.user().getUserId(), new Callback<Response>() {
+                    @Override
+                    public void success (Response response, Response response2) {
+                        restClient.getApiService().getUser( pref.facebookID(), new Callback<User>() {
+                            @Override
+                            public void success (User user, Response response) {
+                                pref.setUser( user );
+                                AndroidUtils.updateStats( DashboardActivity.this );
+                                pDialog.dismiss();
+                            }
+
+                            @Override
+                            public void failure (RetrofitError error) {
+
+                            }
+                        } );
+                    }
+
+                    @Override
+                    public void failure (RetrofitError error) {
+
+                    }
+                } );
+
+            }
+
+        }
+    };
+    IabHelper.QueryInventoryFinishedListener mReceivedInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished (IabResult result, Inventory inventory) {
+
+            if (result.isFailure()) {
+                // Handle failure
+            } else {
+                ArrayList<String> skus = new ArrayList<>();
+                skus.add( StringConstants.IAB_ROOKIE );
+                skus.add( StringConstants.IAB_CHASER );
+                skus.add( StringConstants.IAB_PLAYER );
+                skus.add( StringConstants.IAB_GURU );
+                skus.add( StringConstants.IAB_BAWSE );
+                skus.add( StringConstants.IAB_CLEAR_RECORD );
+                skus.add( StringConstants.IAB_PURCHASE_PICK );
+
+                for (String sku : skus) {
+
+                    Purchase purchase = inventory.getPurchase( sku );
+                    if (purchase != null) {
+                        mHelper.consumeAsync( purchase, mConsumeFinishedListener );
+                    }
+                }
+            }
+        }
+    };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+    protected void onCreate (Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_dashboard );
 
-        bp = new BillingProcessor(this, this.getString(R.string.in_app_billing_public_key), this);
+        bp = new BillingProcessor( this, this.getString( R.string.in_app_billing_public_key ), this );
 
         addNavigationBarFragment();
         addStatsFragment();
         addDashboardFragment();
 
-        String facebokoID = new WagerocityPref(getApplicationContext()).facebookID();
+        String facebokoID = new WagerocityPref( getApplicationContext() ).facebookID();
         if (facebokoID != null) {
-            Log.e("FACEBOOKID", facebokoID);
+            Log.e( "FACEBOOKID", facebokoID );
         }
 
         Permission[] permissions = new Permission[]{
@@ -135,87 +219,73 @@ public class DashboardActivity
         };
 
         SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
-                .setAppId(String.valueOf(R.string.app_id))
-                .setNamespace("Wagerocity")
-                .setPermissions(permissions)
+                .setAppId( String.valueOf( R.string.app_id ) )
+                .setNamespace( "Wagerocity" )
+                .setPermissions( permissions )
                 .build();
 
-        SimpleFacebook.setConfiguration(configuration);
+        SimpleFacebook.setConfiguration( configuration );
 
         onPublishListener = new OnPublishListener() {
             @Override
-            public void onComplete(String postId) {
-                Log.i("Facebook Post Tag", "Published successfully. The new post id = " + postId);
+            public void onComplete (String postId) {
+                Log.i( "Facebook Post Tag", "Published successfully. The new post id = " + postId );
             }
 
             @Override
-            public void onException(Throwable throwable) {
-                super.onException(throwable);
+            public void onException (Throwable throwable) {
+                super.onException( throwable );
             }
 
             @Override
-            public void onFail(String reason) {
-                Log.e("Facebook Post Failed!", "Publish failed = " + reason);
-                super.onFail(reason);
+            public void onFail (String reason) {
+                Log.e( "Facebook Post Failed!", "Publish failed = " + reason );
+                super.onFail( reason );
             }
         };
 
-        final RoboInjector injector = RoboGuice.getInjector(this);
-        eventManager = injector.getInstance(EventManager.class);
+        final RoboInjector injector = RoboGuice.getInjector( this );
+        eventManager = injector.getInstance( EventManager.class );
 
-        mHelper = new IabHelper(this, getString(R.string.in_app_billing_public_key));
+        mHelper = new IabHelper( this, getString( R.string.in_app_billing_public_key ) );
 
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            public void onIabSetupFinished(IabResult result) {
+        mHelper.startSetup( new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished (IabResult result) {
                 if (!result.isSuccess()) {
-                    Log.d("IabHelper Setup", "In-app Billing setup failed: " +
-                            result);
+                    Log.d( "IabHelper Setup", "In-app Billing setup failed: " +
+                            result );
 
                 } else {
-                    Log.d("IabHelper Setup", "In-app Billing is set up OK");
-                    mHelper.queryInventoryAsync(mReceivedInventoryListener);
+                    Log.d( "IabHelper Setup", "In-app Billing is set up OK" );
+                    mHelper.queryInventoryAsync( mReceivedInventoryListener );
                 }
             }
-        });
+        } );
 
 
-
-        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+        Intent serviceIntent = new Intent( "com.android.vending.billing.InAppBillingService.BIND" );
+        serviceIntent.setPackage( "com.android.vending" );
+        bindService( serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE );
 
 
     }
-
-    ServiceConnection mServiceConn = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name,
-                                       IBinder service) {
-            mService = IInAppBillingService.Stub.asInterface(service);
-        }
-    };
 
     private void checkForPurchases () {
 
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume () {
         super.onResume();
-        simpleFacebook = SimpleFacebook.getInstance(this);
+        simpleFacebook = SimpleFacebook.getInstance( this );
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 
             if (!mHelper.handleActivityResult(requestCode,
                     resultCode, data)) {
-                super.onActivityResult(requestCode, resultCode, data);
+                super.onActivityResult( requestCode, resultCode, data );
             }
 
         simpleFacebook.onActivityResult(this, requestCode, resultCode, data);
@@ -264,13 +334,13 @@ public class DashboardActivity
     private void showBackButton() {
         NavigationBarFragment fragment = (NavigationBarFragment) AndroidUtils.getFragmentByTag(this, StringConstants.TAG_FRAG_NAVIGATION);
 
-        fragment.showBackButton(true);
+        fragment.showBackButton( true );
     }
 
     private void hideBackButton() {
         NavigationBarFragment fragment = (NavigationBarFragment) AndroidUtils.getFragmentByTag(this, StringConstants.TAG_FRAG_NAVIGATION);
 
-        fragment.showBackButton(false);
+        fragment.showBackButton( false );
     }
 
     private void addNavigationBarFragment() {
@@ -479,6 +549,9 @@ public class DashboardActivity
     public void onPoolsFragmentInteraction(Uri uri, ArrayList<MyPool> pools) {
         if (uri.toString().equals(getString(R.string.uri_open_my_pools_fragment))) {
             replaceFragment(MyPoolsFragment.newInstance(pools), StringConstants.TAG_FRAG_MY_POOLS_LIST);
+        } else if (uri.toString().equals( getString( R.string.uri_open_create_pool ) )) {
+
+            replaceFragment( CreatePoolFragment.newInstance(), StringConstants.TAG_FRAG_CREATE_POOL );
         }
     }
 
@@ -607,7 +680,7 @@ public class DashboardActivity
 
     @Override
     public void onMyPickShareInteraction(Feed feed) {
-        simpleFacebook.publish(feed, true, onPublishListener);
+        simpleFacebook.publish( feed, true, onPublishListener );
     }
 
     public void buyCreditsAPI (int credits) {
@@ -639,19 +712,20 @@ public class DashboardActivity
     }
 
     @Override
-    public void onProductPurchased(String s, TransactionDetails transactionDetails) {
-        Log.i("bp Jelly", s);
+    public void onProductPurchased (String s, TransactionDetails transactionDetails) {
+        Log.i( "bp Jelly", s );
 
-        if (transactionDetails.productId.equals(StringConstants.IAB_PURCHASE_PICK)) {
+        if (transactionDetails.productId.equals( StringConstants.IAB_PURCHASE_PICK )) {
 
-            replaceFragment(MyPicksFragment.newInstance(new ArrayList<>(showPurchasePicks)), StringConstants.TAG_FRAG_MY_PICKS);
+            replaceFragment( MyPicksFragment
+                    .newInstance( new ArrayList<>( showPurchasePicks ) ), StringConstants.TAG_FRAG_MY_PICKS );
             showPurchasePicks = null;
         }
 
-        if (transactionDetails.productId.equals(StringConstants.IAB_TEST)) {
-                buyCreditsAPI(2000);
+        if (transactionDetails.productId.equals( StringConstants.IAB_TEST )) {
+            buyCreditsAPI( 2000 );
 //            if (bp.isPurchased(StringConstants.IAB_TEST)) {
-                bp.consumePurchase(StringConstants.IAB_TEST);
+            bp.consumePurchase( StringConstants.IAB_TEST );
 //            } else {
 //
 //
@@ -661,147 +735,27 @@ public class DashboardActivity
     }
 
     @Override
-    public void onPurchaseHistoryRestored() {
+    public void onPurchaseHistoryRestored () {
 
     }
 
     @Override
-    public void onBillingError(int i, Throwable throwable) {
+    public void onBillingError (int i, Throwable throwable) {
 
     }
 
     @Override
-    public void onBillingInitialized() {
+    public void onBillingInitialized () {
 
     }
 
     @Override
-    public void onGetDollarsFragmentInteraction(String purchaseID) {
+    public void onGetDollarsFragmentInteraction (String purchaseID) {
 
 
-
-
-
-        mHelper.launchPurchaseFlow(this, purchaseID, 10001,
-                mPurchaseFinishedListener, purchaseID);
+        mHelper.launchPurchaseFlow( this, purchaseID, 10001,
+                mPurchaseFinishedListener, purchaseID );
     }
-
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        @Override
-        public void onIabPurchaseFinished(IabResult result, Purchase info) {
-            Log.e("IabHelper + Message", result.getMessage());
-            Log.e("IabHelper + Info", String.valueOf(info));
-
-            if (result.isFailure()) {
-                // Handle error
-
-                return;
-            } else if (info.getSku().equals(StringConstants.IAB_ROOKIE)) {
-                mHelper.consumeAsync(info, mConsumeFinishedListener);
-                buyCreditsAPI(2000);
-            } else if (info.getSku().equals(StringConstants.IAB_CHASER)) {
-                mHelper.consumeAsync(info, mConsumeFinishedListener);
-                buyCreditsAPI(6250);
-            } else if (info.getSku().equals(StringConstants.IAB_PLAYER)) {
-                mHelper.consumeAsync(info, mConsumeFinishedListener);
-                buyCreditsAPI(30000);
-            } else if (info.getSku().equals(StringConstants.IAB_GURU)) {
-                mHelper.consumeAsync(info, mConsumeFinishedListener);
-                buyCreditsAPI(87500);
-            } else if (info.getSku().equals(StringConstants.IAB_BAWSE)) {
-                mHelper.consumeAsync(info, mConsumeFinishedListener);
-                buyCreditsAPI(200000);
-            } else if (info.getSku().equals(StringConstants.IAB_PURCHASE_PICK)) {
-                mHelper.consumeAsync(info, mConsumeFinishedListener);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        replaceFragment(MyPicksFragment.newInstance(new ArrayList<>(showPurchasePicks)), StringConstants.TAG_FRAG_MY_PICKS);
-                    }
-                }, 100);
-
-                showPurchasePicks = null;
-            } else if (info.getSku().equals(StringConstants.IAB_CLEAR_RECORD)) {
-                mHelper.consumeAsync(info, mConsumeFinishedListener);
-
-                final WagerocityPref pref = new WagerocityPref(DashboardActivity.this);
-
-                final SweetAlertDialog pDialog = AndroidUtils.showDialog(
-                        "Loading",
-                        null,
-                        SweetAlertDialog.PROGRESS_TYPE,
-                        DashboardActivity.this
-                );
-
-                final RestClient restClient = new RestClient();
-                restClient.getApiService().clearRecord(pref.user().getUserId(), new Callback<Response>() {
-                    @Override
-                    public void success(Response response, Response response2) {
-                        restClient.getApiService().getUser(pref.facebookID(), new Callback<User>() {
-                            @Override
-                            public void success(User user, Response response) {
-                                pref.setUser(user);
-                                AndroidUtils.updateStats(DashboardActivity.this);
-                                pDialog.dismiss();
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-
-            }
-
-        }
-    };
-
-    IabHelper.QueryInventoryFinishedListener mReceivedInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-
-            if (result.isFailure()) {
-                // Handle failure
-            } else {
-                ArrayList<String> skus = new ArrayList<>();
-                skus.add(StringConstants.IAB_ROOKIE);
-                skus.add(StringConstants.IAB_CHASER);
-                skus.add(StringConstants.IAB_PLAYER);
-                skus.add(StringConstants.IAB_GURU);
-                skus.add(StringConstants.IAB_BAWSE);
-                skus.add(StringConstants.IAB_CLEAR_RECORD);
-                skus.add(StringConstants.IAB_PURCHASE_PICK);
-
-                for (String sku : skus) {
-
-                    Purchase purchase = inventory.getPurchase(sku);
-                    if (purchase != null) {
-                        mHelper.consumeAsync(purchase, mConsumeFinishedListener);
-                    }
-                }
-            }
-        }
-    };
-
-    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener =
-            new IabHelper.OnConsumeFinishedListener() {
-                public void onConsumeFinished(Purchase purchase,
-                                              IabResult result) {
-
-                    if (result.isSuccess()) {
-                        Log.i("Consumed Purchase", purchase.toString());
-                    } else {
-                        // handle error
-                    }
-                }
-            };
 
 
 }

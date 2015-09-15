@@ -1,38 +1,47 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.plego.wagerocity.android.fragments.PoolsFragment">
-
-    <RelativeLayout
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        tools:context="com.plego.wagerocity.android.fragments.PoolsFragment">
 
-        <Button
-            android:id="@+id/button_show_my_pools"
-            android:layout_width="wrap_content"
+        <LinearLayout
+                android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/blue_button"
-            android:text="Show My Pools"
-            android:textColor="#ffffff"
-            android:layout_centerHorizontal="true"
-            />
+                android:paddingLeft="@dimen/marginMedium"
+                android:paddingRight="@dimen/marginMedium"
+                >
 
-        <!--<Spinner-->
-            <!--android:id="@+id/spinner_leaderboard_filters"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="64dp"-->
-            <!--android:entries="@array/leaderboard_filters"-->
-            <!--/>-->
+                <Button
+                        android:id="@+id/button_show_my_pools"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/marginSmall"
+                        android:text="Show My Pools"
+                        style="@style/Widget.Button.Blue"
+                        android:layout_weight="1"
+                        />
+
+                <Button
+                        android:id="@+id/btn_create_pool"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/marginSmall"
+                        style="@style/Widget.Button.Blue"
+                        android:text="@string/title_create_pool"
+                        android:layout_weight="1"
+                        />
+
+        </LinearLayout>
 
         <ListView
             android:id="@+id/listview_pools"
-            android:layout_below="@id/button_show_my_pools"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             />
 
-    </RelativeLayout>
+</LinearLayout>
 
-</FrameLayout>

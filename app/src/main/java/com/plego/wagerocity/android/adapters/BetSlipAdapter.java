@@ -1,36 +1,17 @@
 package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
-import android.database.DataSetObserver;
-import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.model.OddHolder;
-import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
 
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by haris on 10/05/15.
@@ -41,18 +22,16 @@ public class BetSlipAdapter extends BaseAdapter {
     public static final String TEASER = "teaser";
 
     DecimalFormat f = new DecimalFormat("####");
-
+    private ArrayList<OddHolder>               oddHolders;
+    private Context                            context;
+    private Map<Integer, RiskTextWatcher>      riskTextWatcherMap;
+    private Map<Integer, RiskTextWatcherToWin> riskTextWatcherMapToWin;
     public BetSlipAdapter(ArrayList<OddHolder> oddHolders, Context context) {
         this.oddHolders = new ArrayList<>(oddHolders);
         this.context = context;
         riskTextWatcherMap = new HashMap<>();
         riskTextWatcherMapToWin = new HashMap<>();
     }
-
-    private ArrayList<OddHolder> oddHolders;
-    private Context context;
-    private Map<Integer, RiskTextWatcher> riskTextWatcherMap;
-    private Map<Integer, RiskTextWatcherToWin> riskTextWatcherMapToWin;
 //    private BetOnGameFragment.OnBetOnGameFragmentInteractionListener mListener;
 
     @Override
@@ -109,8 +88,8 @@ public class BetSlipAdapter extends BaseAdapter {
                 arrayList.add("+4.5 pts " + oddHolder.getTeaser2());
                 arrayList.add("+5 pts " + oddHolder.getTeaser3());
             }
-
-            ArrayAdapter arrayAdapter = new ArrayAdapter(context, R.layout.abc_simple_dropdown_hint, arrayList);
+            // TODO check BetAdapter ui
+            ArrayAdapter arrayAdapter = new ArrayAdapter( context, android.R.layout.simple_list_item_1, arrayList );
             viewHolder.spinner.setAdapter(arrayAdapter);
 
             final ViewHolder finalViewHolder = viewHolder;

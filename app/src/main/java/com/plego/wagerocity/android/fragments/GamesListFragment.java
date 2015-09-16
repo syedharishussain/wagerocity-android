@@ -5,20 +5,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-
+import android.util.SparseArray;
+import android.view.*;
+import android.widget.*;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.plego.wagerocity.R;
-import com.plego.wagerocity.android.adapters.GamesListAdapter;
+import com.plego.wagerocity.android.adapters.NewGamesListAdapter;
+import com.plego.wagerocity.android.controller.GameOddController;
 import com.plego.wagerocity.android.model.Game;
-import com.plego.wagerocity.android.model.Odd;
 import com.plego.wagerocity.android.model.OddHolder;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,17 +28,23 @@ import java.util.Iterator;
  * create an instance of this fragment.
  */
 public class GamesListFragment extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARGS_GAMES_LIST = "games_list";
+    private static final String ARGS_GAMES_LIST  = "games_list";
     private static final String ARGS_SPORTS_NAME = "sports_name";
-    private static final String ARGS_POOL_ID = "Pool_Id";
+    private static final String ARGS_POOL_ID     = "Pool_Id";
 
     private ArrayList<Game> games;
-    private String sportsName;
-    private String poolId;
+    private String          sportsName;
+    private String          poolId;
 
     private OnGamesListFragmentInteractionListener mListener;
+    private NewGamesListAdapter                    gamesListAdapter;
+
+    public GamesListFragment () {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -49,25 +54,21 @@ public class GamesListFragment extends Fragment {
      * @return A new instance of fragment GamesListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GamesListFragment newInstance(ArrayList<Game> games, String sportsName, String poolId) {
+    public static GamesListFragment newInstance (ArrayList<Game> games, String sportsName, String poolId) {
         GamesListFragment fragment = new GamesListFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(ARGS_GAMES_LIST, games);
-        args.putString(ARGS_SPORTS_NAME, sportsName);
-        args.putString(ARGS_POOL_ID, poolId);
-        fragment.setArguments(args);
+        args.putParcelableArrayList( ARGS_GAMES_LIST, games );
+        args.putString( ARGS_SPORTS_NAME, sportsName );
+        args.putString( ARGS_POOL_ID, poolId );
+        fragment.setArguments( args );
         return fragment;
     }
 
-    public GamesListFragment() {
-        // Required empty public constructor
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate (Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
         if (getArguments() != null) {
-            games = getArguments().getParcelableArrayList(ARGS_GAMES_LIST);
+            games = getArguments().getParcelableArrayList( ARGS_GAMES_LIST );
             sportsName = getArguments().getString(ARGS_SPORTS_NAME);
             poolId = getArguments().getString(ARGS_POOL_ID);
         }
@@ -76,10 +77,16 @@ public class GamesListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_games_list, container, false);
+        final View view = inflater.inflate( R.layout.fragment_games_list, container, false );
+        ButterKnife.bind( this, view );
+        return view;
     }
 
+    @Override
+    public void onDestroyView () {
+        super.onDestroyView();
+        ButterKnife.unbind( this );
+    }
 
     @Override
     public void onResume() {
@@ -96,33 +103,43 @@ public class GamesListFragment extends Fragment {
 
         final ListView gamesListView = (ListView) view.findViewById(R.id.listview_games_list);
 
-        final GamesListAdapter gamesListAdapter = new GamesListAdapter(view.getContext(), games, sportsName);
+        List<GameOddController> controllers = new ArrayList<>();
+        for (Game game : games) {
+            controllers.add( new GameOddController( sportsName, game ) );
+        }
 
-        gamesListView.setAdapter(gamesListAdapter);
+        gamesListAdapter = new NewGamesListAdapter( view.getContext(), controllers, sportsName );
+        gamesListView.setAdapter( gamesListAdapter );
+    }
 
-        Button showBetSlip = (Button) view.findViewById(R.id.button_cell_games_list_shoeBetSlip);
-        showBetSlip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<OddHolder> oddHolders = new ArrayList<OddHolder>();
+    @OnClick(R.id.button_cell_games_list_shoeBetSlip)
+    public void showBetSlip () {
+        ArrayList<OddHolder> oddHolders = new ArrayList<OddHolder>();
+        for (int i = 0; i < gamesListAdapter.getCount(); i++) {
+            final GameOddController item = gamesListAdapter.getItem( i );
+            final SparseArray<Boolean> checkedArray = item.getCheckedArray();
+            final SparseArray<OddHolder> oddHolderArray = item.getOddHolderArray();
 
-                for (Game game : games) {
-                    if (game.getOddHolders() != null)
-                        if (game.getOddHolders().size() > 0) {
-                            oddHolders.addAll(game.getOddHolders());
-                        }
+            for (int j = 0; j < checkedArray.size(); j++) {
+                final int key = checkedArray.keyAt( j );
+                if (checkedArray.get( key )) {
+                    oddHolders.add( oddHolderArray.get( key ) );
                 }
-
-                if (oddHolders.size() > 0) {
-
-                    Uri uri = Uri.parse(getString(R.string.uri_selected_game_for_betting));
-                    mListener.onGamesListFragmentInteraction(uri, oddHolders, poolId);
-
-                }
-
             }
-        });
+        }
+//        for (Game game : games) {
+//			if (game.getOddHolders() != null)
+//				if (game.getOddHolders().size() > 0) {
+//					oddHolders.addAll(game.getOddHolders());
+//				}
+//		}
 
+        if (oddHolders.size() > 0) {
+
+            Uri uri = Uri.parse( getString( R.string.uri_selected_game_for_betting ) );
+            mListener.onGamesListFragmentInteraction( uri, oddHolders, poolId );
+
+        }
     }
 
     @Override

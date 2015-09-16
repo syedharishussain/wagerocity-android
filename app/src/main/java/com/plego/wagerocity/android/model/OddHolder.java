@@ -3,21 +3,50 @@ package com.plego.wagerocity.android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class OddHolder implements Parcelable, Cloneable {
 
-    public static final String PARLAY = "parlay";
-    public static final String TEASER = "teaser";
+    public static final String POINT_SPREAD = "PointSpread";
+    public static final String SINGLE       = "single";
+    public static final String MONEY_LINE   = "MoneyLine";
+    public static final String OVER         = "Over";
+    public static final String UNDER        = "Under";
 
-    public OddHolder() {
+    public static final String             PARLAY  = "parlay";
+    public static final String             TEASER  = "teaser";
+    public static final Creator<OddHolder> CREATOR = new Creator<OddHolder>() {
+        public OddHolder createFromParcel (Parcel source) {
+            return new OddHolder( source );
+        }
+
+        public OddHolder[] newArray (int size) {
+            return new OddHolder[size];
+        }
+    };
+    Double  stake;
+    String  teamId;
+    String  oddId;
+    String  teamName;
+    String  teamVsteam;
+    String  oddValue;
+    String  betTypeSPT;
+    String  betOT;
+    String  betTypeString;
+    String  pointSpreadString;
+    String  teaserString;
+    Boolean isChecked;
+    String  leagueName;
+    String  riskValue;
+    Double  parlayValue;
+    Double  poolCredits;
+    Integer teaser1;
+    Integer teaser2;
+    Integer teaser3;
+    boolean isTeamA;
+
+    public OddHolder () {
     }
 
-    public OddHolder(Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString, String leagueName, boolean isTeamA, Double poolCredits) {
+    public OddHolder (Double stake, String teamId, String oddId, String teamName, String teamVsteam, String oddValue, String betTypeSPT, String betOT, String betTypeString, String pointSpreadString, String leagueName, boolean isTeamA, Double poolCredits) {
         this.stake = stake;
         this.teamId = teamId;
         this.oddId = oddId;
@@ -28,7 +57,7 @@ public class OddHolder implements Parcelable, Cloneable {
         this.betTypeSPT = betTypeSPT;
         this.betOT = betOT;
         this.betTypeString = betTypeString;
-        this.isChecked = (!(betTypeSPT.equals(PARLAY) || betTypeSPT.equals(TEASER)));
+        this.isChecked = (!(betTypeSPT.equals( PARLAY ) || betTypeSPT.equals( TEASER )));
         this.leagueName = leagueName;
         this.riskValue = "0";
         this.teaser1 = 0;
@@ -39,28 +68,28 @@ public class OddHolder implements Parcelable, Cloneable {
         this.poolCredits = poolCredits;
     }
 
-    Double stake;
-    String teamId;
-    String oddId;
-    String teamName;
-    String teamVsteam;
-    String oddValue;
-    String betTypeSPT;
-    String betOT;
-    String betTypeString;
-    String pointSpreadString;
-    String teaserString;
-    Boolean isChecked;
-    String leagueName;
-    String riskValue;
-    Double parlayValue;
-
-
-    Double poolCredits;
-    Integer teaser1;
-    Integer teaser2;
-    Integer teaser3;
-    boolean isTeamA;
+    private OddHolder (Parcel in) {
+        this.stake = (Double) in.readValue( Double.class.getClassLoader() );
+        this.teamId = in.readString();
+        this.oddId = in.readString();
+        this.teamName = in.readString();
+        this.teamVsteam = in.readString();
+        this.oddValue = in.readString();
+        this.betTypeSPT = in.readString();
+        this.betOT = in.readString();
+        this.betTypeString = in.readString();
+        this.pointSpreadString = in.readString();
+        this.teaserString = in.readString();
+        this.isChecked = (Boolean) in.readValue( Boolean.class.getClassLoader() );
+        this.leagueName = in.readString();
+        this.riskValue = in.readString();
+        this.parlayValue = (Double) in.readValue( Double.class.getClassLoader() );
+        this.poolCredits = (Double) in.readValue( Double.class.getClassLoader() );
+        this.teaser1 = (Integer) in.readValue( Integer.class.getClassLoader() );
+        this.teaser2 = (Integer) in.readValue( Integer.class.getClassLoader() );
+        this.teaser3 = (Integer) in.readValue( Integer.class.getClassLoader() );
+        this.isTeamA = in.readByte() != 0;
+    }
 
     public Double getPoolCredits() {
         return poolCredits;
@@ -69,6 +98,7 @@ public class OddHolder implements Parcelable, Cloneable {
     public void setPoolCredits(Double poolCredits) {
         this.poolCredits = poolCredits;
     }
+
     public boolean isTeamA() {
         return isTeamA;
     }
@@ -84,7 +114,6 @@ public class OddHolder implements Parcelable, Cloneable {
     public void setTeaserString(String teaserString) {
         this.teaserString = teaserString;
     }
-
 
     public Integer getTeaser1() {
         return teaser1;
@@ -110,11 +139,6 @@ public class OddHolder implements Parcelable, Cloneable {
         this.teaser3 = teaser3;
     }
 
-
-
-
-
-
     public Double getParlayValue() {
         return parlayValue;
     }
@@ -122,7 +146,6 @@ public class OddHolder implements Parcelable, Cloneable {
     public void setParlayValue(Double parlayValue) {
         this.parlayValue = parlayValue;
     }
-
 
     public String getLeagueName() {
         return leagueName;
@@ -140,7 +163,6 @@ public class OddHolder implements Parcelable, Cloneable {
         this.riskValue = riskValue;
     }
 
-
     public Boolean getIsChecked() {
         return isChecked;
     }
@@ -148,7 +170,6 @@ public class OddHolder implements Parcelable, Cloneable {
     public void setIsChecked(Boolean isChecked) {
         this.isChecked = isChecked;
     }
-
 
     public String getPointSpreadString() {
         return pointSpreadString;
@@ -158,7 +179,6 @@ public class OddHolder implements Parcelable, Cloneable {
         this.pointSpreadString = pointSpreadString;
     }
 
-
     public String getBetTypeString() {
         return betTypeString;
     }
@@ -166,7 +186,6 @@ public class OddHolder implements Parcelable, Cloneable {
     public void setBetTypeString(String betTypeString) {
         this.betTypeString = betTypeString;
     }
-
 
     public Double getStake() {
         return stake;
@@ -232,14 +251,10 @@ public class OddHolder implements Parcelable, Cloneable {
         this.betOT = betOT;
     }
 
-
-
-
     @Override
     public OddHolder clone() throws CloneNotSupportedException {
         return (OddHolder) super.clone();
     }
-
 
     @Override
     public int describeContents() {
@@ -269,38 +284,5 @@ public class OddHolder implements Parcelable, Cloneable {
         dest.writeValue(this.teaser3);
         dest.writeByte(isTeamA ? (byte) 1 : (byte) 0);
     }
-
-    private OddHolder(Parcel in) {
-        this.stake = (Double) in.readValue(Double.class.getClassLoader());
-        this.teamId = in.readString();
-        this.oddId = in.readString();
-        this.teamName = in.readString();
-        this.teamVsteam = in.readString();
-        this.oddValue = in.readString();
-        this.betTypeSPT = in.readString();
-        this.betOT = in.readString();
-        this.betTypeString = in.readString();
-        this.pointSpreadString = in.readString();
-        this.teaserString = in.readString();
-        this.isChecked = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.leagueName = in.readString();
-        this.riskValue = in.readString();
-        this.parlayValue = (Double) in.readValue(Double.class.getClassLoader());
-        this.poolCredits = (Double) in.readValue(Double.class.getClassLoader());
-        this.teaser1 = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.teaser2 = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.teaser3 = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.isTeamA = in.readByte() != 0;
-    }
-
-    public static final Creator<OddHolder> CREATOR = new Creator<OddHolder>() {
-        public OddHolder createFromParcel(Parcel source) {
-            return new OddHolder(source);
-        }
-
-        public OddHolder[] newArray(int size) {
-            return new OddHolder[size];
-        }
-    };
 }
 

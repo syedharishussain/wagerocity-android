@@ -65,10 +65,10 @@ public class NewGamesListAdapter extends BaseAdapter {
 
 			viewHolder.cbPSA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
 			viewHolder.cbPSB.setOnCheckedChangeListener( new CheckChangeListener( position ) );
-			viewHolder.cbMLA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
-			viewHolder.cbMLB.setOnCheckedChangeListener( new CheckChangeListener( position ) );
-			viewHolder.cbOA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
-			viewHolder.cbUA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+//			viewHolder.cbMLA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+//			viewHolder.cbMLB.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+//			viewHolder.cbOA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+//			viewHolder.cbUA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}

@@ -1,46 +1,31 @@
 package com.plego.wagerocity.android.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-
+import android.view.*;
+import android.widget.*;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import com.google.gson.Gson;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.activities.DashboardActivity;
 import com.plego.wagerocity.android.adapters.BetSlipAdapter;
-import com.plego.wagerocity.android.model.BetParent;
-import com.plego.wagerocity.android.model.Odd;
-import com.plego.wagerocity.android.model.OddHolder;
-import com.plego.wagerocity.android.model.Pick;
-import com.plego.wagerocity.android.model.RestClient;
-import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.android.model.*;
 import com.plego.wagerocity.utils.AndroidUtils;
-import com.sromku.simple.fb.Permission;
-import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Feed;
-import com.sromku.simple.fb.listeners.OnPublishListener;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,60 +37,66 @@ import retrofit.client.Response;
  */
 public class BetOnGameFragment extends Fragment {
 
-    public static final String POINT_SPREAD = "PointSpread";
-    public static final String SINGLE = "single";
-    public static final String MONEY_LINE = "MoneyLine";
-    public static final String OVER = "Over";
-    public static final String UNDER = "Under";
-
+    public static final  String POINT_SPREAD = "PointSpread";
+    public static final  String SINGLE       = "single";
+    public static final  String MONEY_LINE   = "MoneyLine";
+    public static final  String OVER         = "Over";
+    public static final  String UNDER        = "Under";
+    public static final  String PARLAY       = "parlay";
+    public static final  String TEASER       = "teaser";
+    public static final  String TAG          = BetOnGameFragment.class.getSimpleName();
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARGS_GAME = "selected_game";
+    private static final String ARGS_GAME    = "selected_game";
     private static final String ARGS_POOL_ID = "Pool_ID";
-
-    public static final String PARLAY = "parlay";
-    public static final String TEASER = "teaser";
     boolean hasParlay = false;
 
-    private ArrayList<OddHolder> oddHolders;
-    private String poolId;
+    private ArrayList<OddHolder>                   oddHolders;
+    private String                                 poolId;
     private OnBetOnGameFragmentInteractionListener mListener;
-    private OddHolder shareOdd;
+    private OddHolder                              shareOdd;
 
 
-    public static BetOnGameFragment newInstance(ArrayList<OddHolder> oddHolders, String poolId) {
-        BetOnGameFragment fragment = new BetOnGameFragment();
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(ARGS_GAME, oddHolders);
-        args.putString(ARGS_POOL_ID, poolId);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public BetOnGameFragment() {
+    public BetOnGameFragment () {
         // Required empty public constructor
     }
 
+    public static BetOnGameFragment newInstance (ArrayList<OddHolder> oddHolders, String poolId) {
+        BetOnGameFragment fragment = new BetOnGameFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList( ARGS_GAME, oddHolders );
+        args.putString( ARGS_POOL_ID, poolId );
+        fragment.setArguments( args );
+        return fragment;
+    }
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate (Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
 
         if (getArguments() != null) {
-            oddHolders = getArguments().getParcelableArrayList(ARGS_GAME);
-            poolId = getArguments().getString(ARGS_POOL_ID);
+            oddHolders = getArguments().getParcelableArrayList( ARGS_GAME );
+            poolId = getArguments().getString( ARGS_POOL_ID );
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bet_on_game, container, false);
+    public View onCreateView (LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
+        final View view = inflater.inflate( R.layout.fragment_bet_on_game, container, false );
+        ButterKnife.bind( this, view );
+        return view;
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    public void onDestroyView () {
+        super.onDestroyView();
+        ButterKnife.unbind( this );
+    }
 
-        super.onViewCreated(view, savedInstanceState);
+    @Override
+    public void onViewCreated (final View view, @Nullable Bundle savedInstanceState) {
+
+        super.onViewCreated( view, savedInstanceState );
 
         if (oddHolders.size() == 0) {
             mListener.onBetOnGameGoBackFragmentInteraction();
@@ -122,55 +113,52 @@ public class BetOnGameFragment extends Fragment {
                     createTeaserOdd();
         }
 
-        Button placeBet = (Button) view.findViewById(R.id.button_cell_betongame_place_bet);
-        placeBet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                for (OddHolder oddHolder : oddHolders) {
-                    if (oddHolder.getIsChecked()) {
-                        shareOdd = oddHolder;
-                    }
-                }
-
-                if (shareOdd != null) {
-                    final OddHolder finalOdd = shareOdd;
-                    new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                            .setTitleText("Share This With Your Friends!")
-                            .setContentText("Earn $250 and Share This on Facebook With Your Friends.")
-                            .setConfirmText("Yes do it!")
-                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sDialog) {
-                                    sDialog.dismissWithAnimation();
-                                    processBet();
-                                    ((DashboardActivity) getActivity()).shouldShare = true;
-                                    buyCreditsAPI((float) 250.00);
-                                }
-                            })
-                            .setCancelText("Cancel")
-                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog dialog) {
-                                    dialog.cancel();
-                                    processBet();
-                                }
-                            })
-                            .showCancelButton(true)
-                            .show();
-                } else {
-                    processBet();
-                }
-            }
-        });
-
         final ListView betSlipListView = (ListView) view.findViewById(R.id.listview_betslips);
 
         final BetSlipAdapter betSlipAdapter = new BetSlipAdapter(oddHolders, view.getContext());
 
         betSlipListView.setAdapter(betSlipAdapter);
+    }
 
+    @OnClick(R.id.button_cell_betongame_place_bet)
+    public void placeBet () {
+        for (OddHolder oddHolder : oddHolders) {
+            if (oddHolder.getIsChecked()) {
+                shareOdd = oddHolder;
+            }
+        }
+
+        final Gson gson = new Gson();
+        final String request = gson.toJson( oddHolders );
+        Log.d( TAG, "Request--> " + request );
+        if (shareOdd != null) {
+            final OddHolder finalOdd = shareOdd;
+            new SweetAlertDialog( getActivity(), SweetAlertDialog.WARNING_TYPE )
+                    .setTitleText( "Share This With Your Friends!" )
+                    .setContentText( "Earn $250 and Share This on Facebook With Your Friends." )
+                    .setConfirmText( "Yes do it!" )
+                    .setConfirmClickListener( new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick (SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            processBet();
+                            ((DashboardActivity) getActivity()).shouldShare = true;
+                            buyCreditsAPI( (float) 250.00 );
+                        }
+                    } )
+                    .setCancelText( "Cancel" )
+                    .setCancelClickListener( new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick (SweetAlertDialog dialog) {
+                            dialog.cancel();
+                            processBet();
+                        }
+                    } )
+                    .showCancelButton( true )
+                    .show();
+        } else {
+            processBet();
+        }
     }
 
     private void sahreBet(OddHolder oddHolder) {
@@ -392,51 +380,46 @@ public class BetOnGameFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnBetOnGameFragmentInteractionListener {
-
-        public void onBetOnGameFragmentInteraction(Uri uri, ArrayList<Pick> picks);
-
-        public void onBetOnGameGoBackFragmentInteraction();
-
-        public void onBetOnGameShareFragmentInteraction(Feed feed);
-    }
-
-    void processBet() {
+    void processBet () {
         final RestClient restClient = new RestClient();
 
-        final SweetAlertDialog pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        pDialog.setTitleText("Placing Bet..");
-        pDialog.setCancelable(false);
+        final SweetAlertDialog pDialog = new SweetAlertDialog( getActivity(), SweetAlertDialog.PROGRESS_TYPE );
+        pDialog.getProgressHelper().setBarColor( Color.parseColor( "#A5DC86" ) );
+        pDialog.setTitleText( "Placing Bet.." );
+        pDialog.setCancelable( false );
 
         final ArrayList<String> arrayList = new ArrayList<>();
 
         for (final OddHolder oddHolder : oddHolders) {
-            if (!oddHolder.getRiskValue().equals("0") && oddHolder.getIsChecked()) {
+            if (!oddHolder.getRiskValue().equals( "0" ) && oddHolder.getIsChecked()) {
 
-                Float credits = new WagerocityPref(this.getActivity()).user().getCredits();
+                Float credits = new WagerocityPref( this.getActivity() ).user().getCredits();
 
                 if (poolId != null) {
-                    if (poolId.equals("0") || poolId.equals("")) {
-                        if (credits < Float.parseFloat(oddHolder.getRiskValue())) {
-                            AndroidUtils.showDialog("Not Enough Credits", "You do not have enough credits to place this bet.", SweetAlertDialog.ERROR_TYPE, this.getActivity());
+                    if (poolId.equals( "0" ) || poolId.equals( "" )) {
+                        if (credits < Float.parseFloat( oddHolder.getRiskValue() )) {
+                            AndroidUtils
+                                    .showDialog( "Not Enough Credits", "You do not have enough credits to place this bet.", SweetAlertDialog.ERROR_TYPE, this
+                                            .getActivity() );
                             continue;
                         }
                     } else {
-                        if (oddHolder.getPoolCredits() < Float.parseFloat(oddHolder.getRiskValue())) {
-                            AndroidUtils.showDialog("Not Enough Pool Credits", "You do not have enough pool credits to place this bet.", SweetAlertDialog.ERROR_TYPE, this.getActivity());
+                        if (oddHolder.getPoolCredits() < Float.parseFloat( oddHolder.getRiskValue() )) {
+                            AndroidUtils
+                                    .showDialog( "Not Enough Pool Credits", "You do not have enough pool credits to place this bet.", SweetAlertDialog.ERROR_TYPE, this
+                                            .getActivity() );
                             continue;
                         }
                     }
                 }
 
 
-
                 if (!pDialog.isShowing()) pDialog.show();
 
-                final String userId = new WagerocityPref(getActivity()).user().getUserId();
+                final String userId = new WagerocityPref( getActivity() ).user().getUserId();
                 final String oddId = oddHolder.getOddId();
-                final String oddValue = oddHolder.getBetTypeSPT().equals(PARLAY) ? oddHolder.getParlayValue().toString() : oddHolder.getOddValue();
+                final String oddValue = oddHolder.getBetTypeSPT().equals( PARLAY ) ? oddHolder.getParlayValue()
+                        .toString() : oddHolder.getOddValue();
 //                final String position = oddHolder.getBetTypeSPT().equals(SINGLE) ? oddHolder.getBetTypeString().equals(OVER) || oddHolder.getBetTypeString().equals(UNDER) ? oddHolder.getBetTypeString().toLowerCase() : "-" : "-";
                 final String position = oddHolder.isTeamA() ? "over" : "under";
                 final String matchDetail = oddHolder.getTeamVsteam();
@@ -447,14 +430,14 @@ public class BetOnGameFragment extends Fragment {
                 final String leagueName = oddHolder.getLeagueName();
                 final String betType = oddHolder.getBetTypeSPT();
                 final String betOt = oddHolder.getBetOT();
-                final String poolID = (poolId == null || poolId.equals("")) ? "" : poolId;
+                final String poolID = (poolId == null || poolId.equals( "" )) ? "" : poolId;
                 String parentId = "";
 
-                arrayList.add("http://api.wagerocity.com/betOnGame");
+                arrayList.add( "http://api.wagerocity.com/betOnGame" );
 
-                restClient.getApiService().getBetParent(new Callback<BetParent>() {
+                restClient.getApiService().getBetParent( new Callback<BetParent>() {
                     @Override
-                    public void success(BetParent betParent, Response response) {
+                    public void success (BetParent betParent, Response response) {
                         restClient.getApiService().betOnGames(
                                 userId,                     // userId
                                 oddId,                      // oddId
@@ -474,82 +457,87 @@ public class BetOnGameFragment extends Fragment {
                                 "pending",
                                 new Callback<ArrayList<Pick>>() {
                                     @Override
-                                    public void success(ArrayList<Pick> picks, Response response) {
+                                    public void success (ArrayList<Pick> picks, Response response) {
 
-                                        arrayList.remove("http://api.wagerocity.com/betOnGame");
+                                        arrayList.remove( "http://api.wagerocity.com/betOnGame" );
 
 //                                        pDialog.getProgressHelper().setProgress(pDialog.getProgressHelper().getProgress() + progressSize);
 
-                                        if (arrayList.size() == 0) {// (pDialog.getProgressHelper().getProgress() >= 97.0) {
+                                        if (arrayList
+                                                .size() == 0) {// (pDialog.getProgressHelper().getProgress() >= 97.0) {
 
 
-                                            restClient.getApiService().getMyPicks(userId, new Callback<ArrayList<Pick>>() {
-                                                @Override
-                                                public void success(ArrayList<Pick> picks, Response response) {
-                                                    pDialog.dismiss();
+                                            restClient.getApiService()
+                                                    .getMyPicks( userId, new Callback<ArrayList<Pick>>() {
+                                                        @Override
+                                                        public void success (ArrayList<Pick> picks, Response response) {
+                                                            pDialog.dismiss();
 
-                                                    oddHolders.removeAll(oddHolders);
-                                                    Collections.sort(picks, new Pick());
-                                                    Uri uri = Uri.parse(getString(R.string.uri_open_my_picks_fragment));
-                                                    mListener.onBetOnGameFragmentInteraction(uri, picks);
-                                                    boolean shouldShare = ((DashboardActivity) getActivity()).shouldShare;
+                                                            oddHolders.removeAll( oddHolders );
+                                                            Collections.sort( picks, new Pick() );
+                                                            Uri uri = Uri
+                                                                    .parse( getString( R.string.uri_open_my_picks_fragment ) );
+                                                            mListener.onBetOnGameFragmentInteraction( uri, picks );
+                                                            boolean shouldShare = ((DashboardActivity) getActivity()).shouldShare;
 
-                                                    if (shareOdd != null) {
-                                                        if (shouldShare) {
-                                                            sahreBet(shareOdd);
-                                                            ((DashboardActivity) getActivity()).shouldShare = false;
-                                                            shareOdd = null;
+                                                            if (shareOdd != null) {
+                                                                if (shouldShare) {
+                                                                    sahreBet( shareOdd );
+                                                                    ((DashboardActivity) getActivity()).shouldShare = false;
+                                                                    shareOdd = null;
+                                                                }
+                                                            }
                                                         }
-                                                    }
-                                                }
 
-                                                @Override
-                                                public void failure(RetrofitError error) {
-                                                    pDialog.dismiss();
-                                                    Log.e("Picks Posting Error", error.toString());
-                                                }
-                                            });
+                                                        @Override
+                                                        public void failure (RetrofitError error) {
+                                                            pDialog.dismiss();
+                                                            Log.e( "Picks Posting Error", error.toString() );
+                                                        }
+                                                    } );
 
-                                            Log.e("Picks Posting", "Completed");
+                                            Log.e( "Picks Posting", "Completed" );
 
                                         }
-                                        Log.e("Picks Posting", String.valueOf(pDialog.getProgressHelper().getProgress()));
+                                        Log.e( "Picks Posting", String
+                                                .valueOf( pDialog.getProgressHelper().getProgress() ) );
                                     }
 
                                     @Override
-                                    public void failure(RetrofitError error) {
+                                    public void failure (RetrofitError error) {
                                         pDialog.dismiss();
                                     }
                                 }
                         );
 
                         if (poolId != null) {
-                            if (poolId.equals("0") || poolId.equals("")) {
-                                restClient.getApiService().consumeCredits(new WagerocityPref(getActivity()).user().getUserId(),
-                                        Float.parseFloat(stake),
-                                        new Callback<User>() {
-                                            @Override
-                                            public void success(User user, Response response) {
-                                                Log.e("Credits Consumed", user.getCredits().toString());
-                                                new WagerocityPref(getActivity()).setUser(user);
+                            if (poolId.equals( "0" ) || poolId.equals( "" )) {
+                                restClient.getApiService()
+                                        .consumeCredits( new WagerocityPref( getActivity() ).user().getUserId(),
+                                                Float.parseFloat( stake ),
+                                                new Callback<User>() {
+                                                    @Override
+                                                    public void success (User user, Response response) {
+                                                        Log.e( "Credits Consumed", user.getCredits().toString() );
+                                                        new WagerocityPref( getActivity() ).setUser( user );
 
-                                                AndroidUtils.updateStats(getActivity());
-                                            }
+                                                        AndroidUtils.updateStats( getActivity() );
+                                                    }
 
-                                            @Override
-                                            public void failure(RetrofitError error) {
+                                                    @Override
+                                                    public void failure (RetrofitError error) {
 
-                                            }
-                                        });
+                                                    }
+                                                } );
                             }
                         }
                     }
 
                     @Override
-                    public void failure(RetrofitError error) {
+                    public void failure (RetrofitError error) {
 
                     }
-                });
+                } );
             }
         }
     }
@@ -571,6 +559,15 @@ public class BetOnGameFragment extends Fragment {
                 AndroidUtils.showErrorDialog(error, getActivity());
             }
         });
+    }
+
+    public interface OnBetOnGameFragmentInteractionListener {
+
+        public void onBetOnGameFragmentInteraction (Uri uri, ArrayList<Pick> picks);
+
+        public void onBetOnGameGoBackFragmentInteraction ();
+
+        public void onBetOnGameShareFragmentInteraction (Feed feed);
     }
 
 }

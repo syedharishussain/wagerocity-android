@@ -263,8 +263,8 @@ public class OddHolder implements Parcelable, Cloneable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(this.stake);
-        dest.writeString(this.teamId);
+        dest.writeValue( this.stake );
+        dest.writeString( this.teamId );
         dest.writeString(this.oddId);
         dest.writeString(this.teamName);
         dest.writeString(this.teamVsteam);
@@ -273,16 +273,16 @@ public class OddHolder implements Parcelable, Cloneable {
         dest.writeString(this.betOT);
         dest.writeString(this.betTypeString);
         dest.writeString(this.pointSpreadString);
-        dest.writeString(this.teaserString);
-        dest.writeValue(this.isChecked);
-        dest.writeString(this.leagueName);
-        dest.writeString(this.riskValue);
-        dest.writeValue(this.parlayValue);
+        dest.writeString( this.teaserString );
+        dest.writeValue( this.isChecked );
+        dest.writeString( this.leagueName );
+        dest.writeString( this.riskValue );
+        dest.writeValue( this.parlayValue );
         dest.writeValue(this.poolCredits);
         dest.writeValue(this.teaser1);
         dest.writeValue(this.teaser2);
-        dest.writeValue(this.teaser3);
-        dest.writeByte(isTeamA ? (byte) 1 : (byte) 0);
+        dest.writeValue( this.teaser3 );
+        dest.writeByte( isTeamA ? (byte) 1 : (byte) 0 );
     }
 }
 

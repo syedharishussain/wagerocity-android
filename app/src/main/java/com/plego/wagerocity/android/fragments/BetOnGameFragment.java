@@ -24,6 +24,9 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -117,7 +120,7 @@ public class BetOnGameFragment extends Fragment {
 
         final BetSlipAdapter betSlipAdapter = new BetSlipAdapter(oddHolders, view.getContext());
 
-        betSlipListView.setAdapter(betSlipAdapter);
+        betSlipListView.setAdapter( betSlipAdapter );
     }
 
     @OnClick(R.id.button_cell_betongame_place_bet)
@@ -128,9 +131,45 @@ public class BetOnGameFragment extends Fragment {
             }
         }
 
+        final String userId = new WagerocityPref( getActivity() ).user().getUserId();
         final Gson gson = new Gson();
-        final String request = gson.toJson( oddHolders );
+        List<BetRequest> bets = new ArrayList<>();
+        for (OddHolder oddHolder : oddHolders) {
+            final BetRequest betRequest = new BetRequest();
+            betRequest.setUserId( userId );
+            betRequest.setId( oddHolder.getOddId() );
+            betRequest.setPrice( "1" );
+            betRequest.setName( oddHolder.getTeamVsteam() );
+            betRequest.setPoolId( poolId );
+            betRequest.setMatchId( oddHolder.getTeamId() ); // Replace this with game id
+            betRequest.setPool( "" );
+            betRequest.setIsPoolBet( "0" );
+            betRequest.setPoolName( "" );
+            betRequest.setPos( oddHolder.isTeamA() ? "over" : "under" );
+            betRequest.setOddType( "ao" );
+            betRequest.setMatchDetail( betRequest.getName() );
+            betRequest.setInputStake( "no" );
+            betRequest.setIsBetChecked( oddHolder.getIsChecked() ? "yes" : "no" );
+            betRequest.setOddsValue( oddHolder.getBetTypeSPT().equals( PARLAY ) ? oddHolder.getParlayValue()
+                    .toString() : oddHolder.getOddValue() );
+            betRequest.setStake( String.valueOf( oddHolder.getStake() ) );
+            betRequest.setDetailedTeamName( oddHolder.getTeamName() + " " + betRequest.getOddsValue() );
+            betRequest.setOddTypeInt( oddHolder.getBetOT() );
+            betRequest.setMatchCondition( "" );
+            betRequest.setSportsName( oddHolder.getLeagueName() );
+            try {
+                betRequest.generateRowId();
+            }
+            catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            bets.add( betRequest );
+        }
+        final BetRequestWrapper wrapper = new BetRequestWrapper();
+        wrapper.setBets( bets );
+        final String request = gson.toJson( wrapper );
         Log.d( TAG, "Request--> " + request );
+
         if (shareOdd != null) {
             final OddHolder finalOdd = shareOdd;
             new SweetAlertDialog( getActivity(), SweetAlertDialog.WARNING_TYPE )
@@ -159,6 +198,18 @@ public class BetOnGameFragment extends Fragment {
         } else {
             processBet();
         }
+    }
+
+    private String md5Secret (String... strings) throws NoSuchAlgorithmException {
+        StringBuilder builder = new StringBuilder();
+        for (String s : strings) {
+            builder.append( s );
+        }
+        MessageDigest md5 = MessageDigest.getInstance( "MD5" );
+        md5.update( builder.toString().getBytes(), 0, builder.length() );
+        byte[] digest = md5.digest();
+
+        return new BigInteger( 1, digest ).toString( 16 );
     }
 
     private void sahreBet(OddHolder oddHolder) {

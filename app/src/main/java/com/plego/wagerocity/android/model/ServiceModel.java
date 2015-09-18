@@ -1,18 +1,10 @@
 package com.plego.wagerocity.android.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import retrofit.Callback;
 import retrofit.client.Response;
-import retrofit.http.GET;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.Query;
+import retrofit.http.*;
+
+import java.util.ArrayList;
 
 
 /**
@@ -71,6 +63,10 @@ public interface ServiceModel {
             @Part("bet_processed") String betProcessed,
             Callback<ArrayList<Pick>> callback
     );
+
+
+    @POST("/betOnGame")
+    public void betOnGames (@Body BetRequestWrapper betRequest);
 
     @GET("/getMyPicks")
     public void getMyPicks(@Query("userId") String userId, Callback<ArrayList<Pick>> callback);

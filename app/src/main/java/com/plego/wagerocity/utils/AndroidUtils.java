@@ -5,24 +5,17 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.plego.wagerocity.R;
-import com.plego.wagerocity.android.WagerocityPref;
-import com.plego.wagerocity.android.activities.DashboardActivity;
 import com.plego.wagerocity.android.fragments.StatsFragment;
-import com.plego.wagerocity.android.model.RestClient;
-import com.plego.wagerocity.android.model.User;
-import com.plego.wagerocity.android.util.IabHelper;
 import com.plego.wagerocity.constants.StringConstants;
-
-import junit.framework.Assert;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -31,16 +24,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import retrofit.Callback;
 import retrofit.RetrofitError;
-import retrofit.client.Response;
-
-import static java.lang.String.valueOf;
 
 /**
  * Created by haris on 11/02/15.
  */
 public class AndroidUtils {
+
+    public static String getText(EditText editText) {
+        Editable text = editText.getText();
+        return text != null ? text.toString() : "";
+    }
 
     public static void printFBKeyHash(Activity activity) {
         try {

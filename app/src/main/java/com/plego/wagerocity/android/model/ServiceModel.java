@@ -1,18 +1,10 @@
 package com.plego.wagerocity.android.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import retrofit.Callback;
 import retrofit.client.Response;
-import retrofit.http.GET;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.Query;
+import retrofit.http.*;
+
+import java.util.ArrayList;
 
 
 /**
@@ -94,8 +86,18 @@ public interface ServiceModel {
     @GET("/getMyPools")
     public void getMyPools(@Query("userId") String userId, Callback<ArrayList<MyPool>> callback);
 
+    @POST("/rizwanPool")
+    void createPool (@Field("userId") String userId, @Field("poolName") String poolName,
+                     @Field("poolMotto") String poolMotto, @Field("poolDesc") String poolDesc, @Field("poolPrivacy")
+                     String poolPrivacy, @Field("poolSize") String poolSize,
+                     @Field("minPeople") String minPeople, @Field("amount") String amount,
+                     @Field("to_date") String to_date,
+                     @Field("from_date") String from_date, @Field("league_id") String leagueId, @Field
+                             ("league_name") String leagueName);
+
+
     @GET("/getGamesOfPlayer")
-    public void getGamesOfPlayer(@Query("playerID") String playerID, @Query("userID") String userID, Callback<ArrayList<Game>> callback);
+    public void getGamesOfPlayer (@Query("playerID") String playerID, @Query("userID") String userID, Callback<ArrayList<Game>> callback);
 
     @Multipart
     @POST("/PurchasePicksOfPlayer")

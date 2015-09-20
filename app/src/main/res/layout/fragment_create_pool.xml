@@ -25,6 +25,7 @@
 		<EditText
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:id="@+id/edt_pool_name"
 				android:layout_marginBottom="@dimen/marginSmall"
 				/>
 
@@ -39,6 +40,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="@dimen/marginSmall"
+				android:id="@+id/edt_pool_motto"
 				/>
 
 		<TextView
@@ -52,10 +54,25 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="@dimen/marginSmall"
+				android:id="@+id/edt_pool_desc"
 				android:singleLine="false"
 				android:lines="3"
 				android:gravity="top"
 				/>
+
+
+		<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/marginTiny"
+				android:text="Select Sport"
+				/>
+
+		<Spinner
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/spinner_sport"
+			></Spinner>
 
 		<TextView
 				android:layout_width="match_parent"
@@ -67,7 +84,9 @@
 		<RadioGroup
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/marginSmall">
+				android:layout_marginBottom="@dimen/marginSmall"
+				android:id="@+id/radio_pool_privacy"
+				>
 
 			<RadioButton
 					android:layout_width="match_parent"
@@ -99,7 +118,9 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"
-				android:layout_marginBottom="@dimen/marginSmall">
+				android:layout_marginBottom="@dimen/marginSmall"
+				android:id="@+id/radio_pool_size"
+				>
 
 			<RadioButton
 					android:layout_width="match_parent"
@@ -133,6 +154,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="@dimen/marginSmall"
+				android:id="@+id/edt_min_pool_size"
 				/>
 
 		<TextView
@@ -147,6 +169,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="@dimen/marginSmall"
 				android:inputType="numberDecimal"
+				android:id="@+id/edt_amount"
 				/>
 
 		<TextView
@@ -160,6 +183,8 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="@dimen/marginSmall"
+				android:inputType="date"
+				android:id="@+id/edt_from_date"
 				/>
 
 		<TextView
@@ -173,8 +198,15 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="@dimen/marginSmall"
-				android:inputType="numberDecimal"
+				android:inputType="date"
+				android:id="@+id/edt_to_date"
 				/>
 
+		<Button
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Create Pool"
+				android:id="@+id/btn_create_pool"
+				/>
 	</LinearLayout>
 </ScrollView>

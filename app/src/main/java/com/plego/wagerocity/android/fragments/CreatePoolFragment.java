@@ -3,6 +3,7 @@ package com.plego.wagerocity.android.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
+import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.utils.AndroidUtils;
 
@@ -22,11 +24,16 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Hassan on 9/15/2015.
  */
 public class CreatePoolFragment extends Fragment {
+
+	public static final String TAG = CreatePoolFragment.class.getSimpleName();
 
 	public static Fragment newInstance () {
 		return new CreatePoolFragment();
@@ -97,6 +104,20 @@ public class CreatePoolFragment extends Fragment {
 		String poolPrivacy = radioGroupPoolPrivacy.getCheckedRadioButtonId() == R.id.radio_open_pool ? "open" : "close";
 		String poolSize = radioGroupPoolSize.getCheckedRadioButtonId() == R.id.radio_unlimited_size ? "UNLIMITED" : "LIMIT";
 		String sportName = sports.get(spinnerSport.getSelectedItemPosition());
-		new RestClient().getApiService().createPool(userId,poolName, poolMotto, poolDesc, poolPrivacy,poolSize, minPoolSize, amount, toDate, fromDate,sportName, sportName);
+		String leagueId = AndroidUtils.getSportsIdForParam(sportName);
+		String leagueName = AndroidUtils.getSportsNameForParam(sportName);
+		new RestClient().getApiService().createPool(userId,poolName, poolMotto, poolDesc, poolPrivacy,poolSize, minPoolSize, amount, toDate, fromDate,leagueId, leagueName, new CreatePoolCallback());
+	}
+
+	private class CreatePoolCallback implements Callback<Pool> {
+		@Override
+		public void success(Pool pool, Response response) {
+			Log.d(TAG, "Pool create successfully: " + response.getBody().toString());
+		}
+
+		@Override
+		public void failure(RetrofitError error) {
+			Log.e(TAG, "Failed to create pool: ", error);
+		}
 	}
 }

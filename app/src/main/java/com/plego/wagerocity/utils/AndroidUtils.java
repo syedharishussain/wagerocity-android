@@ -88,6 +88,29 @@ public class AndroidUtils {
         return "";
     }
 
+    public static String getSportsIdForParam(String sportsName) {
+
+        if (sportsName.equals("NFL")) {
+            return "1";
+        } else if (sportsName.equals("NCAA Football")) {
+            return "2";
+        } else if (sportsName.equals("MLB")) {
+            return "5";
+        } else if (sportsName.equals("NBA")) {
+            return "3";
+        } else if (sportsName.equals("NCAA Basketball")) {
+            return "4";
+        } else if (sportsName.equals("NHL")) {
+            return "7";
+        } else if (sportsName.equals("Soccer")) {
+            return "9";
+        } else if (sportsName.equals("Tennis")) {
+            return "12";
+        }
+
+        return "";
+    }
+
     public static int getDrawableFromLeagueName(String leagueName) {
         if (leagueName == null) {
             return R.drawable.sports;

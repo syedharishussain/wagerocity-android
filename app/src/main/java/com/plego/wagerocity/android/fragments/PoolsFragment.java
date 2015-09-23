@@ -5,14 +5,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.PoolsListAdapter;
 import com.plego.wagerocity.android.model.*;
+import com.plego.wagerocity.utils.AndroidUtils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -35,6 +38,8 @@ public class PoolsFragment extends Fragment {
 
 	private ArrayList<Pool>                    pools;
 	private OnPoolsFragmentInteractionListener mListener;
+	private SweetAlertDialog                   pDialog;
+	private PoolsListAdapter poolsListAdapter;
 
 	public PoolsFragment () {
 		// Required empty public constructor
@@ -44,14 +49,13 @@ public class PoolsFragment extends Fragment {
 	 * Use this factory method to create a new instance of
 	 * this fragment using the provided parameters.
 	 *
-	 * @param pools Parameter 1.
 	 * @return A new instance of fragment PoolsFragment.
 	 */
 	// TODO: Rename and change types and number of parameters
-	public static PoolsFragment newInstance (ArrayList<Pool> pools) {
+	public static PoolsFragment newInstance () {
 		PoolsFragment fragment = new PoolsFragment();
 		Bundle args = new Bundle();
-		args.putParcelableArrayList( ARGS_POOLS, pools );
+//		args.putParcelableArrayList( ARGS_POOLS, pools );
 		fragment.setArguments( args );
 		return fragment;
 	}
@@ -87,10 +91,42 @@ public class PoolsFragment extends Fragment {
 
 		final ListView poolsListView = (ListView) view.findViewById( R.id.listview_pools );
 
-		PoolsListAdapter poolsListAdapter = new PoolsListAdapter( pools, getActivity(), false );
+		poolsListAdapter = new PoolsListAdapter( pools, getActivity(), false );
 
 		poolsListView.setAdapter( poolsListAdapter );
+		getAllPools();
+	}
 
+	private void getAllPools () {
+		pDialog = AndroidUtils.showDialog(
+				getString( R.string.loading ),
+				null,
+				SweetAlertDialog.PROGRESS_TYPE,
+				getActivity()
+		);
+
+		RestClient restClient = new RestClient();
+		restClient.getApiService()
+				.getAllPools( new WagerocityPref( getActivity() ).user().getUserId(), new Callback<ArrayList<Pool>>() {
+					@Override
+					public void success (ArrayList<Pool> pools, retrofit.client.Response response) {
+						pDialog.dismiss();
+						if (pools != null) {
+							PoolsFragment.this.pools.clear();
+							PoolsFragment.this.pools.addAll( pools );
+							poolsListAdapter.notifyDataSetChanged();
+						}
+					}
+
+					@Override
+					public void failure (RetrofitError error) {
+						pDialog.dismiss();
+						Log.e( "getAllPools", String.valueOf( error ) );
+
+						AndroidUtils.showErrorDialog( error, getActivity() );
+					}
+
+				} );
 	}
 
 
@@ -98,7 +134,8 @@ public class PoolsFragment extends Fragment {
 	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate( savedInstanceState );
 		if (getArguments() != null) {
-			this.pools = getArguments().getParcelableArrayList( ARGS_POOLS );
+			pools = new ArrayList<>();
+//			this.pools = getArguments().getParcelableArrayList( ARGS_POOLS );
 		}
 	}
 

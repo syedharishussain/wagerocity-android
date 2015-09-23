@@ -4,29 +4,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-
+import android.view.*;
+import android.widget.*;
+import butterknife.*;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.RestClient;
 import com.plego.wagerocity.utils.AndroidUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Hassan on 9/15/2015.
@@ -106,7 +97,10 @@ public class CreatePoolFragment extends Fragment {
 		String sportName = sports.get(spinnerSport.getSelectedItemPosition());
 		String leagueId = AndroidUtils.getSportsIdForParam(sportName);
 		String leagueName = AndroidUtils.getSportsNameForParam(sportName);
-		new RestClient().getApiService().createPool(userId,poolName, poolMotto, poolDesc, poolPrivacy,poolSize, minPoolSize, amount, toDate, fromDate,leagueId, leagueName, new CreatePoolCallback());
+		new RestClient().getApiService()
+						.createPool( userId, poolName, poolMotto, poolDesc, poolPrivacy, poolSize,
+									 minPoolSize, amount, toDate, fromDate, leagueId, leagueName, "",
+									 new CreatePoolCallback() );
 	}
 
 	private class CreatePoolCallback implements Callback<Pool> {

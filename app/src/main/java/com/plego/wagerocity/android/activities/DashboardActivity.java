@@ -403,31 +403,7 @@ public class DashboardActivity
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_pools_fragment))) {
-
-            pDialog = AndroidUtils.showDialog(
-                    getString(R.string.loading),
-                    null,
-                    SweetAlertDialog.PROGRESS_TYPE,
-                    DashboardActivity.this
-            );
-
-            RestClient restClient = new RestClient();
-            restClient.getApiService().getAllPools(new WagerocityPref(this).user().getUserId(), new Callback<ArrayList<Pool>>() {
-                @Override
-                public void success(ArrayList<Pool> pools, retrofit.client.Response response) {
-                    pDialog.dismiss();
-                    replaceFragment(PoolsFragment.newInstance(pools), StringConstants.TAG_FRAG_POOLS_LIST);
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    pDialog.dismiss();
-                    Log.e("getAllPools", String.valueOf(error));
-
-                    AndroidUtils.showErrorDialog(error, DashboardActivity.this);
-                }
-
-            });
+            replaceFragment( PoolsFragment.newInstance(), StringConstants.TAG_FRAG_POOLS_LIST );
         }
 
         if (uri.toString().equals(getString(R.string.uri_open_experts_fragment))) {

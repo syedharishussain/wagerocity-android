@@ -36,6 +36,10 @@ public class AndroidUtils {
         return text != null ? text.toString() : "";
     }
 
+    public static boolean isEmpty(CharSequence text) {
+        return text == null || text.length() == 0;
+    }
+
     public static void printFBKeyHash(Activity activity) {
         try {
             PackageInfo info = activity.getPackageManager().getPackageInfo(

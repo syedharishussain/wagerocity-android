@@ -107,7 +107,6 @@ public class DashboardActivity
     BillingProcessor bp;
     ArrayList<Pick> showPurchasePicks;
     public boolean shouldShare;
-    EventManager eventManager;
     IabHelper mHelper;
     IInAppBillingService mService;
 

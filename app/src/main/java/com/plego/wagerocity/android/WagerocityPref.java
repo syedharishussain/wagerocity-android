@@ -4,15 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
-import com.google.inject.Inject;
 import com.plego.wagerocity.android.model.User;
-
-import roboguice.inject.ContextSingleton;
 
 /**
  * Created by haris on 23/03/15.
  */
-@ContextSingleton
 public class WagerocityPref {
 
     private static final String WAGEROCITY_PREFS = "wagerocity_prefs";
@@ -21,7 +17,6 @@ public class WagerocityPref {
 
     private String facebookID;
 
-    @Inject
     public WagerocityPref(Context context) {
         this.context = context;
 

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class BetRequestWrapper {
 
-	@SerializedName("no_of_bets")
+	@SerializedName("num_bets")
 	String betCount;
 
 	@SerializedName("res_bets")

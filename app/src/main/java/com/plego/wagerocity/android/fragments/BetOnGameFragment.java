@@ -14,6 +14,7 @@ import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.google.gson.Gson;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityApplication;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.activities.DashboardActivity;
 import com.plego.wagerocity.android.adapters.BetSlipAdapter;
@@ -29,6 +30,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.*;
+
+import javax.inject.Inject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,6 +56,8 @@ public class BetOnGameFragment extends Fragment {
     private static final String ARGS_POOL_ID = "Pool_ID";
     boolean hasParlay = false;
 
+    @Inject
+    ServiceModel serviceModel;
     private ArrayList<OddHolder>                   oddHolders;
     private String                                 poolId;
     private OnBetOnGameFragmentInteractionListener mListener;
@@ -100,6 +105,7 @@ public class BetOnGameFragment extends Fragment {
     public void onViewCreated (final View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated( view, savedInstanceState );
+        WagerocityApplication.component(getActivity()).inject(this);
 
         if (oddHolders.size() == 0) {
             mListener.onBetOnGameGoBackFragmentInteraction();
@@ -131,73 +137,36 @@ public class BetOnGameFragment extends Fragment {
             }
         }
 
-        final String userId = new WagerocityPref( getActivity() ).user().getUserId();
-        final Gson gson = new Gson();
-        List<BetRequest> bets = new ArrayList<>();
-        for (OddHolder oddHolder : oddHolders) {
-            final BetRequest betRequest = new BetRequest();
-            betRequest.setUserId( userId );
-            betRequest.setId( oddHolder.getOddId() );
-            betRequest.setPrice( "1" );
-            betRequest.setName( oddHolder.getTeamVsteam() );
-            betRequest.setPoolId( poolId );
-            betRequest.setMatchId( oddHolder.getTeamId() ); // Replace this with game id
-            betRequest.setPool( "" );
-            betRequest.setIsPoolBet( "0" );
-            betRequest.setPoolName( "" );
-            betRequest.setPos( oddHolder.isTeamA() ? "over" : "under" );
-            betRequest.setOddType( "ao" );
-            betRequest.setMatchDetail( betRequest.getName() );
-            betRequest.setInputStake( "no" );
-            betRequest.setIsBetChecked( oddHolder.getIsChecked() ? "yes" : "no" );
-            betRequest.setOddsValue( oddHolder.getBetTypeSPT().equals( PARLAY ) ? oddHolder.getParlayValue()
-                    .toString() : oddHolder.getOddValue() );
-            betRequest.setStake( String.valueOf( oddHolder.getStake() ) );
-            betRequest.setDetailedTeamName( oddHolder.getTeamName() + " " + betRequest.getOddsValue() );
-            betRequest.setOddTypeInt( oddHolder.getBetOT() );
-            betRequest.setMatchCondition( "" );
-            betRequest.setSportsName( oddHolder.getLeagueName() );
-            try {
-                betRequest.generateRowId();
-            }
-            catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-            bets.add( betRequest );
-        }
-        final BetRequestWrapper wrapper = new BetRequestWrapper();
-        wrapper.setBets( bets );
-        final String request = gson.toJson( wrapper );
-        Log.d( TAG, "Request--> " + request );
+        new BetProcessor( oddHolders ).process();
 
-        if (shareOdd != null) {
-            final OddHolder finalOdd = shareOdd;
-            new SweetAlertDialog( getActivity(), SweetAlertDialog.WARNING_TYPE )
-                    .setTitleText( "Share This With Your Friends!" )
-                    .setContentText( "Earn $250 and Share This on Facebook With Your Friends." )
-                    .setConfirmText( "Yes do it!" )
-                    .setConfirmClickListener( new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick (SweetAlertDialog sDialog) {
-                            sDialog.dismissWithAnimation();
-                            processBet();
-                            ((DashboardActivity) getActivity()).shouldShare = true;
-                            buyCreditsAPI( (float) 250.00 );
-                        }
-                    } )
-                    .setCancelText( "Cancel" )
-                    .setCancelClickListener( new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick (SweetAlertDialog dialog) {
-                            dialog.cancel();
-                            processBet();
-                        }
-                    } )
-                    .showCancelButton( true )
-                    .show();
-        } else {
-            processBet();
-        }
+//        if (shareOdd != null) {
+//            final OddHolder finalOdd = shareOdd;
+//            new SweetAlertDialog( getActivity(), SweetAlertDialog.WARNING_TYPE )
+//                    .setTitleText( "Share This With Your Friends!" )
+//                    .setContentText( "Earn $250 and Share This on Facebook With Your Friends." )
+//                    .setConfirmText( "Yes do it!" )
+//                    .setConfirmClickListener( new SweetAlertDialog.OnSweetClickListener() {
+//                        @Override
+//                        public void onClick (SweetAlertDialog sDialog) {
+//                            sDialog.dismissWithAnimation();
+//                            processBet();
+//                            ((DashboardActivity) getActivity()).shouldShare = true;
+//                            buyCreditsAPI( (float) 250.00 );
+//                        }
+//                    } )
+//                    .setCancelText( "Cancel" )
+//                    .setCancelClickListener( new SweetAlertDialog.OnSweetClickListener() {
+//                        @Override
+//                        public void onClick (SweetAlertDialog dialog) {
+//                            dialog.cancel();
+//                            processBet();
+//                        }
+//                    } )
+//                    .showCancelButton( true )
+//                    .show();
+//        } else {
+//            processBet();
+//        }
     }
 
     private String md5Secret (String... strings) throws NoSuchAlgorithmException {
@@ -621,5 +590,67 @@ public class BetOnGameFragment extends Fragment {
         public void onBetOnGameShareFragmentInteraction (Feed feed);
     }
 
+    private class BetProcessor implements Callback<Response> {
+
+        private List<OddHolder> oddHolders;
+        private int currentIndex = 0;
+
+        public BetProcessor (List<OddHolder> oddHolders) {
+            this.oddHolders = oddHolders;
+        }
+
+        private void process () {
+            if (currentIndex + 1 >= oddHolders.size()) {
+                return;
+            }
+            final String userId = new WagerocityPref( getActivity() ).user().getUserId();
+            final Gson gson = new Gson();
+            int numBets = oddHolders.size();
+            for (OddHolder oddHolder : oddHolders) {
+                final BetRequest betRequest = new BetRequest();
+                betRequest.setId( oddHolder.getOddId() );
+                betRequest.setPoolId( poolId );
+                betRequest.setMatchId( oddHolder.getTeamId() ); // Replace this with game id
+                betRequest.setIsPoolBet( "0" );
+                betRequest.setPoolName( "" );
+                betRequest.setPos( oddHolder.isTeamA() ? "over" : "under" );
+                betRequest.setOddType( "ao" );
+                betRequest.setMatchDetail( oddHolder.getTeamVsteam() );
+                betRequest.setInputStake( "no" );
+                betRequest.setIsBetChecked( oddHolder.getIsChecked() ? "yes" : "no" );
+                betRequest.setOddsValue( oddHolder.getBetTypeSPT().equals( PARLAY ) ? oddHolder.getParlayValue()
+                        .toString() : oddHolder.getOddValue() );
+                betRequest.setStake( String.valueOf( oddHolder.getStake() ) );
+                betRequest.setDetailedTeamName( oddHolder.getTeamName() + " " + betRequest.getOddsValue() );
+                betRequest.setOddTypeInt( oddHolder.getBetOT() );
+                betRequest.setMatchCondition( "" );
+                betRequest.setSportsName( oddHolder.getLeagueName() );
+                betRequest.setUserId( userId );
+                betRequest.setPlaceBetType( "single_bet" );
+                betRequest.setNumBets( String.valueOf( numBets ) );
+
+                serviceModel.betOnGames( betRequest, this );
+                currentIndex += 1;
+                Log.d( TAG, "Request--> " + gson.toJson( betRequest ) );
+            }
+        }
+
+        @Override
+        public void success (Response response, Response response2) {
+            Log.d( TAG, "Successfully processed bet @ " + currentIndex + " with response " +
+                    response.getReason() + " <------->" +
+                    response.getStatus() + " <------->" + response.getBody() );
+            if (currentIndex < oddHolders.size() - 1) {
+                process();
+            } else {
+                Log.d( TAG, "All bets processed" );
+            }
+        }
+
+        @Override
+        public void failure (RetrofitError error) {
+            Log.e( TAG, "Failed to process bet @ " + currentIndex, error );
+        }
+    }
 }
 

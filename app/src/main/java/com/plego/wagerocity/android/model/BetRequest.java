@@ -11,65 +11,57 @@ import java.security.NoSuchAlgorithmException;
  */
 public class BetRequest {
 
-	@SerializedName("rowid")
-	String rowId;        //1520167over1Scotland vs Georgiaao  md5(id,pos+"1",matchDetail,oddType)
+	@SerializedName("odd_id")
 	String id;            //Odd id
-	String price;        //1
-	String name;        // TeamAName vs TeamBName
 	@SerializedName("pool_id")
 	String poolId;
 	@SerializedName("match_id")
 	String matchId;
-
-	@SerializedName("pool")
-	String pool;
-
 	@SerializedName("is_pool_bet")
 	String isPoolBet;    // 0 (NO)| 1(YES)
-
 	@SerializedName("pool_name")
 	String poolName;
-
 	@SerializedName("pos")
 	String pos;            // over|under
-
 	@SerializedName("odd_type")
 	String oddType;            // ao
-
 	@SerializedName("match_det")
 	String matchDetail;        // Same as name
-
 	@SerializedName("input_stake")
 	String inputStake;                // no
-
 	@SerializedName("bet_checked")
 	String isBetChecked;            //yes|no
-
 	@SerializedName("odds_val")
 	String oddsValue;                //oddHolder.getBetTypeSPT().equals( PARLAY ) ? oddHolder.getParlayValue()
 	//.toString() : oddHolder.getOddValue();
-
 	@SerializedName("stake")
 	String stake;                    //oddHolder.getRiskValue();
-
-	@SerializedName("det_team_name")
+	@SerializedName("team_name")
 	String detailedTeamName;        // Team name + oddvalue
-
-	@SerializedName("odd_type_int")
+	@SerializedName("bet_ot")
 	String oddTypeInt;                // 1 moneyline, 3 pointspread, 4 over|under
-
 	@SerializedName("mat_cond")
-	String matchCondition;                // ""
-
-	@SerializedName("sport_name")
+	String matchCondition;                //  EMPTY | FIRST_HALF | SECOND_HALF | GAME
+	@SerializedName("league_name")
 	String sportsName;                    // oddHolder.getLeagueName
-
-	@SerializedName("user_id")
+	@SerializedName("usr_id")
 	String userId;
+	@SerializedName("place_bet_type")
+	String placeBetType;
+	@SerializedName("num_bets")
+	String numBets;
 
-	public void generateRowId () throws NoSuchAlgorithmException {
-		this.rowId = md5( id, pos + "1", matchDetail, oddType );
-	}
+
+//	@SerializedName("rowid")
+//	String rowId;        //1520167over1Scotland vs Georgiaao  md5(id,pos+"1",matchDetail,oddType)
+//	String price;        //1
+//	String name;        // TeamAName vs TeamBName
+//	@SerializedName("pool")
+//	String pool;
+
+//	public void generateRowId () throws NoSuchAlgorithmException {
+//		this.rowId = md5( id, pos + "1", matchDetail, oddType );
+//	}
 
 	private String md5 (String... strings) throws NoSuchAlgorithmException {
 		StringBuilder builder = new StringBuilder();
@@ -83,32 +75,12 @@ public class BetRequest {
 		return new BigInteger( 1, digest ).toString( 16 );
 	}
 
-	public String getRowId () {
-		return rowId;
-	}
-
 	public String getId () {
 		return id;
 	}
 
 	public void setId (String id) {
 		this.id = id;
-	}
-
-	public String getPrice () {
-		return price;
-	}
-
-	public void setPrice (String price) {
-		this.price = price;
-	}
-
-	public String getName () {
-		return name;
-	}
-
-	public void setName (String name) {
-		this.name = name;
 	}
 
 	public String getPoolId () {
@@ -125,14 +97,6 @@ public class BetRequest {
 
 	public void setMatchId (String matchId) {
 		this.matchId = matchId;
-	}
-
-	public String getPool () {
-		return pool;
-	}
-
-	public void setPool (String pool) {
-		this.pool = pool;
 	}
 
 	public String getIsPoolBet () {
@@ -239,11 +203,27 @@ public class BetRequest {
 		this.sportsName = sportsName;
 	}
 
-	public String getUserId () {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId (String userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getPlaceBetType() {
+		return placeBetType;
+	}
+
+	public void setPlaceBetType(String placeBetType) {
+		this.placeBetType = placeBetType;
+	}
+
+	public String getNumBets() {
+		return numBets;
+	}
+
+	public void setNumBets(String numBets) {
+		this.numBets = numBets;
 	}
 }

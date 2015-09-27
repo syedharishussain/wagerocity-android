@@ -1,26 +1,31 @@
-package com.plego.wagerocity.android.model;
+package com.plego.wagerocity.android.services;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.plego.wagerocity.BuildConfig;
+import com.plego.wagerocity.android.model.ServiceModel;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
- * Created by haris on 17/03/15.
+ * Created by Hassan Jawed on 9/27/2015.
  */
-public class RestClient {
+@Module
+@Singleton
+public class ApiModule {
 
-//    private static final String BASE_URL = "http://plego.info/wagerocity_api_v1/api_v1";
-    private ServiceModel apiService;
-
-    public RestClient()
-    {
+    @Provides
+    @Singleton
+    public ServiceModel providesServiceModel() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
                 .create();
@@ -28,18 +33,15 @@ public class RestClient {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setReadTimeout(60 * 1000, TimeUnit.MILLISECONDS);
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+        RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setEndpoint(BuildConfig.BASE_URL)
                 .setClient(new OkClient(okHttpClient))
-                .setConverter(new GsonConverter(gson))
-                .build();
+                .setConverter(new GsonConverter(gson));
+        if (BuildConfig.DEBUG) {
+            builder.setLogLevel(RestAdapter.LogLevel.FULL);
+        }
+        RestAdapter restAdapter = builder.build();
 
-        apiService = restAdapter.create(ServiceModel.class);
-    }
-
-    public ServiceModel getApiService()
-    {
-        return apiService;
+        return restAdapter.create(ServiceModel.class);
     }
 }

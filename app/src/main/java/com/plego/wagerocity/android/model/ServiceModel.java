@@ -66,7 +66,7 @@ public interface ServiceModel {
 
 
     @POST("/betOnGame")
-    public void betOnGames (@Body BetRequestWrapper betRequest);
+    public void betOnGames (@Body BetRequest betRequest, Callback<Response> callback);
 
     @GET("/getMyPicks")
     public void getMyPicks(@Query("userId") String userId, Callback<ArrayList<Pick>> callback);

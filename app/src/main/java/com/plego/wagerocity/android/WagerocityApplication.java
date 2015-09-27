@@ -2,10 +2,9 @@ package com.plego.wagerocity.android;
 
 import android.app.Application;
 import android.content.Context;
-
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.plego.wagerocity.BuildConfig;
-
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -20,9 +19,10 @@ public class WagerocityApplication extends Application {
         super.onCreate();
 
         component = DaggerComponentInitializer.initBase(this);
-        if (!BuildConfig.DEBUG) {
-            Fabric.with(this, new Crashlytics());
-        }
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                .core( new CrashlyticsCore.Builder().disabled( BuildConfig.DEBUG ).build() )
+                .build();
+        Fabric.with(this, crashlyticsKit);
     }
 
     public static BaseComponent component(Context context) {

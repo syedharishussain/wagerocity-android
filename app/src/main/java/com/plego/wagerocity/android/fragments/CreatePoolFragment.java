@@ -5,34 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-
+import android.view.*;
+import android.widget.*;
+import butterknife.*;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityApplication;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.Pool;
-import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.ServiceModel;
 import com.plego.wagerocity.utils.AndroidUtils;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import javax.inject.Inject;
 
 /**
  * Created by Hassan on 9/15/2015.
@@ -66,6 +56,8 @@ public class CreatePoolFragment extends Fragment {
 	@Bind(R.id.spinner_sport)
 	Spinner    spinnerSport;
 	List<String> sports;
+	@Inject
+	ServiceModel serviceModel;
 
 	@Nullable
 	@Override
@@ -85,6 +77,8 @@ public class CreatePoolFragment extends Fragment {
 	public void onViewCreated (View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated( view, savedInstanceState );
 
+		WagerocityApplication.component( getActivity() ).inject( this );
+
 		sports = new ArrayList<>();
 		sports.add( "NFL" );
 		sports.add( "NCAA Football" );
@@ -102,7 +96,8 @@ public class CreatePoolFragment extends Fragment {
 	@OnClick(R.id.edt_from_date)
 	public void showFromDatePicker () {
 		DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-			@Override public void onDateSet (DatePicker datePicker, int year, int month, int day) {
+			@Override
+			public void onDateSet (DatePicker datePicker, int year, int month, int day) {
 				Calendar calendar = Calendar.getInstance();
 				calendar.set( Calendar.YEAR, year );
 				calendar.set( Calendar.MONTH, month );
@@ -175,10 +170,10 @@ public class CreatePoolFragment extends Fragment {
 		String sportName = sports.get( spinnerSport.getSelectedItemPosition() );
 		String leagueId = AndroidUtils.getSportsIdForParam( sportName );
 		String leagueName = AndroidUtils.getSportsNameForParam( sportName );
-		new RestClient().getApiService()
-				.createPool( userId, poolName, poolMotto, poolDesc, poolPrivacy, poolSize,
-						minPoolSize, amount, toDate, fromDate, leagueId, leagueName,
-						new CreatePoolCallback() );
+
+		serviceModel.createPool( userId, poolName, poolMotto, poolDesc, poolPrivacy, poolSize,
+				minPoolSize, amount, toDate, fromDate, leagueId, leagueName, "image1.png",
+				new CreatePoolCallback() );
 	}
 
 	private class CreatePoolCallback implements Callback<Pool> {

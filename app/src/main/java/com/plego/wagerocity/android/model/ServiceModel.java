@@ -1,16 +1,10 @@
 package com.plego.wagerocity.android.model;
 
-import java.util.ArrayList;
-
 import retrofit.Callback;
 import retrofit.client.Response;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
-import retrofit.http.GET;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.Query;
+import retrofit.http.*;
+
+import java.util.ArrayList;
 
 
 /**
@@ -92,15 +86,16 @@ public interface ServiceModel {
     @GET("/getMyPools")
     public void getMyPools(@Query("userId") String userId, Callback<ArrayList<MyPool>> callback);
 
-	@FormUrlEncoded
+    @Multipart
     @POST("/createPool")
-    void createPool (@Field("userId") String userId, @Field("poolName") String poolName,
-                     @Field("poolMotto") String poolMotto, @Field("poolDesc") String poolDesc, @Field("poolPrivacy")
-                     String poolPrivacy, @Field("poolSize") String poolSize,
-                     @Field("minPeople") String minPeople, @Field("amount") String amount,
-                     @Field("to_date") String to_date,
-                     @Field("from_date") String from_date, @Field("league_id") String leagueId, @Field
-                             ("league_name") String leagueName,Callback<Pool> callback);
+    void createPool (@Part("userId") String userId, @Part("poolName") String poolName,
+                     @Part("poolMotto") String poolMotto, @Part("poolDesc") String poolDesc, @Part("poolPrivacy")
+                     String poolPrivacy, @Part("poolSize") String poolSize,
+                     @Part("minPeople") String minPeople, @Part("amount") String amount,
+                     @Part("to_date") String to_date,
+                     @Part("from_date") String from_date, @Part("league_id") String leagueId, @Part
+                             ("league_name") String leagueName, @Part("pool_image") String poolImage, Callback<Pool>
+                             callback);
 
     @GET("/getGamesOfPlayer")
     public void getGamesOfPlayer (@Query("playerID") String playerID, @Query("userID") String userID, Callback<ArrayList<Game>> callback);

@@ -2,13 +2,13 @@ package com.plego.wagerocity.android.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.plego.wagerocity.BuildConfig;
 import com.squareup.okhttp.OkHttpClient;
-
-import java.util.concurrent.TimeUnit;
-
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by haris on 17/03/15.
@@ -29,10 +29,10 @@ public class RestClient {
         okHttpClient.setReadTimeout(60 * 1000, TimeUnit.MILLISECONDS);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setEndpoint(BASE_URL)
-                .setClient(new OkClient(okHttpClient))
-                .setConverter(new GsonConverter(gson))
+                .setLogLevel( RestAdapter.LogLevel.FULL )
+                .setEndpoint( BuildConfig.BASE_URL )
+                .setClient( new OkClient( okHttpClient ) )
+                .setConverter( new GsonConverter( gson ) )
                 .build();
 
         apiService = restAdapter.create(ServiceModel.class);

@@ -42,6 +42,7 @@ public class OddHolder implements Parcelable, Cloneable {
     Integer teaser2;
     Integer teaser3;
     boolean isTeamA;
+    String  matchId;
 
     public OddHolder () {
     }
@@ -66,6 +67,7 @@ public class OddHolder implements Parcelable, Cloneable {
         this.teaserString = "";
         this.isTeamA = isTeamA;
         this.poolCredits = poolCredits;
+        this.matchId = "";
     }
 
     private OddHolder (Parcel in) {
@@ -89,6 +91,7 @@ public class OddHolder implements Parcelable, Cloneable {
         this.teaser2 = (Integer) in.readValue( Integer.class.getClassLoader() );
         this.teaser3 = (Integer) in.readValue( Integer.class.getClassLoader() );
         this.isTeamA = in.readByte() != 0;
+        this.matchId = in.readString();
     }
 
     public Double getPoolCredits() {
@@ -102,6 +105,12 @@ public class OddHolder implements Parcelable, Cloneable {
     public boolean isTeamA() {
         return isTeamA;
     }
+
+    public String getProcessedPos () {
+        return isParlay() ? "" : isTeamA ? "over" : "under";
+    }
+
+    private boolean isParlay () {return betTypeSPT.equalsIgnoreCase( "parlay" );}
 
     public void setTeamA(boolean isTeamA) {
         this.isTeamA = isTeamA;
@@ -183,6 +192,10 @@ public class OddHolder implements Parcelable, Cloneable {
         return betTypeString;
     }
 
+    public String getProcessedOddType () {
+        return isParlay() ? "parley" : "ao";
+    }
+
     public void setBetTypeString(String betTypeString) {
         this.betTypeString = betTypeString;
     }
@@ -205,6 +218,10 @@ public class OddHolder implements Parcelable, Cloneable {
 
     public String getOddId() {
         return oddId;
+    }
+
+    public String getProcessedOddId () {
+        return isParlay() ? "parley_bet" : oddId;
     }
 
     public void setOddId(String oddId) {
@@ -247,8 +264,24 @@ public class OddHolder implements Parcelable, Cloneable {
         return betOT;
     }
 
+    public String getProcessedBetOT () {
+        return isParlay() ? "" : betOT;
+    }
+
     public void setBetOT(String betOT) {
         this.betOT = betOT;
+    }
+
+    public String getProcessedMatchId () {
+        return isParlay() ? "" : teamId;
+    }
+
+    public String getMatchId () {
+        return matchId;
+    }
+
+    public void setMatchId (String matchId) {
+        this.matchId = matchId;
     }
 
     @Override
@@ -283,6 +316,7 @@ public class OddHolder implements Parcelable, Cloneable {
         dest.writeValue(this.teaser2);
         dest.writeValue( this.teaser3 );
         dest.writeByte( isTeamA ? (byte) 1 : (byte) 0 );
+        dest.writeString( matchId );
     }
 }
 

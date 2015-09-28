@@ -600,39 +600,35 @@ public class BetOnGameFragment extends Fragment {
         }
 
         private void process () {
-            if (currentIndex + 1 >= oddHolders.size()) {
-                return;
-            }
             final String userId = new WagerocityPref( getActivity() ).user().getUserId();
             final Gson gson = new Gson();
             int numBets = oddHolders.size();
-            for (OddHolder oddHolder : oddHolders) {
-                final BetRequest betRequest = new BetRequest();
-                betRequest.setId( oddHolder.getOddId() );
-                betRequest.setPoolId( poolId );
-                betRequest.setMatchId( oddHolder.getTeamId() ); // Replace this with game id
-                betRequest.setIsPoolBet( "0" );
-                betRequest.setPoolName( "" );
-                betRequest.setPos( oddHolder.isTeamA() ? "over" : "under" );
-                betRequest.setOddType( "ao" );
-                betRequest.setMatchDetail( oddHolder.getTeamVsteam() );
-                betRequest.setInputStake( "no" );
-                betRequest.setIsBetChecked( oddHolder.getIsChecked() ? "yes" : "no" );
-                betRequest.setOddsValue( oddHolder.getBetTypeSPT().equals( PARLAY ) ? oddHolder.getParlayValue()
-                        .toString() : oddHolder.getOddValue() );
-                betRequest.setStake( String.valueOf( oddHolder.getStake() ) );
-                betRequest.setDetailedTeamName( oddHolder.getTeamName() + " " + betRequest.getOddsValue() );
-                betRequest.setOddTypeInt( oddHolder.getBetOT() );
-                betRequest.setMatchCondition( "" );
-                betRequest.setSportsName( oddHolder.getLeagueName() );
-                betRequest.setUserId( userId );
-                betRequest.setPlaceBetType( "single_bet" );
-                betRequest.setNumBets( String.valueOf( numBets ) );
+            OddHolder oddHolder = oddHolders.get( currentIndex );
+            final BetRequest betRequest = new BetRequest();
+            betRequest.setId( oddHolder.getProcessedOddId() );
+            betRequest.setPoolId( poolId );
+            betRequest.setMatchId( oddHolder.getProcessedMatchId() );
+            betRequest.setIsPoolBet( "0" );
+            betRequest.setPoolName( "" );
+            betRequest.setPos( oddHolder.getProcessedPos() );
+            betRequest.setOddType( oddHolder.getProcessedOddType() );
+            betRequest.setMatchDetail( oddHolder.getTeamVsteam() );
+            betRequest.setInputStake( "no" );
+            betRequest.setIsBetChecked( oddHolder.getIsChecked() ? "yes" : "no" );
+            betRequest.setOddsValue( oddHolder.getBetTypeSPT().equals( PARLAY ) ? oddHolder.getParlayValue()
+                    .toString() : oddHolder.getOddValue() );
+            betRequest.setStake( oddHolder.getRiskValue() );
+            betRequest.setDetailedTeamName( oddHolder.getTeamName() + " " + betRequest.getOddsValue() );
+            betRequest.setOddTypeInt( oddHolder.getProcessedBetOT() );
+            betRequest.setMatchCondition( "" );
+            betRequest.setSportsName( oddHolder.getLeagueName() );
+            betRequest.setUserId( userId );
+            betRequest.setPlaceBetType( "single_bet" );
+            betRequest.setNumBets( String.valueOf( numBets ) );
 
-                serviceModel.betOnGames( betRequest, this );
-                currentIndex += 1;
-                Log.d( TAG, "Request--> " + gson.toJson( betRequest ) );
-            }
+            serviceModel.betOnGames( betRequest, this );
+            currentIndex += 1;
+            Log.d( TAG, "Request--> " + gson.toJson( betRequest ) );
         }
 
         @Override
@@ -640,7 +636,7 @@ public class BetOnGameFragment extends Fragment {
             Log.d( TAG, "Successfully processed bet @ " + currentIndex + " with response " +
                     response.getReason() + " <------->" +
                     response.getStatus() + " <------->" + response.getBody() );
-            if (currentIndex < oddHolders.size() - 1) {
+            if (currentIndex < oddHolders.size()) {
                 process();
             } else {
                 Log.d( TAG, "All bets processed" );

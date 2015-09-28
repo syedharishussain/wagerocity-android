@@ -12,19 +12,19 @@ import java.security.NoSuchAlgorithmException;
 public class BetRequest {
 
 	@SerializedName("odd_id")
-	String id;            //Odd id
+	String id;            //Odd id for parlay "parlay_bet"
 	@SerializedName("pool_id")
 	String poolId;
 	@SerializedName("match_id")
-	String matchId;
+	String matchId;			// matchId, EMPTY for parlay
 	@SerializedName("is_pool_bet")
 	String isPoolBet;    // 0 (NO)| 1(YES)
 	@SerializedName("pool_name")
 	String poolName;
 	@SerializedName("pos")
-	String pos;            // over|under
+	String pos;            // over|under for parlay EMPTY
 	@SerializedName("odd_type")
-	String oddType;            // ao
+	String oddType;            // ao for single and parlay for parlay
 	@SerializedName("match_det")
 	String matchDetail;        // Same as name
 	@SerializedName("input_stake")
@@ -47,7 +47,7 @@ public class BetRequest {
 	@SerializedName("usr_id")
 	String userId;
 	@SerializedName("place_bet_type")
-	String placeBetType;
+	String placeBetType;			// "single_bet"
 	@SerializedName("num_bets")
 	String numBets;
 

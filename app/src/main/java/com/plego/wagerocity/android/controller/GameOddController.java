@@ -97,6 +97,7 @@ public class GameOddController {
 				true,
 				game.getPoolCredits()
 		);
+
 		oddHolderArray.put( id, oddHolder );
 	}
 

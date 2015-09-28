@@ -20,6 +20,7 @@ import com.plego.wagerocity.android.activities.DashboardActivity;
 import com.plego.wagerocity.android.adapters.BetSlipAdapter;
 import com.plego.wagerocity.android.model.*;
 import com.plego.wagerocity.utils.AndroidUtils;
+import com.plego.wagerocity.utils.UiUtils;
 import com.sromku.simple.fb.entities.Feed;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -57,11 +58,16 @@ public class BetOnGameFragment extends Fragment {
     boolean hasParlay = false;
 
     @Inject
-    ServiceModel serviceModel;
+    ServiceModel   serviceModel;
+    @Inject
+    UiUtils        uiUtils;
+    @Inject
+    WagerocityPref prefs;
     private ArrayList<OddHolder>                   oddHolders;
     private String                                 poolId;
     private OnBetOnGameFragmentInteractionListener mListener;
     private OddHolder                              shareOdd;
+    private SweetAlertDialog                       progressAlert;
 
 
     public BetOnGameFragment () {
@@ -105,7 +111,8 @@ public class BetOnGameFragment extends Fragment {
     public void onViewCreated (final View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated( view, savedInstanceState );
-        WagerocityApplication.component(getActivity()).inject(this);
+        WagerocityApplication.component( getActivity() ).inject( this );
+        uiUtils.setContext( getActivity() );
 
         if (oddHolders.size() == 0) {
             mListener.onBetOnGameGoBackFragmentInteraction();
@@ -137,36 +144,34 @@ public class BetOnGameFragment extends Fragment {
             }
         }
 
-        new BetProcessor( oddHolders ).process();
-
-//        if (shareOdd != null) {
-//            final OddHolder finalOdd = shareOdd;
-//            new SweetAlertDialog( getActivity(), SweetAlertDialog.WARNING_TYPE )
-//                    .setTitleText( "Share This With Your Friends!" )
-//                    .setContentText( "Earn $250 and Share This on Facebook With Your Friends." )
-//                    .setConfirmText( "Yes do it!" )
-//                    .setConfirmClickListener( new SweetAlertDialog.OnSweetClickListener() {
-//                        @Override
-//                        public void onClick (SweetAlertDialog sDialog) {
-//                            sDialog.dismissWithAnimation();
-//                            processBet();
-//                            ((DashboardActivity) getActivity()).shouldShare = true;
-//                            buyCreditsAPI( (float) 250.00 );
-//                        }
-//                    } )
-//                    .setCancelText( "Cancel" )
-//                    .setCancelClickListener( new SweetAlertDialog.OnSweetClickListener() {
-//                        @Override
-//                        public void onClick (SweetAlertDialog dialog) {
-//                            dialog.cancel();
-//                            processBet();
-//                        }
-//                    } )
-//                    .showCancelButton( true )
-//                    .show();
-//        } else {
-//            processBet();
-//        }
+        if (shareOdd != null) {
+            final OddHolder finalOdd = shareOdd;
+            new SweetAlertDialog( getActivity(), SweetAlertDialog.WARNING_TYPE )
+                    .setTitleText( "Share This With Your Friends!" )
+                    .setContentText( "Earn $250 and Share This on Facebook With Your Friends." )
+                    .setConfirmText( "Yes do it!" )
+                    .setConfirmClickListener( new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick (SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            startBetProcessor();
+                            ((DashboardActivity) getActivity()).shouldShare = true;
+                            buyCreditsAPI( (float) 250.00 );
+                        }
+                    } )
+                    .setCancelText( "Cancel" )
+                    .setCancelClickListener( new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick (SweetAlertDialog dialog) {
+                            dialog.cancel();
+                            startBetProcessor();
+                        }
+                    } )
+                    .showCancelButton( true )
+                    .show();
+        } else {
+            startBetProcessor();
+        }
     }
 
     private String md5Secret (String... strings) throws NoSuchAlgorithmException {
@@ -284,20 +289,22 @@ public class BetOnGameFragment extends Fragment {
             oddHolder.setTeamId(oddHolders.get(0).getTeamId());
             oddHolder.setOddId(oddHolders.get(0).getOddId());
             oddHolder.setTeamName("Teaser");
-            oddHolder.setTeamVsteam(oddHolders.get(0).getLeagueName().equals("nfl") ? "+6.0 pts " : "+4.0 pts " + firstTeaserValue + "( " + count + " teams )");
-            oddHolder.setOddValue("");
-            oddHolder.setBetTypeSPT(TEASER);
-            oddHolder.setBetOT("1");
-            oddHolder.setBetTypeString("");
-            oddHolder.setPointSpreadString("");
-            oddHolder.setIsChecked(false);
-            oddHolder.setRiskValue("0");
-            oddHolder.setTeaserString(oddHolders.get(0).getLeagueName().equals("nfl") ? "+6.0 pts " : "+4.0 pts " + firstTeaserValue + "( " + count + " teams )");
-            oddHolder.setOddValue(firstTeaserValue);
-            oddHolder.setLeagueName(oddHolders.get(0).getLeagueName());
-            oddHolder.setTeaser1((Integer) map.get(oddHolders.get(0).getLeagueName().equals("nfl") ? 6.0 : 4.0));
-            oddHolder.setTeaser2((Integer) map.get(oddHolders.get(0).getLeagueName().equals("nfl") ? 6.5 : 4.5));
-            oddHolder.setTeaser3((Integer) map.get(oddHolders.get(0).getLeagueName().equals("nfl") ? 7.0 : 5.0));
+            oddHolder.setTeamVsteam( oddHolders.get( 0 ).getLeagueName()
+                    .equals( "nfl" ) ? "+6.0 pts " : "+4.0 pts " + firstTeaserValue + "( " + count + " teams )" );
+            oddHolder.setOddValue( "" );
+            oddHolder.setBetTypeSPT( TEASER );
+            oddHolder.setBetOT( "1" );
+            oddHolder.setBetTypeString( "" );
+            oddHolder.setPointSpreadString( "" );
+            oddHolder.setIsChecked( false );
+            oddHolder.setRiskValue( "0" );
+            oddHolder.setTeaserString( oddHolders.get( 0 ).getLeagueName()
+                    .equals( "nfl" ) ? "+6.0 pts " : "+4.0 pts " + firstTeaserValue + "( " + count + " teams )" );
+            oddHolder.setOddValue( firstTeaserValue );
+            oddHolder.setLeagueName( oddHolders.get( 0 ).getLeagueName() );
+            oddHolder.setTeaser1( (Integer) map.get( oddHolders.get( 0 ).getLeagueName().equals( "nfl" ) ? 6.0 : 4.0 ) );
+            oddHolder.setTeaser2( (Integer) map.get( oddHolders.get( 0 ).getLeagueName().equals( "nfl" ) ? 6.5 : 4.5 ) );
+            oddHolder.setTeaser3( (Integer) map.get( oddHolders.get( 0 ).getLeagueName().equals( "nfl" ) ? 7.0 : 5.0 ) );
 
             oddHolders.add(oddHolder);
         }
@@ -398,6 +405,16 @@ public class BetOnGameFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void startBetProcessor () {
+        progressAlert = uiUtils.showProgressAlert( "Validating Bet.." );
+        BetProcessor betProcessor = new BetProcessor( oddHolders );
+        if (betProcessor.validateBet()) {
+            progressAlert.dismissWithAnimation();
+            progressAlert = uiUtils.showProgressAlert( "Placing Bet.." );
+            betProcessor.process();
+        }
     }
 
     void processBet () {
@@ -532,23 +549,7 @@ public class BetOnGameFragment extends Fragment {
 
                         if (poolId != null) {
                             if (poolId.equals( "0" ) || poolId.equals( "" )) {
-                                restClient.getApiService()
-                                        .consumeCredits( new WagerocityPref( getActivity() ).user().getUserId(),
-                                                Float.parseFloat( stake ),
-                                                new Callback<User>() {
-                                                    @Override
-                                                    public void success (User user, Response response) {
-                                                        Log.e( "Credits Consumed", user.getCredits().toString() );
-                                                        new WagerocityPref( getActivity() ).setUser( user );
-
-                                                        AndroidUtils.updateStats( getActivity() );
-                                                    }
-
-                                                    @Override
-                                                    public void failure (RetrofitError error) {
-
-                                                    }
-                                                } );
+                                asyncConsumeCredits( stake );
                             }
                         }
                     }
@@ -560,6 +561,25 @@ public class BetOnGameFragment extends Fragment {
                 } );
             }
         }
+    }
+
+    private void asyncConsumeCredits (String stake) {
+        serviceModel.consumeCredits( new WagerocityPref( getActivity() ).user().getUserId(),
+                Float.parseFloat( stake ),
+                new Callback<User>() {
+                    @Override
+                    public void success (User user, Response response) {
+                        Log.e( "Credits Consumed", user.getCredits().toString() );
+                        new WagerocityPref( getActivity() ).setUser( user );
+
+                        AndroidUtils.updateStats( getActivity() );
+                    }
+
+                    @Override
+                    public void failure (RetrofitError error) {
+
+                    }
+                } );
     }
 
     public void buyCreditsAPI(Float credits) {
@@ -594,9 +614,45 @@ public class BetOnGameFragment extends Fragment {
 
         private List<OddHolder> oddHolders;
         private int currentIndex = 0;
+        private float riskValue;
 
         public BetProcessor (List<OddHolder> oddHolders) {
             this.oddHolders = oddHolders;
+            calculateStakeAmount();
+        }
+
+        private void calculateStakeAmount () {
+            riskValue = 0;
+            if (oddHolders == null) return;
+            for (OddHolder oddHolder : oddHolders) {
+                riskValue += Float.parseFloat( oddHolder.getRiskValue() );
+            }
+        }
+
+        private boolean validateBet () {
+            Float credits = prefs.user().getCredits();
+            if (credits < riskValue) {
+                if (progressAlert != null && progressAlert.isShowing()) {
+                    progressAlert.dismiss();
+                }
+                uiUtils.showDialog( "Not Enough Credits", "You do not have enough credits to place this bet.", SweetAlertDialog.ERROR_TYPE );
+                return false;
+            }
+
+            if (!AndroidUtils.isEmpty( poolId )) {
+                for (OddHolder oddHolder : oddHolders) {
+                    if (oddHolder.getPoolCredits() < Float.parseFloat( oddHolder.getRiskValue() )) {
+                        if (progressAlert != null && progressAlert.isShowing()) {
+                            progressAlert.dismiss();
+                        }
+                        uiUtils.showDialog( "Not Enough Pool Credits", "You do not have enough pool credits to place this " +
+                                "bet.", SweetAlertDialog.ERROR_TYPE );
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private void process () {
@@ -608,7 +664,7 @@ public class BetOnGameFragment extends Fragment {
             betRequest.setId( oddHolder.getProcessedOddId() );
             betRequest.setPoolId( poolId );
             betRequest.setMatchId( oddHolder.getProcessedMatchId() );
-            betRequest.setIsPoolBet( "0" );
+            betRequest.setIsPoolBet( AndroidUtils.isEmpty( poolId ) ? "0" : "1" );
             betRequest.setPoolName( "" );
             betRequest.setPos( oddHolder.getProcessedPos() );
             betRequest.setOddType( oddHolder.getProcessedOddType() );
@@ -640,11 +696,49 @@ public class BetOnGameFragment extends Fragment {
                 process();
             } else {
                 Log.d( TAG, "All bets processed" );
+                String userId = prefs.user().getUserId();
+                serviceModel.getMyPicks( userId, new Callback<ArrayList<Pick>>() {
+                    @Override
+                    public void success (ArrayList<Pick> picks, Response response) {
+                        if (progressAlert != null && progressAlert.isShowing()) {
+                            progressAlert.dismiss();
+                        }
+
+                        oddHolders.clear();
+                        Collections.sort( picks, new Pick() );
+                        Uri uri = Uri
+                                .parse( getString( R.string.uri_open_my_picks_fragment ) );
+                        mListener.onBetOnGameFragmentInteraction( uri, picks );
+                        boolean shouldShare = ((DashboardActivity) getActivity()).shouldShare;
+
+                        if (shareOdd != null) {
+                            if (shouldShare) {
+                                sahreBet( shareOdd );
+                                ((DashboardActivity) getActivity()).shouldShare = false;
+                                shareOdd = null;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void failure (RetrofitError error) {
+                        if (progressAlert != null && progressAlert.isShowing()) {
+                            progressAlert.dismiss();
+                        }
+                        uiUtils.showErrorDialog( error );
+                        Log.e( "Picks Posting Error", error.toString() );
+                    }
+                } );
             }
+            asyncConsumeCredits( oddHolders.get( currentIndex - 1 ).getRiskValue() );
         }
 
         @Override
         public void failure (RetrofitError error) {
+            if (progressAlert != null && progressAlert.isShowing()) {
+                progressAlert.dismiss();
+            }
+            uiUtils.showErrorDialog( error );
             Log.e( TAG, "Failed to process bet @ " + currentIndex, error );
         }
     }

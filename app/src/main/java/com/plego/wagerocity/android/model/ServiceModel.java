@@ -90,8 +90,19 @@ public interface ServiceModel {
     @GET("/getMyPools")
     public void getMyPools(@Query("userId") String userId, Callback<ArrayList<MyPool>> callback);
 
+    @Multipart
+    @POST("/createPool")
+    void createPool (@Part("userId") String userId, @Part("poolName") String poolName,
+                     @Part("poolMotto") String poolMotto, @Part("poolDesc") String poolDesc, @Part("poolPrivacy")
+                     String poolPrivacy, @Part("poolSize") String poolSize,
+                     @Part("minPeople") String minPeople, @Part("amount") String amount,
+                     @Part("to_date") String to_date,
+                     @Part("from_date") String from_date, @Part("league_id") String leagueId, @Part
+                             ("league_name") String leagueName, @Part("pool_image") String poolImage, Callback<Pool>
+                             callback);
+
     @GET("/getGamesOfPlayer")
-    public void getGamesOfPlayer(@Query("playerID") String playerID, @Query("userID") String userID, Callback<ArrayList<Game>> callback);
+    public void getGamesOfPlayer (@Query("playerID") String playerID, @Query("userID") String userID, Callback<ArrayList<Game>> callback);
 
     @Multipart
     @POST("/PurchasePicksOfPlayer")

@@ -3,6 +3,8 @@ package com.plego.wagerocity.android;
 import com.plego.wagerocity.SystemServiceModule;
 import com.plego.wagerocity.android.fragments.BetOnGameFragment;
 import com.plego.wagerocity.android.services.ApiModule;
+import com.plego.wagerocity.android.fragments.CreatePoolFragment;
+import com.plego.wagerocity.android.services.ApiModule;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -14,5 +16,6 @@ import javax.inject.Singleton;
 @Singleton
 public interface BaseComponent {
 
+	void inject (CreatePoolFragment fragment);
     void inject(BetOnGameFragment fragment);
 }

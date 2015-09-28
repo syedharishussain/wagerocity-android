@@ -2,13 +2,17 @@ package com.plego.wagerocity.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.*;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.EditText;
+
 import android.widget.*;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.plego.wagerocity.R;
@@ -22,10 +26,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.RetrofitError;
+
 /**
  * Created by haris on 11/02/15.
  */
 public class AndroidUtils {
+
+    public static String getText(EditText editText) {
+        Editable text = editText.getText();
+        return text != null ? text.toString() : "";
+    }
+
+    public static boolean isEmpty(CharSequence text) {
+        return text == null || text.length() == 0;
+    }
 
     public static String getText(EditText editText) {
         Editable text = editText.getText();
@@ -83,6 +99,29 @@ public class AndroidUtils {
             return "soccer";
         } else if (sportsName.equals("Tennis")) {
             return "tennis";
+        }
+
+        return "";
+    }
+
+    public static String getSportsIdForParam(String sportsName) {
+
+        if (sportsName.equals("NFL")) {
+            return "1";
+        } else if (sportsName.equals("NCAA Football")) {
+            return "2";
+        } else if (sportsName.equals("MLB")) {
+            return "5";
+        } else if (sportsName.equals("NBA")) {
+            return "3";
+        } else if (sportsName.equals("NCAA Basketball")) {
+            return "4";
+        } else if (sportsName.equals("NHL")) {
+            return "7";
+        } else if (sportsName.equals("Soccer")) {
+            return "9";
+        } else if (sportsName.equals("Tennis")) {
+            return "12";
         }
 
         return "";

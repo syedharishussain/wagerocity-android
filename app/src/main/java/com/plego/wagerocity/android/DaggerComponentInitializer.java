@@ -1,5 +1,7 @@
 package com.plego.wagerocity.android;
 
+import com.plego.wagerocity.android.services.ApiModule;
+
 import com.plego.wagerocity.SystemServiceModule;
 
 /**
@@ -8,8 +10,11 @@ import com.plego.wagerocity.SystemServiceModule;
 public class DaggerComponentInitializer {
 
     public static BaseComponent initBase(WagerocityApplication application) {
-        return DaggerBaseComponent.builder().uiModule(new UiModule(application))
-                .systemServiceModule(new SystemServiceModule(application)).build();
+        return DaggerBaseComponent.builder().uiModule( new UiModule( application ) ).apiModule( new ApiModule() )
+                .build();
+        return DaggerBaseComponent.builder().uiModule( new UiModule( application ) )
+                .apiModule( new ApiModule() )
+                .systemServiceModule( new SystemServiceModule( application ) ).build();
     }
 
 }

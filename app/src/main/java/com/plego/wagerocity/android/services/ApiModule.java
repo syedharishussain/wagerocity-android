@@ -5,16 +5,15 @@ import com.google.gson.GsonBuilder;
 import com.plego.wagerocity.BuildConfig;
 import com.plego.wagerocity.android.model.ServiceModel;
 import com.squareup.okhttp.OkHttpClient;
-
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
+
+import java.util.concurrent.TimeUnit;
+
+import javax.inject.Singleton;
 
 /**
  * Created by Hassan Jawed on 9/27/2015.

@@ -1,6 +1,9 @@
 package com.plego.wagerocity.utils;
 
 import android.app.Application;
+import android.graphics.Color;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import com.plego.wagerocity.R;
 import android.content.Context;
 import android.graphics.Color;
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -64,5 +67,13 @@ public class UiUtils {
         errorDialog.setCancelable(true);
         errorDialog.show();
 
+    }
+
+    public SweetAlertDialog showProgressDialog () {
+        return showDialog(
+                application.getString( R.string.loading ),
+                null,
+                SweetAlertDialog.PROGRESS_TYPE
+        );
     }
 }

@@ -79,121 +79,6 @@ public class DashboardActivity
             mService = IInAppBillingService.Stub.asInterface( service );
         }
     };
-    IabHelper.OnConsumeFinishedListener      mConsumeFinishedListener   =
-            new IabHelper.OnConsumeFinishedListener() {
-                public void onConsumeFinished (Purchase purchase,
-                                               IabResult result) {
-
-                    if (result.isSuccess()) {
-                        Log.i( "Consumed Purchase", purchase.toString() );
-                    } else {
-                        // handle error
-                    }
-                }
-            };
-    IabHelper.OnIabPurchaseFinishedListener  mPurchaseFinishedListener  = new IabHelper.OnIabPurchaseFinishedListener() {
-        @Override
-        public void onIabPurchaseFinished (IabResult result, Purchase info) {
-            Log.e( "IabHelper + Message", result.getMessage() );
-            Log.e( "IabHelper + Info", String.valueOf( info ) );
-
-            if (result.isFailure()) {
-                // Handle error
-
-                return;
-            } else if (info.getSku().equals( StringConstants.IAB_ROOKIE )) {
-                mHelper.consumeAsync( info, mConsumeFinishedListener );
-                buyCreditsAPI( 2000 );
-            } else if (info.getSku().equals( StringConstants.IAB_CHASER )) {
-                mHelper.consumeAsync( info, mConsumeFinishedListener );
-                buyCreditsAPI( 6250 );
-            } else if (info.getSku().equals( StringConstants.IAB_PLAYER )) {
-                mHelper.consumeAsync( info, mConsumeFinishedListener );
-                buyCreditsAPI( 30000 );
-            } else if (info.getSku().equals( StringConstants.IAB_GURU )) {
-                mHelper.consumeAsync( info, mConsumeFinishedListener );
-                buyCreditsAPI( 87500 );
-            } else if (info.getSku().equals( StringConstants.IAB_BAWSE )) {
-                mHelper.consumeAsync( info, mConsumeFinishedListener );
-                buyCreditsAPI( 200000 );
-            } else if (info.getSku().equals( StringConstants.IAB_PURCHASE_PICK )) {
-                mHelper.consumeAsync( info, mConsumeFinishedListener );
-
-                new Handler().postDelayed( new Runnable() {
-                    @Override
-                    public void run () {
-                        replaceFragment( MyPicksFragment
-                                .newInstance( new ArrayList<>( showPurchasePicks ) ), StringConstants.TAG_FRAG_MY_PICKS );
-                    }
-                }, 100 );
-
-                showPurchasePicks = null;
-            } else if (info.getSku().equals( StringConstants.IAB_CLEAR_RECORD )) {
-                mHelper.consumeAsync( info, mConsumeFinishedListener );
-
-                final WagerocityPref pref = new WagerocityPref( DashboardActivity.this );
-
-                final SweetAlertDialog pDialog = AndroidUtils.showDialog(
-                        "Loading",
-                        null,
-                        SweetAlertDialog.PROGRESS_TYPE,
-                        DashboardActivity.this
-                );
-
-                final RestClient restClient = new RestClient();
-                restClient.getApiService().clearRecord( pref.user().getUserId(), new Callback<Response>() {
-                    @Override
-                    public void success (Response response, Response response2) {
-                        restClient.getApiService().getUser( pref.facebookID(), new Callback<User>() {
-                            @Override
-                            public void success (User user, Response response) {
-                                pref.setUser( user );
-                                AndroidUtils.updateStats( DashboardActivity.this );
-                                pDialog.dismiss();
-                            }
-
-                            @Override
-                            public void failure (RetrofitError error) {
-
-                            }
-                        } );
-                    }
-
-                    @Override
-                    public void failure (RetrofitError error) {
-
-                    }
-                } );
-
-            }
-
-        }
-    };
-    IabHelper.QueryInventoryFinishedListener mReceivedInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-        public void onQueryInventoryFinished (IabResult result, Inventory inventory) {
-
-            if (result.isFailure()) {
-                // Handle failure
-            } else {
-                ArrayList<String> skus = new ArrayList<>();
-                skus.add( StringConstants.IAB_ROOKIE );
-                skus.add( StringConstants.IAB_CHASER );
-                skus.add( StringConstants.IAB_PLAYER );
-                skus.add( StringConstants.IAB_GURU );
-                skus.add( StringConstants.IAB_BAWSE );
-                skus.add( StringConstants.IAB_CLEAR_RECORD );
-                skus.add( StringConstants.IAB_PURCHASE_PICK );
-
-                for (String sku : skus) {
-
-                    Purchase purchase = inventory.getPurchase( sku );
-                    if (purchase != null) {
-                        mHelper.consumeAsync( purchase, mConsumeFinishedListener );
-                    }
-                }
-            }
-        }
-    };
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -733,6 +618,11 @@ public class DashboardActivity
                 mPurchaseFinishedListener, purchaseID );
     }
 
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        @Override
+        public void onIabPurchaseFinished(IabResult result, Purchase info) {
+            Log.e("IabHelper + Message", result.getMessage());
+            Log.e("IabHelper + Info", String.valueOf(info));
 
             if (result.isFailure()) {
                 // Handle error

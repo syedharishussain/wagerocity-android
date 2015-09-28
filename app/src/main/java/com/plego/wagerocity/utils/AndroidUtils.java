@@ -2,17 +2,13 @@ package com.plego.wagerocity.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
+import android.content.pm.*;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.EditText;
-
 import android.widget.*;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.plego.wagerocity.R;
@@ -26,22 +22,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
-import retrofit.RetrofitError;
-
 /**
  * Created by haris on 11/02/15.
  */
 public class AndroidUtils {
-
-    public static String getText(EditText editText) {
-        Editable text = editText.getText();
-        return text != null ? text.toString() : "";
-    }
-
-    public static boolean isEmpty(CharSequence text) {
-        return text == null || text.length() == 0;
-    }
 
     public static String getText(EditText editText) {
         Editable text = editText.getText();

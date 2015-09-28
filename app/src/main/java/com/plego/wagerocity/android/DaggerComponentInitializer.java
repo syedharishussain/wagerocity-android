@@ -10,8 +10,6 @@ import com.plego.wagerocity.SystemServiceModule;
 public class DaggerComponentInitializer {
 
     public static BaseComponent initBase(WagerocityApplication application) {
-        return DaggerBaseComponent.builder().uiModule( new UiModule( application ) ).apiModule( new ApiModule() )
-                .build();
         return DaggerBaseComponent.builder().uiModule( new UiModule( application ) )
                 .apiModule( new ApiModule() )
                 .systemServiceModule( new SystemServiceModule( application ) ).build();

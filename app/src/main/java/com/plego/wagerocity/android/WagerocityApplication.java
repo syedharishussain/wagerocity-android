@@ -20,7 +20,7 @@ public class WagerocityApplication extends Application {
 
         component = DaggerComponentInitializer.initBase(this);
         Crashlytics crashlyticsKit = new Crashlytics.Builder()
-                .core( new CrashlyticsCore.Builder().disabled( BuildConfig.DEBUG ).build() )
+                .core( new CrashlyticsCore.Builder().disabled( BuildConfig.ENABLE_CRASHLYTICS ).build() )
                 .build();
         Fabric.with(this, crashlyticsKit);
     }

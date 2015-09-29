@@ -10,6 +10,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.android.vending.billing.IInAppBillingService;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.google.android.gms.common.*;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.*;
@@ -67,7 +68,7 @@ public class DashboardActivity
     EventManager         eventManager;
     IabHelper            mHelper;
     IInAppBillingService mService;
-    ServiceConnection                        mServiceConn               = new ServiceConnection() {
+    ServiceConnection mServiceConn = new ServiceConnection() {
         @Override
         public void onServiceDisconnected (ComponentName name) {
             mService = null;
@@ -79,6 +80,8 @@ public class DashboardActivity
             mService = IInAppBillingService.Stub.asInterface( service );
         }
     };
+
+    private static int REQUEST_GOOGLE_PLAY_RESOLVE = 100;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -153,6 +156,11 @@ public class DashboardActivity
         bindService( serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE );
 
 
+        GoogleApiAvailability instance = GoogleApiAvailability.getInstance();
+        int errorCode = instance.isGooglePlayServicesAvailable( this );
+        if (errorCode != ConnectionResult.SUCCESS) {
+            instance.showErrorDialogFragment( this, errorCode, REQUEST_GOOGLE_PLAY_RESOLVE );
+        }
     }
 
     private void checkForPurchases () {

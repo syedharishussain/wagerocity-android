@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import butterknife.*;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityApplication;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.Pool;
 import com.plego.wagerocity.android.model.ServiceModel;
 import com.plego.wagerocity.utils.AndroidUtils;
+import com.plego.wagerocity.utils.UiUtils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -30,6 +32,7 @@ import javax.inject.Inject;
 public class CreatePoolFragment extends Fragment {
 
 	public static final String TAG = CreatePoolFragment.class.getSimpleName();
+	private SweetAlertDialog progressAlert;
 
 	public static Fragment newInstance () {
 		return new CreatePoolFragment();
@@ -58,6 +61,8 @@ public class CreatePoolFragment extends Fragment {
 	List<String> sports;
 	@Inject
 	ServiceModel serviceModel;
+	@Inject
+	UiUtils      uiUtils;
 
 	@Nullable
 	@Override
@@ -78,6 +83,7 @@ public class CreatePoolFragment extends Fragment {
 		super.onViewCreated( view, savedInstanceState );
 
 		WagerocityApplication.component( getActivity() ).inject( this );
+		uiUtils.setContext( getActivity() );
 
 		sports = new ArrayList<>();
 		sports.add( "NFL" );
@@ -171,6 +177,7 @@ public class CreatePoolFragment extends Fragment {
 		String leagueId = AndroidUtils.getSportsIdForParam( sportName );
 		String leagueName = AndroidUtils.getSportsNameForParam( sportName );
 
+		progressAlert = uiUtils.showProgressAlert( "Creating pool..." );
 		serviceModel.createPool( userId, poolName, poolMotto, poolDesc, poolPrivacy, poolSize,
 				minPoolSize, amount, toDate, fromDate, leagueId, leagueName, "image1.png",
 				new CreatePoolCallback() );
@@ -180,13 +187,15 @@ public class CreatePoolFragment extends Fragment {
 
 		@Override
 		public void success (Pool pool, Response response) {
-			Log.d( TAG,
-					"Pool create successfully: " + response.getBody()
-							.toString() );
+			progressAlert.dismissWithAnimation();
+			uiUtils.showDialog( "Success", "Pool created successfully", SweetAlertDialog.SUCCESS_TYPE );
+			Log.d( TAG, "Pool create successfully: " + response.getBody().toString() );
 		}
 
 		@Override
 		public void failure (RetrofitError error) {
+			progressAlert.dismissWithAnimation();
+			uiUtils.showErrorDialog( error );
 			Log.e( TAG, "Failed to create pool: ", error );
 		}
 	}

@@ -1,9 +1,6 @@
 package com.plego.wagerocity.utils;
 
 import android.app.Application;
-import android.graphics.Color;
-import cn.pedant.SweetAlert.SweetAlertDialog;
-import com.plego.wagerocity.R;
 import android.content.Context;
 import android.graphics.Color;
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -39,7 +36,7 @@ public class UiUtils {
     }
 
     public SweetAlertDialog showProgressAlert (String title) {
-        SweetAlertDialog pDialog = new SweetAlertDialog( context, SweetAlertDialog.PROGRESS_TYPE );
+        SweetAlertDialog pDialog = new SweetAlertDialog( this.context, SweetAlertDialog.PROGRESS_TYPE );
         pDialog.getProgressHelper().setBarColor( Color.parseColor( "#A5DC86" ) );
         pDialog.setTitleText( title );
         pDialog.setCancelable( false );

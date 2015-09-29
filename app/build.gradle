@@ -25,9 +25,9 @@ android {
     lintOptions {
         abortOnError false
     }
-    signingConfigs{
-        staging{
-            storeFile file('staging.keystore.jks')
+    signingConfigs {
+        staging {
+            storeFile file( 'staging.keystore.jks' )
             storePassword 'plego123'
             keyAlias 'Plego'
             keyPassword 'plego123'
@@ -35,19 +35,19 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://api.wagerocity.com\"")
-            buildConfigField("boolean", "ENABLE_CRASHLYTICS", "false")
+            buildConfigField( "String", "BASE_URL", "\"http://api.wagerocity.com\"" )
+            buildConfigField( "boolean", "ENABLE_CRASHLYTICS", "false" )
         }
         staging {
-            buildConfigField("String", "BASE_URL", "\"http://api.wagerocity.com\"")
-            buildConfigField("boolean", "ENABLE_CRASHLYTICS", "true")
+            buildConfigField( "String", "BASE_URL", "\"http://api.wagerocity.com\"" )
+            buildConfigField( "boolean", "ENABLE_CRASHLYTICS", "true" )
             signingConfig signingConfigs.staging
         }
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "BASE_URL", "\"http://api.wagerocity.com\"")
-            buildConfigField("boolean", "ENABLE_CRASHLYTICS", "true")
+            proguardFiles getDefaultProguardFile( 'proguard-android.txt' ), 'proguard-rules.pro'
+            buildConfigField( "String", "BASE_URL", "\"http://api.wagerocity.com\"" )
+            buildConfigField( "boolean", "ENABLE_CRASHLYTICS", "true" )
         }
     }
     compileOptions {
@@ -55,16 +55,27 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/'] } }
-    tasks.findByPath(":libs:facebook:androidJavadocs").enabled = false
+    tasks.findByPath( ":libs:facebook:androidJavadocs" ).enabled = false
 }
 
-repositories { mavenCentral()
-    maven { url 'https://maven.fabric.io/public' } }
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.+'
-    compile 'com.android.support:design:23.+'
+    compile fileTree( dir: 'libs', include: ['*.jar'] )
+    compile project( ':libs:facebook' )
+    compile files( 'libs/simple.facebook.jar' )
+    compile( 'com.crashlytics.sdk.android:crashlytics:2.5.2@aar' ) {
+        transitive = true;
+    }
+
+    apt 'com.google.dagger:dagger-compiler:2.0'
+    provided 'javax.annotation:jsr250-api:1.0'
+    // TODO remove this
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.google.code.gson:gson:2.3'
@@ -75,15 +86,8 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'cn.pedant.sweetalert:library:1.3'
-    compile project(':libs:facebook')
-    compile files('libs/simple.facebook.jar')
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
-        transitive = true;
-    }
-
-    apt 'com.google.dagger:dagger-compiler:2.0'
     compile 'com.google.dagger:dagger:2.0'
-    provided 'javax.annotation:jsr250-api:1.0'
     compile 'com.squareup:otto:1.3.8'
-    compile 'org.roboguice:roboguice:2.0' // TODO remove this
+    compile 'org.roboguice:roboguice:2.0'
+    compile 'com.google.android.gms:play-services-gcm:8.1.0'
 }

@@ -3,8 +3,7 @@ package com.plego.wagerocity.android.activities;
 import android.content.*;
 import android.net.Uri;
 import android.os.*;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.*;
 import android.util.Log;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.android.vending.billing.IInAppBillingService;
@@ -41,7 +40,7 @@ public class DashboardActivity
         GetDollarsFragment.OnGetDollarsFragmentInteractionListener,
         LeaderBoardListFragment.OnLeaderboardListFragmentInteractionListener,
         PoolsFragment.OnPoolsFragmentInteractionListener,
-        MyPoolsFragment.OnMyPoolsFragmentInteractionListener,
+        InteractionListener,
         ExpertsFragment.OnExpertsFragmentInteractionListener,
         SportsListFragment.OnSportsListFragmentInteractionListener,
         GamesListFragment.OnGamesListFragmentInteractionListener,
@@ -168,10 +167,10 @@ public class DashboardActivity
     @Override
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 
-            if (!mHelper.handleActivityResult(requestCode,
-                    resultCode, data)) {
-                super.onActivityResult( requestCode, resultCode, data );
-            }
+        if (!mHelper.handleActivityResult(requestCode,
+                resultCode, data)) {
+            super.onActivityResult( requestCode, resultCode, data );
+        }
 
         simpleFacebook.onActivityResult(this, requestCode, resultCode, data);
 
@@ -417,8 +416,23 @@ public class DashboardActivity
     }
 
     @Override
-    public void onMyPoolsFragmentInteraction(Uri uri) {
+    public void onPoolsFragmentInteraction (Uri uri) {
+        if (uri.toString().equals(getString(R.string.uri_open_my_pools_fragment))) {
+            replaceFragment(MyPoolsFragment.newInstance(), StringConstants.TAG_FRAG_MY_POOLS_LIST);
+        }
+    }
 
+    @Override
+    public void goBack () {
+        getSupportFragmentManager().popBackStackImmediate();
+    }
+
+    @Override
+    public void closeCurrentAndDisplayMyPool (Uri uri) {
+        getSupportFragmentManager().popBackStackImmediate();
+        if (uri.toString().equals( getString( R.string.uri_open_my_pools_fragment ) )) {
+            replaceFragment( MyPoolsFragment.newInstance(), StringConstants.TAG_FRAG_MY_POOLS_LIST );
+        }
     }
 
     @Override

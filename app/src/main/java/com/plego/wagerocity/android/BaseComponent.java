@@ -1,10 +1,10 @@
 package com.plego.wagerocity.android;
 
 import com.plego.wagerocity.SystemServiceModule;
-import com.plego.wagerocity.android.fragments.BetOnGameFragment;
+import com.plego.wagerocity.android.adapters.PoolsListAdapter;
+import com.plego.wagerocity.android.fragments.*;
 import com.plego.wagerocity.android.services.ApiModule;
-import com.plego.wagerocity.android.fragments.CreatePoolFragment;
-import com.plego.wagerocity.android.services.ApiModule;
+import com.plego.wagerocity.android.services.GetUserService;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -18,4 +18,12 @@ public interface BaseComponent {
 
 	void inject (CreatePoolFragment fragment);
     void inject(BetOnGameFragment fragment);
+
+	void inject (PoolsListAdapter adapter);
+
+	void inject (PoolsFragment fragment);
+
+	void inject (MyPoolsFragment fragment);
+
+	void inject (GetUserService service);
 }

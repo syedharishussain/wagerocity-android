@@ -36,18 +36,18 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"http://api.wagerocity.com\"")
-            buildConfigField("boolean", "ENABLE_CRASHLYTICS", "false")
+            buildConfigField("boolean", "DISBLE_CRASHLYTICS", "true")
         }
         staging {
             buildConfigField("String", "BASE_URL", "\"http://api.wagerocity.com\"")
-            buildConfigField("boolean", "ENABLE_CRASHLYTICS", "true")
+            buildConfigField("boolean", "DISBLE_CRASHLYTICS", "false")
             signingConfig signingConfigs.staging
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BASE_URL", "\"http://api.wagerocity.com\"")
-            buildConfigField("boolean", "ENABLE_CRASHLYTICS", "true")
+            buildConfigField("boolean", "DISBLE_CRASHLYTICS", "false")
         }
     }
     compileOptions {

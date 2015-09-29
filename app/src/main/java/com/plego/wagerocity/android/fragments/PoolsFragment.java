@@ -12,15 +12,22 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityApplication;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.PoolsListAdapter;
+import com.plego.wagerocity.android.controller.events.*;
 import com.plego.wagerocity.android.model.*;
+import com.plego.wagerocity.android.services.GetUserService;
 import com.plego.wagerocity.utils.AndroidUtils;
+import com.plego.wagerocity.utils.UiUtils;
+import com.squareup.otto.Subscribe;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +46,17 @@ public class PoolsFragment extends Fragment {
 	private ArrayList<Pool>                    pools;
 	private OnPoolsFragmentInteractionListener mListener;
 	private SweetAlertDialog                   pDialog;
-	private PoolsListAdapter poolsListAdapter;
+	private PoolsListAdapter                   poolsListAdapter;
+	@Inject
+	EventFactory   eventFactory;
+	@Inject
+	ServiceModel   serviceModel;
+	@Inject
+	UiUtils        uiUtils;
+	@Inject
+	WagerocityPref wagerocityPref;
+	private SweetAlertDialog progressAlert;
+
 
 	public PoolsFragment () {
 		// Required empty public constructor
@@ -61,31 +78,30 @@ public class PoolsFragment extends Fragment {
 	}
 
 	@Override
+	public void onResume () {
+		super.onResume();
+		eventFactory.register( this );
+	}
+
+	@Override
+	public void onPause () {
+		super.onPause();
+		eventFactory.unregister( this );
+	}
+
+	@Override
 	public void onViewCreated (View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated( view, savedInstanceState );
+
+		WagerocityApplication.component( getActivity() ).inject( this );
+		uiUtils.setContext( getActivity() );
 
 		Button showMyPoolsButton = (Button) view.findViewById( R.id.button_show_my_pools );
 		showMyPoolsButton.setOnClickListener( new View.OnClickListener() {
 			@Override
 			public void onClick (View v) {
-
-				RestClient restClient = new RestClient();
-				restClient.getApiService().getMyPools( new WagerocityPref( getActivity() ).user()
-						.getUserId(), new Callback<ArrayList<MyPool>>() {
-					@Override
-					public void success (ArrayList<MyPool> myPools, Response response) {
-
-						Uri uri = Uri.parse( getString( R.string.uri_open_my_pools_fragment ) );
-						mListener.onPoolsFragmentInteraction( uri, myPools );
-
-					}
-
-					@Override
-					public void failure (RetrofitError error) {
-
-					}
-				} );
-
+				Uri uri = Uri.parse( getString( R.string.uri_open_my_pools_fragment ) );
+				mListener.onPoolsFragmentInteraction( uri );
 			}
 		} );
 
@@ -154,6 +170,47 @@ public class PoolsFragment extends Fragment {
 		super.onDestroyView();
 	}
 
+	@Subscribe
+	public void handlePoolItemAction (OnItemEvent itemEvent) {
+		if (itemEvent.getAction() == Action.JOIN_POOL) {
+			final Pool pool = pools.get( itemEvent.getData() );
+			if (Integer.parseInt( pool.getAmount() ) > 0) {
+				String content = "$" + pool
+						.getAmount() + " will be deducted from your account, do you still want to join?";
+				uiUtils.showWarningAlert( "Are you sure?", content, new SweetAlertDialog.OnSweetClickListener() {
+					@Override
+					public void onClick (SweetAlertDialog sweetAlertDialog) {
+						sweetAlertDialog.dismissWithAnimation();
+						joinPool( pool );
+					}
+				} );
+			} else {
+				joinPool( pool );
+			}
+		}
+	}
+
+	private void joinPool(Pool pool) {
+		progressAlert = uiUtils.showProgressAlert( "Loading" );
+		String userId = wagerocityPref.user().getUserId();
+		String poolId = pool.getPoolId();
+		serviceModel.joinPool( userId, poolId, new Callback<ArrayList<Pool>>() {
+			@Override
+			public void success (ArrayList<Pool> pools, Response response) {
+				new GetUserService( getActivity() ).get();
+				progressAlert.dismiss();
+				Uri uri = Uri.parse( getString( R.string.uri_open_my_pools_fragment ) );
+				mListener.onPoolsFragmentInteraction( uri );
+			}
+
+			@Override
+			public void failure (RetrofitError error) {
+				progressAlert.dismiss();
+				uiUtils.showErrorDialog( error );
+			}
+		} );
+	}
+
 	@OnClick(R.id.btn_create_pool)
 	public void showCreatePool () {
 		mListener.onPoolsFragmentInteraction( Uri.parse( getString( R.string.uri_open_create_pool ) ), null );
@@ -191,6 +248,7 @@ public class PoolsFragment extends Fragment {
 
 		// TODO: Update argument type and name
 		public void onPoolsFragmentInteraction (Uri uri, ArrayList<MyPool> pools);
+		public void onPoolsFragmentInteraction (Uri uri);
 	}
 
 }

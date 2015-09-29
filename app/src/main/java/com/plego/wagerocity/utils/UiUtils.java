@@ -44,8 +44,7 @@ public class UiUtils {
         return pDialog;
     }
 
-    public void showErrorDialog (RetrofitError error) {
-
+    public SweetAlertDialog showErrorDialog (RetrofitError error) {
         Boolean isTimedOut = (error.getKind() == RetrofitError.Kind.NETWORK);
         String errorTitle = isTimedOut ? "Error!" : "Error!";
         String errorMessage = isTimedOut ?
@@ -58,12 +57,12 @@ public class UiUtils {
                                 "Something went wrong! Please try again later" ;
 
         SweetAlertDialog errorDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
-        errorDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        errorDialog.getProgressHelper().setBarColor( Color.parseColor( "#A5DC86" ) );
         errorDialog.setTitleText( errorTitle );
         errorDialog.setContentText( errorMessage );
-        errorDialog.setCancelable(true);
+        errorDialog.setCancelable( true );
         errorDialog.show();
-
+        return errorDialog;
     }
 
     public SweetAlertDialog showProgressDialog () {
@@ -72,5 +71,17 @@ public class UiUtils {
                 null,
                 SweetAlertDialog.PROGRESS_TYPE
         );
+    }
+
+    public SweetAlertDialog showWarningAlert (String title, String content, SweetAlertDialog.OnSweetClickListener confirmCallback) {
+        SweetAlertDialog warningAlert = new SweetAlertDialog( context, SweetAlertDialog.WARNING_TYPE )
+                .setTitleText( title )
+                .setContentText( content )
+                .setConfirmText( "Yes!" )
+                .setConfirmClickListener( confirmCallback )
+                .setCancelText( "Cancel" )
+                .showCancelButton( true );
+        warningAlert.show();
+        return warningAlert;
     }
 }

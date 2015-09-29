@@ -1,6 +1,8 @@
 package com.plego.wagerocity.android.fragments;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,7 +34,8 @@ import javax.inject.Inject;
 public class CreatePoolFragment extends Fragment {
 
 	public static final String TAG = CreatePoolFragment.class.getSimpleName();
-	private SweetAlertDialog progressAlert;
+	private SweetAlertDialog    progressAlert;
+	private InteractionListener mListener;
 
 	public static Fragment newInstance () {
 		return new CreatePoolFragment();
@@ -183,12 +186,31 @@ public class CreatePoolFragment extends Fragment {
 				new CreatePoolCallback() );
 	}
 
+	@Override
+	public void onAttach (Activity activity) {
+		super.onAttach( activity );
+		try {
+			mListener = (InteractionListener) activity;
+		}
+		catch (ClassCastException e) {
+			throw new ClassCastException( activity.toString()
+					+ " must implement OnPoolsFragmentInteractionListener" );
+		}
+	}
+
+	@Override
+	public void onDetach () {
+		super.onDetach();
+		mListener = null;
+	}
+
 	private class CreatePoolCallback implements Callback<Pool> {
 
 		@Override
 		public void success (Pool pool, Response response) {
 			progressAlert.dismissWithAnimation();
-			uiUtils.showDialog( "Success", "Pool created successfully", SweetAlertDialog.SUCCESS_TYPE );
+			Uri uri = Uri.parse( getString( R.string.uri_open_my_pools_fragment ) );
+			mListener.closeCurrentAndDisplayMyPool( uri );
 			Log.d( TAG, "Pool create successfully: " + response.getBody().toString() );
 		}
 

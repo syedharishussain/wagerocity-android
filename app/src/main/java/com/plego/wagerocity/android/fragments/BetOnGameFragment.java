@@ -19,6 +19,7 @@ import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.activities.DashboardActivity;
 import com.plego.wagerocity.android.adapters.BetSlipAdapter;
 import com.plego.wagerocity.android.model.*;
+import com.plego.wagerocity.android.services.GetUserService;
 import com.plego.wagerocity.utils.AndroidUtils;
 import com.plego.wagerocity.utils.UiUtils;
 import com.sromku.simple.fb.entities.Feed;
@@ -729,6 +730,7 @@ public class BetOnGameFragment extends Fragment {
                         Log.e( "Picks Posting Error", error.toString() );
                     }
                 } );
+                new GetUserService( getActivity() ).get();
             }
 //            asyncConsumeCredits( oddHolders.get( currentIndex - 1 ).getRiskValue() );
         }

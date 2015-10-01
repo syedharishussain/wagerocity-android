@@ -730,7 +730,7 @@ public class BetOnGameFragment extends Fragment {
                     }
                 } );
             }
-            asyncConsumeCredits( oddHolders.get( currentIndex - 1 ).getRiskValue() );
+//            asyncConsumeCredits( oddHolders.get( currentIndex - 1 ).getRiskValue() );
         }
 
         @Override

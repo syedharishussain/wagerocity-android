@@ -230,15 +230,14 @@ public class BetSlipAdapter extends BaseAdapter {
                 }
 
                 if (oddHolder.getBetTypeSPT().equals(PARLAY)) {
-                    Double value = Double.parseDouble(s.toString());
+                    float value = Float.parseFloat( s.toString() );
+                    result = AndroidUtils.getParlayWinAmount( value, oddHolder.getParlayValue() );
 
-                    result = oddHolder.getParlayValue() * value;
+                    viewHolder.toWin.setText( String.valueOf( f.format( result ) ) );
 
-                    viewHolder.toWin.setText(String.valueOf(f.format(result)));
+                    oddHolder.setRiskValue( f.format( Double.parseDouble( s.toString() ) ) );
 
-                    oddHolder.setRiskValue(f.format(Double.parseDouble(s.toString())));
-
-                    oddHolders.set(position, oddHolder);
+                    oddHolders.set( position, oddHolder );
                 } else {
 
                     Double value = Double.parseDouble(s.toString());

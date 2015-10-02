@@ -148,6 +148,10 @@ public class AndroidUtils {
         return "";
     }
 
+    public static float getParlayWinAmount (float value, double odds) {
+        return (float) ( value * odds );
+    }
+
     public static int getToWinAmount(double value, double betOddValue) {
         Double result;
         if (betOddValue > 0) {

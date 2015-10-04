@@ -1,34 +1,22 @@
 package com.plego.wagerocity.android.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
-import com.plego.wagerocity.android.model.ExpertPlayer;
-import com.plego.wagerocity.android.model.Game;
-import com.plego.wagerocity.android.model.LeaderboardPlayer;
-import com.plego.wagerocity.android.model.Pick;
-import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.*;
 import com.plego.wagerocity.utils.AndroidUtils;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 /**
  * Created by haris on 06/04/15.
@@ -72,66 +60,65 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
         final LeaderboardPlayer leaderboardPlayer = this.leaderboardPlayers.get(position);
 //        if (convertView == null) {
 
-            viewHolder = new ViewHolder();
+        viewHolder = new ViewHolder();
 
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            convertView = inflater.inflate(R.layout.layout_cell_leaderboard_users, parent, false);
+        convertView = inflater.inflate(R.layout.layout_cell_leaderboard_users, parent, false);
 
-            viewHolder.textViewPlayerName = (TextView) convertView.findViewById(R.id.textview_leaderboard_user_name);
-            viewHolder.textViewPlayeRank = (TextView) convertView.findViewById(R.id.textView_leaderboard_cell_rank);
-            viewHolder.textViewUserStats = (TextView) convertView.findViewById(R.id.textview_leaderboard_user_stats);
-            viewHolder.imageViewUserImage = (ImageView) convertView.findViewById(R.id.imageview_leaderboard_user);
-            viewHolder.button = (Button) convertView.findViewById(R.id.button_leaderboard_user_buy_picks);
-            viewHolder.follow = (Button) convertView.findViewById(R.id.button_leaderboard_follow_unfollow);
+        viewHolder.textViewPlayerName = (TextView) convertView.findViewById(R.id.textview_leaderboard_user_name);
+        viewHolder.textViewPlayeRank = (TextView) convertView.findViewById(R.id.textView_leaderboard_cell_rank);
+        viewHolder.textViewUserStats = (TextView) convertView.findViewById(R.id.textview_leaderboard_user_stats);
+        viewHolder.imageViewUserImage = (ImageView) convertView.findViewById(R.id.imageview_leaderboard_user);
+        viewHolder.button = (Button) convertView.findViewById(R.id.button_leaderboard_user_buy_picks);
+        viewHolder.follow = (Button) convertView.findViewById(R.id.button_leaderboard_follow_unfollow);
 
-            if (Integer.parseInt(leaderboardPlayer.getTotalPicks()) == 0) {
-                viewHolder.button.setEnabled(false);
-                viewHolder.button.setBackgroundResource(R.drawable.blue_button_grey);
+        boolean enableBuyPicks = Integer.parseInt( leaderboardPlayer.getTotalPicks() ) > 0;
+        viewHolder.button.setEnabled( enableBuyPicks );
+        viewHolder.button.setBackgroundResource( enableBuyPicks ? R.drawable.blue_button_small : R.drawable
+                .blue_button_grey );
+
+        boolean isFollowing = leaderboardPlayer.getIsFollowing();
+        viewHolder.follow.setText( isFollowing ? "Unfollow" : "Follow" );
+        viewHolder.follow
+                .setBackgroundResource( isFollowing ? R.drawable.blue_button_grey : R.drawable.blue_button_small );
+
+        viewHolder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LeaderboardPlayer player = leaderboardPlayers.get(position);
+
+                final SweetAlertDialog pDialog = AndroidUtils.showDialog(
+                        "Loading",
+                        null,
+                        SweetAlertDialog.PROGRESS_TYPE,
+                        context
+                );
+
+                RestClient restClient = new RestClient();
+
+                restClient.getApiService().getGamesOfPlayer(
+                        player.getUsrId(),
+                        new WagerocityPref(context).user().getUserId(),
+                        new Callback<ArrayList<Game>>() {
+                            @Override
+                            public void success(ArrayList<Game> games, Response response) {
+                                pDialog.dismiss();
+                                Uri uri = Uri.parse(context.getString(R.string.uri_open_picks_of_player_fragment));
+                                mListner.onLeaderboardPlayerListAdapterFragmentInteraction(uri, games);
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                pDialog.dismiss();
+                                AndroidUtils.showErrorDialog(error, context);
+                            }
+                        });
+
             }
-
-        if (leaderboardPlayer.getIsFollowing()) {
-            viewHolder.follow.setText("Unfollow");
-        } else {
-            viewHolder.follow.setText("Follow");
-        }
-
-            viewHolder.button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    LeaderboardPlayer player = leaderboardPlayers.get(position);
-
-                    final SweetAlertDialog pDialog = AndroidUtils.showDialog(
-                            "Loading",
-                            null,
-                            SweetAlertDialog.PROGRESS_TYPE,
-                            context
-                    );
-
-                    RestClient restClient = new RestClient();
-
-                    restClient.getApiService().getGamesOfPlayer(
-                            player.getUsrId(),
-                            new WagerocityPref(context).user().getUserId(),
-                            new Callback<ArrayList<Game>>() {
-                                @Override
-                                public void success(ArrayList<Game> games, Response response) {
-                                    pDialog.dismiss();
-                                    Uri uri = Uri.parse(context.getString(R.string.uri_open_picks_of_player_fragment));
-                                    mListner.onLeaderboardPlayerListAdapterFragmentInteraction(uri, games);
-                                }
-
-                                @Override
-                                public void failure(RetrofitError error) {
-                                    pDialog.dismiss();
-                                    AndroidUtils.showErrorDialog(error, context);
-                                }
-                            });
-
-                }
-            });
+        });
 
         final ViewHolder finalViewHolder = viewHolder;
         viewHolder.follow.setOnClickListener(new View.OnClickListener() {
@@ -139,21 +126,21 @@ public class LeaderboardPlayersListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 RestClient restClient = new RestClient();
                 if (leaderboardPlayer.getIsFollowing()) {
-                        restClient.getApiService().unfollowPlayer(
-                                new WagerocityPref(context).user().getUserId(),
-                                leaderboardPlayer.getUsrId(),
-                                new Callback<Response>() {
-                            @Override
-                            public void success(Response response, Response response2) {
-                                finalViewHolder.follow.setText("Follow");
-                                leaderboardPlayer.setIsFollowing(false);
-                            }
+                    restClient.getApiService().unfollowPlayer(
+                            new WagerocityPref(context).user().getUserId(),
+                            leaderboardPlayer.getUsrId(),
+                            new Callback<Response>() {
+                                @Override
+                                public void success(Response response, Response response2) {
+                                    finalViewHolder.follow.setText("Follow");
+                                    leaderboardPlayer.setIsFollowing(false);
+                                }
 
-                            @Override
-                            public void failure(RetrofitError error) {
+                                @Override
+                                public void failure(RetrofitError error) {
 
-                            }
-                        });
+                                }
+                            });
                 } else {
                     restClient.getApiService().followPlayer(
                             new WagerocityPref(context).user().getUserId(),

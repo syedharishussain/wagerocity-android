@@ -7,25 +7,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
+import android.view.*;
+import android.widget.*;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.plego.wagerocity.R;
-import com.plego.wagerocity.android.WagerocityPref;
-import com.plego.wagerocity.android.model.RestClient;
-import com.plego.wagerocity.android.model.User;
+import com.plego.wagerocity.android.services.GetUserService;
 import com.plego.wagerocity.constants.StringConstants;
-import com.plego.wagerocity.utils.AndroidUtils;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -143,6 +131,7 @@ public class DashboardFragment extends Fragment implements BillingProcessor.IBil
                 Log.v("Test", getString(R.string.uri_open_sports_list_fragment));
                 Uri uri = Uri.parse(getString(R.string.uri_open_sports_list_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
+				new GetUserService( getActivity() ).get();
             }
         });
 
@@ -163,6 +152,7 @@ public class DashboardFragment extends Fragment implements BillingProcessor.IBil
                 Log.v("Test", getString(R.string.uri_open_my_picks_fragment));
                 Uri uri = Uri.parse(getString(R.string.uri_open_my_picks_fragment));
                 mListener.onDashboardFragmentInteraction(uri);
+				new GetUserService( getActivity() ).get();
             }
         });
 

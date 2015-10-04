@@ -105,8 +105,8 @@ public class NewGamesListAdapter extends BaseAdapter {
 		viewHolder.cbPSB.setTag( position );
 		viewHolder.cbMLA.setTag( position );
 		viewHolder.cbMLB.setTag( position );
-		viewHolder.cbOA.setTag( position );
-		viewHolder.cbUA.setTag( position );
+		viewHolder.cbOA.setTag(position);
+		viewHolder.cbUA.setTag(position);
 
 		final SparseArray<Boolean> checkedArray = gameOddController.getCheckedArray();
 		viewHolder.cbPSA.setChecked( checkedArray.get( viewHolder.cbPSA.getId(), false ) );
@@ -115,6 +115,7 @@ public class NewGamesListAdapter extends BaseAdapter {
 		viewHolder.cbMLB.setChecked( checkedArray.get( viewHolder.cbMLB.getId(), false ) );
 		viewHolder.cbOA.setChecked( checkedArray.get( viewHolder.cbOA.getId(), false ) );
 		viewHolder.cbUA.setChecked( checkedArray.get( viewHolder.cbUA.getId(), false ) );
+        viewHolder.tvOU.setText(context.getResources().getString(R.string.text_over_under_value, game.getTeamAOdd().getTotalMid()));
 
 		viewHolder.textViewTeamA.setText( game.getTeamAFullname() );
 		viewHolder.textViewTeamB.setText( game.getTeamBFullname() );

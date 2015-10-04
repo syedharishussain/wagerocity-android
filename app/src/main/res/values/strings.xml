@@ -45,6 +45,7 @@
     <string name="in_app_billing_rookie">com.wagerocity.rookie</string>
     <string name="title_create_pool">Create Pool</string>
     <string name="uri_open_create_pool">create pool</string>
+    <string name="text_over_under_value">Over\nO | %s | U\nUnder</string>
 
     <string-array name="leaderboard_filters">
         <item>All Leaderboards</item>

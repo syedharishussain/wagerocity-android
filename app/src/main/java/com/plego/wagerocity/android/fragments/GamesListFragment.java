@@ -15,7 +15,9 @@ import com.plego.wagerocity.android.adapters.NewGamesListAdapter;
 import com.plego.wagerocity.android.controller.GameOddController;
 import com.plego.wagerocity.android.model.Game;
 import com.plego.wagerocity.android.model.OddHolder;
+import com.plego.wagerocity.utils.AndroidUtils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +107,13 @@ public class GamesListFragment extends Fragment {
 
         List<GameOddController> controllers = new ArrayList<>();
         for (Game game : games) {
+            try {
+                boolean isMatchStarted = AndroidUtils.isCstPastTime( game.getCstStartTime() );
+                if (isMatchStarted) continue;
+            }
+            catch (ParseException e) {
+                e.printStackTrace();
+            }
             controllers.add( new GameOddController( sportsName, game ) );
         }
 

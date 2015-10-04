@@ -20,7 +20,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by haris on 11/02/15.
@@ -34,6 +34,21 @@ public class AndroidUtils {
 
     public static boolean isEmpty(CharSequence text) {
         return text == null || text.length() == 0;
+    }
+
+    public static boolean isCstPastTime (String cstTime) throws ParseException {
+        //CST to UTC
+        SimpleDateFormat cstFormatter = new SimpleDateFormat( "yyyy-MM-dd kk:mm:ss" );
+        Calendar cstUtcTime = Calendar.getInstance();
+        cstUtcTime.setTime( cstFormatter.parse( cstTime ) );
+        cstUtcTime.add( Calendar.HOUR_OF_DAY, 6 );
+
+        // current to UTC
+        Calendar currentTime = Calendar.getInstance();
+        int offset = TimeZone.getDefault().getOffset( currentTime.getTimeInMillis() );
+        currentTime.setTimeInMillis( currentTime.getTimeInMillis() - offset );
+
+        return cstUtcTime.before( currentTime );
     }
 
     public static void printFBKeyHash(Activity activity) {
@@ -206,7 +221,7 @@ public class AndroidUtils {
                 "Fetching results taking too much time. Please try again later." :
                 (error.getLocalizedMessage() != null) ?
                         (error.getLocalizedMessage().equals("404 Not Found")) ? "No Records Found." :
-                        error.getLocalizedMessage() :
+                                error.getLocalizedMessage() :
                         (error.getMessage() != null)  ?
                                 error.getMessage() :
                                 "Something went wrong! Please try again later" ;

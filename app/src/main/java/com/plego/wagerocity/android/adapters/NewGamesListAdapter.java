@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.controller.GameOddController;
 import com.plego.wagerocity.android.model.Game;
+import com.plego.wagerocity.android.model.Odd;
 import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.text.ParseException;
@@ -63,24 +64,17 @@ public class NewGamesListAdapter extends BaseAdapter {
 			viewHolder = new ViewHolder( convertView );
 			convertView.setTag( viewHolder );
 
-			viewHolder.cbPSA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
-			viewHolder.cbPSB.setOnCheckedChangeListener( new CheckChangeListener( position ) );
-			viewHolder.cbMLA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
-			viewHolder.cbMLB.setOnCheckedChangeListener( new CheckChangeListener( position ) );
-			viewHolder.cbOA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
-			viewHolder.cbUA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+			viewHolder.cbPointSpreadA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+			viewHolder.cbPointSpreadB.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+			viewHolder.cbMoneyLineA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+			viewHolder.cbMoneyLineB.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+			viewHolder.cbOverTeamA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
+			viewHolder.cbUnderTeamA.setOnCheckedChangeListener( new CheckChangeListener( position ) );
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
 		if (game == null) return convertView;
-
-		gameOddController.addPointSpreadA( viewHolder.cbPSA.getId() );
-		gameOddController.addPointSpreadB( viewHolder.cbPSB.getId() );
-		gameOddController.addMoneyLineA( viewHolder.cbMLA.getId() );
-		gameOddController.addMoneyLineB( viewHolder.cbMLB.getId() );
-		gameOddController.addOverTeamA( viewHolder.cbOA.getId() );
-		gameOddController.addUnderTeamA( viewHolder.cbUA.getId() );
 
 		if (sportsName.equals( "mlb" )) {
 			viewHolder.teamAPitcher.setVisibility( View.VISIBLE );
@@ -89,41 +83,55 @@ public class NewGamesListAdapter extends BaseAdapter {
 			viewHolder.teamBPitcher.setText( (game.getTeamBPitcher() == null) ? "" : game.getTeamBPitcher() );
 		}
 
-		if (game.getTeamAOdd() == null) {
-			viewHolder.cbPSA.setEnabled( false );
-			viewHolder.cbMLA.setEnabled( false );
-			viewHolder.cbOA.setEnabled( false );
-			viewHolder.cbUA.setEnabled( false );
+		Odd teamAOdd = game.getProxyTeamAOdd();
+		viewHolder.cbPointSpreadA.setEnabled( teamAOdd.hasPointSpread() );
+		viewHolder.cbMoneyLineA.setEnabled( teamAOdd.hasMoney() );
+		viewHolder.cbOverTeamA.setEnabled( teamAOdd.hasOver() );
+		viewHolder.cbUnderTeamA.setEnabled( teamAOdd.hasUnder() );
+		if (game.getTeamAOdd() != null) {
+			gameOddController.addPointSpreadA( viewHolder.cbPointSpreadA.getId() );
+			gameOddController.addMoneyLineA( viewHolder.cbMoneyLineA.getId() );
+			gameOddController.addOverTeamA( viewHolder.cbOverTeamA.getId() );
+			gameOddController.addUnderTeamA( viewHolder.cbUnderTeamA.getId() );
 		}
 
-		if (game.getTeamBOdd() == null) {
-			viewHolder.cbPSB.setEnabled( false );
-			viewHolder.cbMLB.setEnabled( false );
+		Odd teamBOdd = game.getProxyTeamBOdd();
+		viewHolder.cbPointSpreadB.setEnabled( teamBOdd.hasPointSpread() );
+		viewHolder.cbMoneyLineB.setEnabled( teamBOdd.hasMoney() );
+		if (game.getTeamBOdd() != null) {
+			gameOddController.addPointSpreadB( viewHolder.cbPointSpreadB.getId() );
+			gameOddController.addMoneyLineB( viewHolder.cbMoneyLineB.getId() );
 		}
 
-		viewHolder.cbPSA.setTag( position );
-		viewHolder.cbPSB.setTag( position );
-		viewHolder.cbMLA.setTag( position );
-		viewHolder.cbMLB.setTag( position );
-		viewHolder.cbOA.setTag(position);
-		viewHolder.cbUA.setTag( position );
+		viewHolder.tvPointSpreadA.setText( teamAOdd.getPointSpreadString() );
+		viewHolder.tvMoneyLineA.setText( teamAOdd.getMoneyLineString() );
+		viewHolder.tvOverTeamA.setText( teamAOdd.getOverString() );
+		viewHolder.tvUnderTeamA.setText( teamAOdd.getUnderString() );
+		String signedTotalMid = teamAOdd.getTotalMidString();
+		viewHolder.tvOverUnder.setText( context.getResources()
+											   .getString( R.string.text_over_under_value, signedTotalMid ) );
+		viewHolder.tvPointSpreadB.setText( teamBOdd.getPointSpreadString() );
+		viewHolder.tvMoneyLineB.setText( teamBOdd.getMoneyLineString() );
+
+		viewHolder.cbPointSpreadA.setTag( position );
+		viewHolder.cbPointSpreadB.setTag( position );
+		viewHolder.cbMoneyLineA.setTag( position );
+		viewHolder.cbMoneyLineB.setTag( position );
+		viewHolder.cbOverTeamA.setTag(position);
+		viewHolder.cbUnderTeamA.setTag( position );
 
 		final SparseArray<Boolean> checkedArray = gameOddController.getCheckedArray();
-		viewHolder.cbPSA.setChecked( checkedArray.get( viewHolder.cbPSA.getId(), false ) );
-		viewHolder.cbPSB.setChecked( checkedArray.get( viewHolder.cbPSB.getId(), false ) );
-		viewHolder.cbMLA.setChecked( checkedArray.get( viewHolder.cbMLA.getId(), false ) );
-		viewHolder.cbMLB.setChecked( checkedArray.get( viewHolder.cbMLB.getId(), false ) );
-		viewHolder.cbOA.setChecked( checkedArray.get( viewHolder.cbOA.getId(), false ) );
-		viewHolder.cbUA.setChecked( checkedArray.get( viewHolder.cbUA.getId(), false ) );
-		String signedTotalMid = AndroidUtils.getSignedOddValue( game.getTeamAOdd()
-																	.getTotalMid() );
-		viewHolder.tvOU.setText( context.getResources()
-										.getString( R.string.text_over_under_value, signedTotalMid ) );
+		viewHolder.cbPointSpreadA.setChecked( checkedArray.get( viewHolder.cbPointSpreadA.getId(), false ) );
+		viewHolder.cbPointSpreadB.setChecked( checkedArray.get( viewHolder.cbPointSpreadB.getId(), false ) );
+		viewHolder.cbMoneyLineA.setChecked( checkedArray.get( viewHolder.cbMoneyLineA.getId(), false ) );
+		viewHolder.cbMoneyLineB.setChecked( checkedArray.get( viewHolder.cbMoneyLineB.getId(), false ) );
+		viewHolder.cbOverTeamA.setChecked( checkedArray.get( viewHolder.cbOverTeamA.getId(), false ) );
+		viewHolder.cbUnderTeamA.setChecked( checkedArray.get( viewHolder.cbUnderTeamA.getId(), false ) );
 
-		viewHolder.textViewTeamA.setText( game.getTeamAFullname() );
-		viewHolder.textViewTeamB.setText( game.getTeamBFullname() );
+		viewHolder.tvTeamAName.setText( game.getTeamAFullname() );
+		viewHolder.tvTeamBName.setText( game.getTeamBFullname() );
 		try {
-			viewHolder.textViewDate.setText( AndroidUtils.getFormatedDate( game.getCstStartTime() ) );
+			viewHolder.tvGameDate.setText( AndroidUtils.getFormatedDate( game.getCstStartTime() ) );
 		}
 		catch (ParseException e) {
 			e.printStackTrace();
@@ -136,108 +144,126 @@ public class NewGamesListAdapter extends BaseAdapter {
 				.showImageForEmptyUri( R.drawable.sports )
 				.build();
 
-		ImageLoader.getInstance().displayImage( game.getTeamALogo(), viewHolder.imageViewA, options );
-		ImageLoader.getInstance().displayImage( game.getTeamBLogo(), viewHolder.imageViewB, options );
+		ImageLoader.getInstance().displayImage( game.getTeamALogo(), viewHolder.ivTeamAFlag, options );
+		ImageLoader.getInstance().displayImage( game.getTeamBLogo(), viewHolder.ivTeamBFlag, options );
 
-		setBettingInfo( game, viewHolder );
+//		setBettingInfo( game, viewHolder );
 
 		return convertView;
 	}
 
 	private void setBettingInfo (Game game, ViewHolder view) {
-		String plA = "-", plB = "-", mlA = "-", mlB = "-", oA = "-", uA = "-", ou = "-";
+		String plB = "-", mlA = "-", mlB = "-", oA = "-", uA = "-", ou = "-";
 
 		if (game.getTeamAOdd() != null) {
+			CharSequence pointSpreadA = AndroidUtils.noneIfEmpty( game.getTeamAOdd()
+																	  .getPoint() );
+			view.cbPointSpreadA.setEnabled( game.getTeamAOdd()
+												.getPoint() != null );
+			view.tvPointSpreadA.setText( pointSpreadA );
 
-			if (game.getTeamAOdd().getPoint() != null) { plA = game.getTeamAOdd().getPoint(); } else {
-				view.cbPSA.setEnabled( false );
+			CharSequence moneyLineA = AndroidUtils.noneIfEmpty( game.getTeamAOdd()
+																	.getMoney() );
+			if (game.getTeamAOdd()
+					.getMoney() != null) {
+				mlA = game.getTeamAOdd()
+						  .getMoney();
+			} else {
+				view.cbMoneyLineA.setEnabled( false );
 			}
 
-			if (game.getTeamAOdd().getMoney() != null) { mlA = game.getTeamAOdd().getMoney(); } else {
-				view.cbMLA.setEnabled( false );
+			if (game.getTeamAOdd()
+					.getOver() != null) {
+				oA = game.getTeamAOdd()
+						 .getOver();
+			} else {
+				view.cbOverTeamA.setEnabled( false );
 			}
 
-			if (game.getTeamAOdd().getOver() != null) { oA = game.getTeamAOdd().getOver(); } else {
-				view.cbOA.setEnabled( false );
-			}
-
-			if (game.getTeamAOdd().getUnder() != null) { uA = game.getTeamAOdd().getUnder(); } else {
-				view.cbUA.setEnabled( false );
+			if (game.getTeamAOdd()
+					.getUnder() != null) {
+				uA = game.getTeamAOdd()
+						 .getUnder();
+			} else {
+				view.cbUnderTeamA.setEnabled( false );
 			}
 
 		}
 
 		if (game.getTeamBOdd() != null) {
 			if (game.getTeamBOdd().getPoint() != null) { plB = game.getTeamBOdd().getPoint(); } else {
-				view.cbPSB.setEnabled( false );
+				view.cbPointSpreadB.setEnabled( false );
 			}
 
 
-			if (game.getTeamBOdd().getMoney() != null) { mlB = game.getTeamBOdd().getMoney(); } else {
-				view.cbMLB.setEnabled( false );
+			if (game.getTeamBOdd().getMoney() != null) {
+				mlB = game.getTeamBOdd().getMoney(); } else {
+				view.cbMoneyLineB.setEnabled( false );
 			}
 		}
 
-		if (game.getTeamAOdd() == null) { view.tvPSA.setText( "-" ); } else {
-			view.tvPSA.setText( game.getTeamAOdd().getPointSpreadString() == null ? "-" : game.getTeamAOdd()
-					.getPointSpreadString() );
+		if (game.getTeamAOdd() == null) { view.tvPointSpreadA.setText( "-" ); } else {
+			view.tvPointSpreadA.setText( game.getTeamAOdd()
+											 .getPointSpreadString() == null ? "-" : game.getTeamAOdd()
+																						 .getPointSpreadString() );
 		}
 
-		if (game.getTeamBOdd() == null) { view.tvPSB.setText( "-" ); } else {
-			view.tvPSB.setText( game.getTeamBOdd().getPointSpreadString() == null ? "-" : game.getTeamBOdd()
-					.getPointSpreadString() );
+		if (game.getTeamBOdd() == null) {
+			view.tvPointSpreadB.setText( "-" ); } else {
+			view.tvPointSpreadB.setText( game.getTeamBOdd()
+											 .getPointSpreadString() == null ? "-" : game.getTeamBOdd()
+																						 .getPointSpreadString() );
 		}
 
-		view.tvMLA.setText( AndroidUtils.getSignedOddValue( mlA ) );
-		view.tvMLB.setText( AndroidUtils.getSignedOddValue( mlB ) );
-		view.tvOA.setText( AndroidUtils.getSignedOddValue( oA ) );
-		view.tvUA.setText( AndroidUtils.getSignedOddValue( uA ) );
-
+		view.tvMoneyLineA.setText( AndroidUtils.getSignedOddValue( mlA ) );
+		view.tvMoneyLineB.setText( AndroidUtils.getSignedOddValue( mlB ) );
+		view.tvOverTeamA.setText( AndroidUtils.getSignedOddValue( oA ) );
+		view.tvUnderTeamA.setText( AndroidUtils.getSignedOddValue( uA ) );
 	}
 
 	public static class ViewHolder {
 
 		//
 		@Bind(R.id.textview_cell_games_team_a)
-		TextView  textViewTeamA;
+		TextView  tvTeamAName;
 		@Bind(R.id.textview_cell_games_team_b)
-		TextView  textViewTeamB;
+		TextView  tvTeamBName;
 		@Bind(R.id.textview_cell_games_team_a_pitcher)
 		TextView  teamAPitcher;
 		@Bind(R.id.textview_cell_games_team_b_pitcher)
 		TextView  teamBPitcher;
 		@Bind(R.id.textview_cell_games_date_time)
-		TextView  textViewDate;
+		TextView  tvGameDate;
 		@Bind(R.id.imageview_cell_games_list_team_a_flag)
-		ImageView imageViewA;
+		ImageView ivTeamAFlag;
 		@Bind(R.id.imageview_cell_games_list_team_b_flag)
-		ImageView imageViewB;
+		ImageView ivTeamBFlag;
 		@Bind(R.id.button_cell_games_list_pointspread_team_a)
-		TextView  tvPSA;
+		TextView  tvPointSpreadA;
 		@Bind(R.id.button_cell_games_list_pointspread_team_b)
-		TextView  tvPSB;
+		TextView  tvPointSpreadB;
 		@Bind(R.id.button_cell_games_list_money_line_team_a)
-		TextView  tvMLA;
+		TextView  tvMoneyLineA;
 		@Bind(R.id.button_cell_games_list_money_line_team_b)
-		TextView  tvMLB;
+		TextView  tvMoneyLineB;
 		@Bind(R.id.button_cell_games_list_over_team_a)
-		TextView  tvOA;
+		TextView  tvOverTeamA;
 		@Bind(R.id.button_cell_games_list_over_team_b)
-		TextView  tvUA;
+		TextView  tvUnderTeamA;
 		@Bind(R.id.textview_cell_games_list_over_under)
-		TextView  tvOU;
+		TextView  tvOverUnder;
 		@Bind(R.id.checkbox_cell_games_list_pointspread_a)
-		CheckBox  cbPSA;
+		CheckBox  cbPointSpreadA;
 		@Bind(R.id.checkbox_cell_games_list_pointspread_b)
-		CheckBox  cbPSB;
+		CheckBox  cbPointSpreadB;
 		@Bind(R.id.checkbox_cell_games_list_moneyline_a)
-		CheckBox  cbMLA;
+		CheckBox  cbMoneyLineA;
 		@Bind(R.id.checkbox_cell_games_list_moneyline_b)
-		CheckBox  cbMLB;
+		CheckBox  cbMoneyLineB;
 		@Bind(R.id.checkbox_cell_games_list_over_a)
-		CheckBox  cbOA;
+		CheckBox  cbOverTeamA;
 		@Bind(R.id.checkbox_cell_games_list_over_b)
-		CheckBox  cbUA;
+		CheckBox  cbUnderTeamA;
 
 
 		private ViewHolder (View itemView) {

@@ -108,7 +108,7 @@ public class MyPicksListAdapter extends BaseAdapter {
 			}
 
 			viewHolder.textViewTeamA.setText( pick.getMatchDet() );
-//            viewHolder.textViewTeamB.setText( pick.getTeamBName() );
+//            viewHolder.tvTeamBName.setText( pick.getTeamBName() );
 			try {
 				viewHolder.textViewDate.setText( pick.getStartTime() );
 			}

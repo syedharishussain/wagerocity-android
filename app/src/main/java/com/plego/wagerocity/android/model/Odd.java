@@ -2,10 +2,12 @@ package com.plego.wagerocity.android.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.plego.wagerocity.utils.AndroidUtils;
+
+import static com.plego.wagerocity.utils.AndroidUtils.getSignedOddValue;
+import static com.plego.wagerocity.utils.AndroidUtils.isEmpty;
 
 public class Odd implements Parcelable {
 
@@ -36,11 +38,16 @@ public class Odd implements Parcelable {
     private String money;
 
     public String getPointSpreadString() {
+		if(!hasPointSpread()) return "-";
 
-        if (getPointMid().equals("") ) return AndroidUtils.getSignedOddValue( getPoint() );
+		String pointValue = " (" + AndroidUtils.getSignedOddValue( point ) + ")";
 
-        return AndroidUtils.getSignedOddValue( getPointMid() ) + " (" + AndroidUtils.getSignedOddValue( getPoint() ) + ")"  ;
-    }
+		return isEmpty( pointMid ) ? pointValue : AndroidUtils.getSignedOddValue( pointMid ) + pointValue;
+	}
+
+	public boolean hasPointSpread () {
+		return !isEmpty( point );
+	}
 
 
     /**
@@ -167,6 +174,14 @@ public class Odd implements Parcelable {
         return over;
     }
 
+	public String getOverString () {
+		return isEmpty( over ) ? "-" : getSignedOddValue( over );
+	}
+
+	public boolean hasOver () {
+		return !isEmpty( over );
+	}
+
     /**
      *
      * @param over
@@ -190,6 +205,14 @@ public class Odd implements Parcelable {
         return under;
     }
 
+	public String getUnderString () {
+		return isEmpty( under ) ? "-" : getSignedOddValue( under );
+	}
+
+	public boolean hasUnder () {
+		return !isEmpty( under );
+	}
+
     /**
      *
      * @param under
@@ -212,6 +235,10 @@ public class Odd implements Parcelable {
     public String getTotalMid() {
         return totalMid;
     }
+
+	public String getTotalMidString () {
+		return isEmpty( totalMid ) ? "-" : getSignedOddValue( totalMid );
+	}
 
     /**
      *
@@ -258,6 +285,14 @@ public class Odd implements Parcelable {
     public String getMoney() {
         return money;
     }
+
+	public String getMoneyLineString () {
+		return isEmpty( money ) ? "-" : getSignedOddValue( money );
+	}
+
+	public boolean hasMoney () {
+		return !isEmpty( money );
+	}
 
     /**
      *

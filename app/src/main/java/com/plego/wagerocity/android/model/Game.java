@@ -2,13 +2,9 @@ package com.plego.wagerocity.android.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.plego.wagerocity.utils.AndroidUtils;
 
-import java.lang.reflect.Array;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -243,6 +239,10 @@ public class Game implements Parcelable {
         return teamAOdd;
     }
 
+	public Odd getProxyTeamAOdd () {
+		return teamAOdd == null ? new Odd() : teamAOdd;
+	}
+
     /**
      *
      * @param teamAOdd
@@ -260,6 +260,10 @@ public class Game implements Parcelable {
     public Odd getTeamBOdd() {
         return teamBOdd;
     }
+
+	public Odd getProxyTeamBOdd () {
+		return teamBOdd == null ? new Odd() : teamBOdd;
+	}
 
     /**
      *

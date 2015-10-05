@@ -36,6 +36,10 @@ public class AndroidUtils {
         return text == null || text.length() == 0;
     }
 
+	public static CharSequence noneIfEmpty (CharSequence text) {
+		return isEmpty( text ) ? "-" : text;
+	}
+
     public static boolean isCstPastTime (String cstTime) throws ParseException {
         //CST to UTC
         SimpleDateFormat cstFormatter = new SimpleDateFormat( "yyyy-MM-dd kk:mm:ss" );

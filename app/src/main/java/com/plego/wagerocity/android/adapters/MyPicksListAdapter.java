@@ -35,7 +35,7 @@ public class MyPicksListAdapter extends BaseAdapter {
 		}
 		catch (ClassCastException e) {
 			throw new ClassCastException( context.toString()
-					+ " must implement OnMyPickShareInteractionListener" );
+										  + " must implement OnMyPickShareInteractionListener" );
 		}
 	}
 
@@ -61,7 +61,7 @@ public class MyPicksListAdapter extends BaseAdapter {
 		final Pick pick = picks.get( position );
 
 		final String betTypeString = pick.getTeamName().equals( "Parlay" ) || pick.getTeamName()
-				.equals( "Teaser" ) ? pick.getTeamName() : AndroidUtils
+																				  .equals( "Teaser" ) ? pick.getTeamName() : AndroidUtils
 				.getBetTypeFromBetOT( Integer.parseInt( pick.getBetOt() ), pick.getPos() );
 
 		if (convertView == null) {
@@ -99,15 +99,19 @@ public class MyPicksListAdapter extends BaseAdapter {
 		if (pick != null) {
 
 			if (pick.getIsPoolBet() != null && pick.getPoolName() != null) {
-				if (!pick.getIsPoolBet().equals( "0" )) {
+				if (!pick.getIsPoolBet()
+						 .equals( "0" )) {
 					viewHolder.poolLabel.setVisibility( View.VISIBLE );
 					viewHolder.poolName.setVisibility( View.VISIBLE );
 
 					viewHolder.poolName.setText( pick.getPoolName() );
 				}
+			} else {
+				viewHolder.poolLabel.setVisibility( View.GONE );
+				viewHolder.poolName.setVisibility( View.GONE );
 			}
 
-			viewHolder.textViewTeamA.setText( pick.getMatchDet() );
+			viewHolder.tvMatchTitle.setText( pick.getMatchDet() );
 //            viewHolder.tvTeamBName.setText( pick.getTeamBName() );
 			try {
 				viewHolder.textViewDate.setText( pick.getStartTime() );
@@ -119,23 +123,31 @@ public class MyPicksListAdapter extends BaseAdapter {
 			DecimalFormat f = new DecimalFormat( "##.00" );
 
 
-			viewHolder.textViewTeamName.setText( pick.getTeamName() );
+			viewHolder.tvTeamName.setText( pick.getTeamName() );
 			viewHolder.textViewBetType.setText( betTypeString );
 			viewHolder.textViewBetTypeValue.setText( AndroidUtils.getSignedOddValue( pick.getOddsVal() ) );
 			viewHolder.textViewStake.setText( "$" + pick.getStake() );
 
 			viewHolder.textViewResult.setText( pick.getBetResult() );
 
-			if (pick.getOddType().equalsIgnoreCase( OddType.PARLEY ) || pick.getTeamName().equals( "Teaser" )) {
+			if (pick.getOddType()
+					.equalsIgnoreCase( OddType.PARLEY ) || pick.getTeamName()
+															   .equals( "Teaser" )) {
 				viewHolder.textViewBetType.setVisibility( View.GONE );
 				viewHolder.textViewBetTypeValue.setVisibility( View.GONE );
 				viewHolder.textViewToWin.setText( "$" + String.valueOf( f.format( AndroidUtils
-										.getParlayWinAmount( Float.parseFloat( pick.getStake() ), Double
-												.parseDouble( pick.getOddsVal() ) ) ) ) );
+																						  .getParlayWinAmount( Float.parseFloat(
+																													   pick.getStake() ),
+																											   Double
+																													   .parseDouble(
+																															   pick.getOddsVal() ) ) ) ) );
 			} else {
 				viewHolder.textViewToWin.setText( "$" + String.valueOf( f.format( AndroidUtils
-						.getToWinAmount( Double.parseDouble( pick.getStake() ), Double
-								.parseDouble( pick.getOddsVal() ) ) ) ) );
+																						  .getToWinAmount( Double.parseDouble(
+																												   pick.getStake() ),
+																										   Double
+																												   .parseDouble(
+																														   pick.getOddsVal() ) ) ) ) );
 			}
 
 			DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -145,8 +157,10 @@ public class MyPicksListAdapter extends BaseAdapter {
 					.showImageForEmptyUri( AndroidUtils.getDrawableFromLeagueName( pick.getLeagueName() ) )
 					.build();
 
-			ImageLoader.getInstance().displayImage( pick.getTeamALogo(), viewHolder.imageViewA, options );
-			ImageLoader.getInstance().displayImage( pick.getTeamBLogo(), viewHolder.imageViewB, options );
+			ImageLoader.getInstance()
+					   .displayImage( pick.getTeamALogo(), viewHolder.imageViewA, options );
+			ImageLoader.getInstance()
+					   .displayImage( pick.getTeamBLogo(), viewHolder.imageViewB, options );
 
 		}
 
@@ -155,32 +169,32 @@ public class MyPicksListAdapter extends BaseAdapter {
 
 	class ViewHolder {
 
-		@Bind(R.id.textview_cell_my_picks_team_a_name)
-		TextView textViewTeamA;
+		@Bind(R.id.tv_match_title)
+		TextView  tvMatchTitle;
 		@Bind(R.id.textview_cell_my_picks_date_time)
-		TextView textViewDate;
-		@Bind(R.id.textview_cell_my_picks_team_name)
-		TextView poolLabel;
-		@Bind(R.id.textview_cell_my_picks_pool_label)
-		TextView poolName;
-		@Bind(R.id.textview_cell_my_picks_pool_name)
-		TextView textViewTeamName;
+		TextView  textViewDate;
+		@Bind(R.id.tv_team_name)
+		TextView  tvTeamName;
+		@Bind(R.id.tv_pool_label)
+		TextView  poolLabel;
+		@Bind(R.id.tv_pool_name)
+		TextView  poolName;
 		@Bind(R.id.textview_cell_my_picks_bet_type)
-		TextView textViewBetType;
+		TextView  textViewBetType;
 		@Bind(R.id.textview_cell_my_picks_bet_type_value)
-		TextView textViewBetTypeValue;
+		TextView  textViewBetTypeValue;
 		@Bind(R.id.textview_cell_my_picks_stake_value)
-		TextView textViewStake;
+		TextView  textViewStake;
 		@Bind(R.id.textview_cell_my_picks_to_win_value)
-		TextView textViewToWin;
+		TextView  textViewToWin;
 		@Bind(R.id.textview_cell_my_picks_result)
-		TextView textViewResult;
+		TextView  textViewResult;
 		@Bind(R.id.imageview_cell_my_picks_team_a_flag)
 		ImageView imageViewA;
 		@Bind(R.id.imageview_cell_my_picks_team_b_flag)
 		ImageView imageViewB;
 		@Bind(R.id.button_cell_my_picks_share)
-		Button share;
+		Button    share;
 
 		ViewHolder (View view) {
 			ButterKnife.bind( this, view );

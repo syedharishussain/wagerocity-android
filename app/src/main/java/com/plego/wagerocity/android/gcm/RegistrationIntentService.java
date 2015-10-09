@@ -55,7 +55,8 @@ public class RegistrationIntentService extends IntentService {
 					String token = instanceID.getToken( getString( R.string.gcm_defaultSenderId ),
 														GoogleCloudMessaging.INSTANCE_ID_SCOPE, null );
 					subscribeTopics( token, pubSub );
-					serviceModel.setDeviceToken( token, new Callback<Response>() {
+					serviceModel.setDeviceToken( prefs.user()
+													  .getUserId(), token, 2, new Callback<Response>() {
 
 						@Override public void success (Response response, Response response2) {
 							prefs.setSentTokenToServer( true );

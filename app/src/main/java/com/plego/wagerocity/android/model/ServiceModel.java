@@ -120,5 +120,6 @@ public interface ServiceModel {
     @POST("/unfollowPlayer")
     public void unfollowPlayer(@Part("userId") String userId, @Part("playerId") String playerId, Callback<Response> callback);
 
+	void setDeviceToken (String token, Callback<Response> callback);
 }
 

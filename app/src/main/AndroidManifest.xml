@@ -78,17 +78,18 @@
             </intent-filter>
         </receiver>
         <service
-                android:name="com.example.MyGcmListenerService"
+                android:name=".android.gcm.GcmPushListenerService"
                 android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <service android:name="[.MyInstanceIDService]" android:exported="false">
+        <service android:name=".android.gcm.OnInstanceIDRefresh" android:exported="false">
           <intent-filter>
                  <action android:name="com.google.android.gms.iid.InstanceID"/>
           </intent-filter>
         </service>
+
     </application>
 
 </manifest>

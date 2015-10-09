@@ -45,8 +45,9 @@
     <string name="in_app_billing_rookie">com.wagerocity.rookie</string>
     <string name="title_create_pool">Create Pool</string>
     <string name="uri_open_create_pool">create pool</string>
+	<string name="gcm_defaultSenderId">335832937591</string>
 
-    <string-array name="leaderboard_filters">
+	<string-array name="leaderboard_filters">
         <item>All Leaderboards</item>
         <item>NFL FOOTBALL</item>
         <item>NCAA FOOTBALL</item>

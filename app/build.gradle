@@ -32,6 +32,12 @@ android {
             keyAlias 'Plego'
             keyPassword 'plego123'
         }
+    release{
+            storeFile file('wagerocity-keystore.jks')
+            storePassword '123456'
+            keyAlias 'wagerocity'
+            keyPassword '123456'
+        }
     }
     buildTypes {
         debug {
@@ -48,6 +54,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BASE_URL", "\"http://api.wagerocity.com\"")
             buildConfigField("boolean", "DISBLE_CRASHLYTICS", "false")
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {

@@ -23,6 +23,7 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityApplication;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.model.ServiceModel;
 import retrofit.Callback;
@@ -47,6 +48,9 @@ public class RegistrationIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent (Intent intent) {
+		Log.d( TAG, "Sending token" );
+		WagerocityApplication.component( getApplicationContext() )
+							 .inject( this );
 		final InstanceID instanceID = InstanceID.getInstance( this );
 		final GcmPubSub pubSub = GcmPubSub.getInstance( this );
 		new Thread( new Runnable() {

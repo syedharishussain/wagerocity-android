@@ -8,25 +8,53 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
+import com.google.gson.Gson;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.activities.DashboardActivity;
-import com.plego.wagerocity.android.model.ServiceModel;
-
-import javax.inject.Inject;
+import com.plego.wagerocity.android.model.BetPayload;
+import com.plego.wagerocity.utils.AndroidUtils;
 
 /**
  * Created by Hassan Jawed on 10/10/2015.
  */
 public class GcmPushListenerService extends GcmListenerService {
 
-	@Inject ServiceModel serviceModel;
+
+	public static final String TAG = GcmPushListenerService.class.getSimpleName();
 
 	@Override public void onMessageReceived (String from, Bundle data) {
+		Log.d( TAG, "from: " + from + "Bundle: " + data );
+		Gson gson = new Gson();
 
+		String payload = data.getString( "payload" );
+		if (AndroidUtils.isEmpty( payload )) return;
+
+		BetPayload betPayload;
+		betPayload = gson.fromJson( payload, BetPayload.class );
+		if (betPayload == null) return;
+
+		// TODO replace this with bet result
+		String betResult = betPayload.getBetResult();
+		boolean isLost;
+		switch (betResult.toLowerCase()) {
+			case "win":
+			case "draw":
+				isLost = false;
+				break;
+
+			case "loss":
+			default:
+				isLost = true;
+				break;
+		}
+		String message = getString( isLost ? R.string.text_bet_lost : R.string.text_bet_won,
+									betPayload.getStake(), betPayload.getMatchDetail() );
+		sendNotification( message );
 	}
 
-	private void sendNotification(String message) {
+	private void sendNotification (String message) {
 		Intent intent = new Intent( this, DashboardActivity.class );
 		intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
 		PendingIntent pendingIntent = PendingIntent.getActivity( this, 0 /* Request code */, intent,

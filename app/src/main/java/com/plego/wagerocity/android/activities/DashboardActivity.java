@@ -158,8 +158,9 @@ public class DashboardActivity
 		serviceIntent.setPackage( "com.android.vending" );
 		bindService( serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE );
 
-
+		Log.d( TAG, "Check google play services" );
 		if (checkPlayServices()) {
+			Log.d( TAG, "Starting registeration service" );
 			Intent intent = new Intent( this, RegistrationIntentService.class );
 			startService( intent );
 		}

@@ -2,8 +2,9 @@ package com.plego.wagerocity.android;
 
 import com.plego.wagerocity.SystemServiceModule;
 import com.plego.wagerocity.android.fragments.BetOnGameFragment;
-import com.plego.wagerocity.android.services.ApiModule;
 import com.plego.wagerocity.android.fragments.CreatePoolFragment;
+import com.plego.wagerocity.android.gcm.GcmPushListenerService;
+import com.plego.wagerocity.android.gcm.RegistrationIntentService;
 import com.plego.wagerocity.android.services.ApiModule;
 import dagger.Component;
 
@@ -18,4 +19,8 @@ public interface BaseComponent {
 
 	void inject (CreatePoolFragment fragment);
     void inject(BetOnGameFragment fragment);
+
+	void inject (GcmPushListenerService gcmPushListenerService);
+
+	void inject (RegistrationIntentService registrationIntentService);
 }

@@ -11,22 +11,23 @@ import com.plego.wagerocity.android.model.User;
  */
 public class WagerocityPref {
 
-    private static final String WAGEROCITY_PREFS = "wagerocity_prefs";
+	private static final String WAGEROCITY_PREFS     = "wagerocity_prefs";
+	private static final String SENT_TOKEN_TO_SERVER = "sent_token_to_server";
 
-    private final Context context;
+	private final Context context;
 
-    private String facebookID;
+	private String facebookID;
 
-    public WagerocityPref(Context context) {
-        this.context = context;
+	public WagerocityPref (Context context) {
+		this.context = context;
 
-    }
+	}
 
-    private SharedPreferences getPref() {
-        return context.getSharedPreferences(WAGEROCITY_PREFS, Context.MODE_PRIVATE);
-    }
+	private SharedPreferences getPref () {
+		return context.getSharedPreferences( WAGEROCITY_PREFS, Context.MODE_PRIVATE );
+	}
 
-    public void setFacebookID(String facebookID) {
+	public void setFacebookID (String facebookID) {
         SharedPreferences.Editor pref = getPref().edit();
         pref.putString("userFacebookID", facebookID);
         pref.commit();
@@ -69,4 +70,14 @@ public class WagerocityPref {
         String json = getPref().getString("userObject", null);
         return (User)gson.fromJson(json, User.class);
     }
+
+	public void setSentTokenToServer (boolean sent) {
+		SharedPreferences.Editor editor = getPref().edit();
+		editor.putBoolean( SENT_TOKEN_TO_SERVER, sent );
+		editor.commit();
+	}
+
+	public boolean getSentTokenToServer () {
+		return getPref().getBoolean( SENT_TOKEN_TO_SERVER, false );
+	}
 }

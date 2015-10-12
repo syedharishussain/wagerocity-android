@@ -452,7 +452,6 @@ public class DashboardActivity
         }
     }
 
-	}
     @Override
     public void goBack () {
         getSupportFragmentManager().popBackStackImmediate();

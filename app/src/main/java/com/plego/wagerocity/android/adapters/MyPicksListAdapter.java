@@ -8,6 +8,7 @@ import butterknife.ButterKnife;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityApplication;
 import com.plego.wagerocity.android.model.OddType;
 import com.plego.wagerocity.android.model.Pick;
 import com.plego.wagerocity.utils.AndroidUtils;
@@ -17,6 +18,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 /**
  * Created by haris on 06/04/15.
  */
@@ -25,11 +28,13 @@ public class MyPicksListAdapter extends BaseAdapter {
 	ArrayList<Pick> picks;
 	Context         context;
 	private OnMyPickShareInteractionListener mListener;
+	@Inject ImageLoader                      imageLoader;
 
 	public MyPicksListAdapter (Context context, ArrayList<Pick> picks) {
 		this.picks = picks;
 		this.context = context;
-
+		WagerocityApplication.component( context )
+							 .inject( this );
 		try {
 			mListener = (OnMyPickShareInteractionListener) context;
 		}
@@ -60,8 +65,9 @@ public class MyPicksListAdapter extends BaseAdapter {
 
 		final Pick pick = picks.get( position );
 
-		final String betTypeString = pick.getTeamName().equals( "Parlay" ) || pick.getTeamName()
-																				  .equals( "Teaser" ) ? pick.getTeamName() : AndroidUtils
+		final String betTypeString = pick.getTeamName()
+										 .equals( "Parlay" ) || pick.getTeamName()
+																	.equals( "Teaser" ) ? pick.getTeamName() : AndroidUtils
 				.getBetTypeFromBetOT( Integer.parseInt( pick.getBetOt() ), pick.getPos() );
 
 		if (convertView == null) {
@@ -157,10 +163,8 @@ public class MyPicksListAdapter extends BaseAdapter {
 					.showImageForEmptyUri( AndroidUtils.getDrawableFromLeagueName( pick.getLeagueName() ) )
 					.build();
 
-			ImageLoader.getInstance()
-					   .displayImage( pick.getTeamALogo(), viewHolder.imageViewA, options );
-			ImageLoader.getInstance()
-					   .displayImage( pick.getTeamBLogo(), viewHolder.imageViewB, options );
+			imageLoader.displayImage( pick.getTeamALogo(), viewHolder.imageViewA, options );
+			imageLoader.displayImage( pick.getTeamBLogo(), viewHolder.imageViewB, options );
 
 		}
 

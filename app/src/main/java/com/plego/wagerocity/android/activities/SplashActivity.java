@@ -17,23 +17,26 @@ import roboguice.activity.RoboFragmentActivity;
 
 public class SplashActivity extends RoboFragmentActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_splash);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Fabric.with(this, new Crashlytics());
+		setContentView(R.layout.activity_splash);
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        ImageLoader.getInstance().init(config);
+		ImageLoader instance = ImageLoader.getInstance();
+		if (!instance.isInited()) {
+			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+			instance.init( config );
+		}
 
-        AndroidUtils.printFBKeyHash(this);
+		AndroidUtils.printFBKeyHash(this);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                finish();
-            }
-        }, 1000);
-    }
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+				finish();
+			}
+		}, 1000);
+	}
 }

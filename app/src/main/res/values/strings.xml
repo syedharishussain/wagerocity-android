@@ -47,8 +47,8 @@
     <string name="uri_open_create_pool">create pool</string>
     <string name="text_over_under_value">Over\nO | %s | U\nUnder</string>
 	<string name="gcm_defaultSenderId">963388369453</string>
-	<string name="text_bet_won">Congrats, you won bet %1$s of %2$s</string>
-	<string name="text_bet_lost">You lost bet %1$s of %2$s</string>
+	<string name="text_bet_won">You won your $%1$s bet on the %2$s matchup</string>
+	<string name="text_bet_lost">You lost your $%1$s bet on the %2$s matchup</string>
 
 	<string-array name="leaderboard_filters">
         <item>All Leaderboards</item>

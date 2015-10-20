@@ -63,11 +63,16 @@ public class GcmPushListenerService extends GcmListenerService {
 		Uri defaultSoundUri = RingtoneManager.getDefaultUri( RingtoneManager.TYPE_NOTIFICATION );
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder( this )
 				.setSmallIcon( R.drawable.app_icon )
-				.setContentTitle( "GCM Message" )
+				.setContentTitle( "Wagerocity" )
 				.setContentText( message )
 				.setAutoCancel( true )
 				.setSound( defaultSoundUri )
 				.setContentIntent( pendingIntent );
+
+		NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+		bigTextStyle.setBigContentTitle("Wagerocity");
+		bigTextStyle.bigText( message );
+		notificationBuilder.setStyle(bigTextStyle);
 
 		NotificationManager notificationManager =
 				(NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );

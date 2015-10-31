@@ -4,13 +4,23 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.plego.wagerocity.utils.AndroidUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game implements Parcelable {
 
-    @SerializedName("cst_start_time")
+	public static final Creator<Game> CREATOR = new Creator<Game>() {
+		public Game createFromParcel (Parcel source) {
+			return new Game( source );
+		}
+
+		public Game[] newArray (int size) {
+			return new Game[size];
+		}
+	};
+	@SerializedName("cst_start_time")
     @Expose
     private String cstStartTime;
     @SerializedName("team_A_number")
@@ -48,35 +58,60 @@ public class Game implements Parcelable {
     @SerializedName("team_A_logo")
     @Expose
     private String teamALogo;
-
     @SerializedName("team_B_logo")
     @Expose
     private String teamBLogo;
-
     @Expose
     private String leagueName;
-
     @SerializedName("user_info")
     @Expose
     private User user;
-
     @SerializedName("bet_info")
     @Expose
     private Bet bet;
-
     @SerializedName("is_purchased")
     @Expose
     private Boolean isPurchased;
-
     @SerializedName("team_A_pitcher")
     @Expose
     private String teamAPitcher;
-
     @SerializedName("team_B_pitcher")
     @Expose
     private String teamBPitcher;
-
     private Double poolCredits;
+	private ArrayList<OddHolder> oddHolders;
+	private String sportsName = "";
+
+	public Game () {
+	}
+
+	private Game (Parcel in) {
+		this.cstStartTime = in.readString();
+		this.teamANumber = in.readString();
+		this.teamBNumber = in.readString();
+		this.sports = new ArrayList<String>();
+		in.readList( this.sports, List.class.getClassLoader() );
+		this.oddHolders = new ArrayList<OddHolder>();
+		in.readList( this.oddHolders, List.class.getClassLoader() );
+		this.teamAOdd = in.readParcelable( Odd.class.getClassLoader() );
+		this.teamBOdd = in.readParcelable( Odd.class.getClassLoader() );
+		this.user = in.readParcelable( User.class.getClassLoader() );
+		this.bet = in.readParcelable( Bet.class.getClassLoader() );
+		this.teamAName = in.readString();
+		this.teamBName = in.readString();
+		this.teamAFullname = in.readString();
+		this.teamBFullname = in.readString();
+		this.teamANickname = in.readString();
+		this.teamBNickname = in.readString();
+		this.teamALogo = in.readString();
+		this.teamBLogo = in.readString();
+		this.sportsName = in.readString();
+		this.leagueName = in.readString();
+		this.teamAPitcher = in.readString();
+		this.teamBPitcher = in.readString();
+		this.poolCredits = (Double) in.readValue( Double.class.getClassLoader() );
+		this.oddHolders = new ArrayList<OddHolder>();
+	}
 
     public Double getPoolCredits() {
         return poolCredits;
@@ -85,7 +120,6 @@ public class Game implements Parcelable {
     public void setPoolCredits(Double poolCredits) {
         this.poolCredits = poolCredits;
     }
-
 
     public String getTeamAPitcher() {
         return teamAPitcher;
@@ -103,8 +137,6 @@ public class Game implements Parcelable {
         this.teamBPitcher = teamBPitcher;
     }
 
-    private ArrayList<OddHolder> oddHolders;
-
     public ArrayList<OddHolder> getOddHolders() {
         return oddHolders;
     }
@@ -112,8 +144,6 @@ public class Game implements Parcelable {
     public void setOddHolders(ArrayList<OddHolder> oddHolders) {
         this.oddHolders = oddHolders;
     }
-
-
 
     public Boolean getIsPurchased() {
         return isPurchased;
@@ -147,7 +177,6 @@ public class Game implements Parcelable {
         this.bet = bet;
     }
 
-
     public String getSportsName() {
         return sportsName;
     }
@@ -155,8 +184,6 @@ public class Game implements Parcelable {
     public void setSportsName(String sportsName) {
         this.sportsName = sportsName;
     }
-
-    private String sportsName = "";
 
     /**
      *
@@ -239,10 +266,6 @@ public class Game implements Parcelable {
         return teamAOdd;
     }
 
-	public Odd getProxyTeamAOdd () {
-		return teamAOdd == null ? new Odd() : teamAOdd;
-	}
-
     /**
      *
      * @param teamAOdd
@@ -251,6 +274,10 @@ public class Game implements Parcelable {
     public void setTeamAOdd(Odd teamAOdd) {
         this.teamAOdd = teamAOdd;
     }
+
+	public Odd getProxyTeamAOdd () {
+		return teamAOdd == null ? new Odd() : teamAOdd;
+	}
 
     /**
      *
@@ -261,10 +288,6 @@ public class Game implements Parcelable {
         return teamBOdd;
     }
 
-	public Odd getProxyTeamBOdd () {
-		return teamBOdd == null ? new Odd() : teamBOdd;
-	}
-
     /**
      *
      * @param teamBOdd
@@ -273,6 +296,10 @@ public class Game implements Parcelable {
     public void setTeamBOdd(Odd teamBOdd) {
         this.teamBOdd = teamBOdd;
     }
+
+	public Odd getProxyTeamBOdd () {
+		return teamBOdd == null ? new Odd() : teamBOdd;
+	}
 
     /**
      *
@@ -292,6 +319,10 @@ public class Game implements Parcelable {
         this.teamAName = teamAName;
     }
 
+	public String getTeamADisplayName () {
+		return AndroidUtils.isEmpty( teamAName ) ? teamAFullname : teamAName;
+	}
+
     /**
      *
      * @return
@@ -309,6 +340,10 @@ public class Game implements Parcelable {
     public void setTeamBName(String teamBName) {
         this.teamBName = teamBName;
     }
+
+	public String getTeamBDisplayName () {
+		return AndroidUtils.isEmpty( teamBName ) ? teamBFullname : teamBName;
+	}
 
     /**
      *
@@ -418,79 +453,37 @@ public class Game implements Parcelable {
         this.teamBLogo = teamBLogo;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.cstStartTime);
-        dest.writeString(this.teamANumber);
-        dest.writeString(this.teamBNumber);
-        dest.writeList(this.sports);
-        dest.writeList(this.oddHolders);
-        dest.writeParcelable(this.teamAOdd, 0);
-        dest.writeParcelable(this.teamBOdd, 0);
-        dest.writeParcelable(this.user, 0);
-        dest.writeParcelable(this.bet, 0);
-        dest.writeString(this.teamAName);
-        dest.writeString(this.teamBName);
-        dest.writeString(this.teamAFullname);
-        dest.writeString(this.teamBFullname);
-        dest.writeString(this.teamANickname);
-        dest.writeString(this.teamBNickname);
-        dest.writeString(this.teamALogo);
-        dest.writeString(this.teamBLogo);
-        dest.writeString(this.sportsName);
-        dest.writeString(this.leagueName);
-        dest.writeList(this.oddHolders);
-        dest.writeString(this.teamAPitcher);
-        dest.writeString(this.teamBPitcher);
-        dest.writeValue(this.poolCredits);
-    }
-
-    public Game() {
-    }
-
-    private Game(Parcel in) {
-        this.cstStartTime = in.readString();
-        this.teamANumber = in.readString();
-        this.teamBNumber = in.readString();
-        this.sports = new ArrayList<String>();
-        in.readList(this.sports, List.class.getClassLoader());
-        this.oddHolders = new ArrayList<OddHolder>();
-        in.readList(this.oddHolders, List.class.getClassLoader());
-        this.teamAOdd = in.readParcelable(Odd.class.getClassLoader());
-        this.teamBOdd = in.readParcelable(Odd.class.getClassLoader());
-        this.user = in.readParcelable(User.class.getClassLoader());
-        this.bet = in.readParcelable(Bet.class.getClassLoader());
-        this.teamAName = in.readString();
-        this.teamBName = in.readString();
-        this.teamAFullname = in.readString();
-        this.teamBFullname = in.readString();
-        this.teamANickname = in.readString();
-        this.teamBNickname = in.readString();
-        this.teamALogo = in.readString();
-        this.teamBLogo = in.readString();
-        this.sportsName = in.readString();
-        this.leagueName = in.readString();
-        this.teamAPitcher = in.readString();
-        this.teamBPitcher = in.readString();
-        this.poolCredits = (Double) in.readValue(Double.class.getClassLoader());
-        this.oddHolders = new ArrayList<OddHolder>();
-    }
-
-    public static final Creator<Game> CREATOR = new Creator<Game>() {
-        public Game createFromParcel(Parcel source) {
-            return new Game(source);
-        }
-
-        public Game[] newArray(int size) {
-            return new Game[size];
-        }
-    };
+	@Override
+	public void writeToParcel (Parcel dest, int flags) {
+		dest.writeString( this.cstStartTime );
+		dest.writeString( this.teamANumber );
+		dest.writeString( this.teamBNumber );
+		dest.writeList( this.sports );
+		dest.writeList( this.oddHolders );
+		dest.writeParcelable( this.teamAOdd, 0 );
+		dest.writeParcelable( this.teamBOdd, 0 );
+		dest.writeParcelable( this.user, 0 );
+		dest.writeParcelable( this.bet, 0 );
+		dest.writeString( this.teamAName );
+		dest.writeString( this.teamBName );
+		dest.writeString( this.teamAFullname );
+		dest.writeString( this.teamBFullname );
+		dest.writeString( this.teamANickname );
+		dest.writeString( this.teamBNickname );
+		dest.writeString( this.teamALogo );
+		dest.writeString( this.teamBLogo );
+		dest.writeString( this.sportsName );
+		dest.writeString( this.leagueName );
+		dest.writeList( this.oddHolders );
+		dest.writeString( this.teamAPitcher );
+		dest.writeString( this.teamBPitcher );
+		dest.writeValue( this.poolCredits );
+	}
 
     public String getTeamNameFromTeamNumber (String teamNumber) {
         return (getTeamANumber().equals(teamNumber)) ? getTeamAName() : getTeamBName();

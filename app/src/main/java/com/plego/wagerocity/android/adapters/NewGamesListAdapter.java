@@ -128,8 +128,8 @@ public class NewGamesListAdapter extends BaseAdapter {
 		viewHolder.cbOverTeamA.setChecked( checkedArray.get( viewHolder.cbOverTeamA.getId(), false ) );
 		viewHolder.cbUnderTeamA.setChecked( checkedArray.get( viewHolder.cbUnderTeamA.getId(), false ) );
 
-		viewHolder.tvTeamAName.setText( game.getTeamAFullname() );
-		viewHolder.tvTeamBName.setText( game.getTeamBFullname() );
+		viewHolder.tvTeamAName.setText( game.getTeamADisplayName() );
+		viewHolder.tvTeamBName.setText( game.getTeamBDisplayName() );
 		try {
 			viewHolder.tvGameDate.setText( AndroidUtils.getFormatedDate( game.getCstStartTime() ) );
 		}

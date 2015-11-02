@@ -642,7 +642,7 @@ public class DashboardActivity
 		ArrayList<Game> result = new ArrayList<>();
 		for (Game game : games) {
 			try {
-				if (!dateUtils.isPastDate( game.getCstStartTime() )) {
+				if (dateUtils.isPastDate( game.getCstStartTime() )) {
 					result.add( game );
 				}
 			}

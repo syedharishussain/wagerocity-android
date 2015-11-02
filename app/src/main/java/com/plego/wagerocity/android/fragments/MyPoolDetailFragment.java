@@ -5,31 +5,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.MyPoolDetailAdapter;
-import com.plego.wagerocity.android.model.Game;
-import com.plego.wagerocity.android.model.MyPool;
-import com.plego.wagerocity.android.model.PoolMember;
-import com.plego.wagerocity.android.model.RestClient;
+import com.plego.wagerocity.android.model.*;
 import com.plego.wagerocity.utils.AndroidUtils;
-
-import org.w3c.dom.Text;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.text.ParseException;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +37,10 @@ public class MyPoolDetailFragment extends Fragment {
 
     private OnMyPoolDetailFragmentInteractionListener mListener;
 
+	public MyPoolDetailFragment () {
+		// Required empty public constructor
+	}
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -64,8 +57,36 @@ public class MyPoolDetailFragment extends Fragment {
         return fragment;
     }
 
-    public MyPoolDetailFragment() {
-        // Required empty public constructor
+	public static boolean setListViewHeightBasedOnItems (ListView listView) {
+
+		MyPoolDetailAdapter listAdapter = (MyPoolDetailAdapter) listView.getAdapter();
+		if (listAdapter != null) {
+
+			int numberOfItems = listAdapter.getCount();
+			// Get total height of all items.
+			int totalItemsHeight = 0;
+			for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
+				View item = listAdapter.getView( itemPos, null, listView );
+				item.measure( 0, 0 );
+				totalItemsHeight += item.getMeasuredHeight();
+			}
+
+			// Get total height of all item dividers.
+			int totalDividersHeight = listView.getDividerHeight() *
+									  (numberOfItems - 1);
+
+			// Set list height.
+			ViewGroup.LayoutParams params = listView.getLayoutParams();
+			params.height = totalItemsHeight + totalDividersHeight;
+			listView.setLayoutParams( params );
+			listView.requestLayout();
+
+			return true;
+
+		} else {
+			return false;
+		}
+
     }
 
     @Override
@@ -148,7 +169,9 @@ public class MyPoolDetailFragment extends Fragment {
                             }
 
                             Uri uri = Uri.parse(getActivity().getString(R.string.uri_open_games_list_fragment));
-                            mListener.onMyPoolDetailFragmentInteraction(uri, games, pool.getPoolLeague(), pool.getPoolId());
+							String sportsName = AndroidUtils.getSportsNameFromParam( pool.getPoolLeague() );
+							mListener.onMyPoolDetailFragmentInteraction( uri, games,
+																		 sportsName, pool.getPoolId() );
 
                         } else {
 
@@ -216,38 +239,6 @@ public class MyPoolDetailFragment extends Fragment {
     public interface OnMyPoolDetailFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onMyPoolDetailFragmentInteraction(Uri uri, ArrayList<Game> games, String leagueName, String poolId);
-    }
-
-    public static boolean setListViewHeightBasedOnItems(ListView listView) {
-
-        MyPoolDetailAdapter listAdapter = (MyPoolDetailAdapter) listView.getAdapter();
-        if (listAdapter != null) {
-
-            int numberOfItems = listAdapter.getCount();
-            // Get total height of all items.
-            int totalItemsHeight = 0;
-            for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
-                View item = listAdapter.getView(itemPos, null, listView);
-                item.measure(0, 0);
-                totalItemsHeight += item.getMeasuredHeight();
-            }
-
-            // Get total height of all item dividers.
-            int totalDividersHeight = listView.getDividerHeight() *
-                    (numberOfItems - 1);
-
-            // Set list height.
-            ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalItemsHeight + totalDividersHeight;
-            listView.setLayoutParams(params);
-            listView.requestLayout();
-
-            return true;
-
-        } else {
-            return false;
-        }
-
     }
 
 }

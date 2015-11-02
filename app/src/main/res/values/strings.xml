@@ -49,6 +49,7 @@
 	<string name="gcm_defaultSenderId">963388369453</string>
 	<string name="text_bet_won">You won your $%1$s bet on the %2$s matchup</string>
 	<string name="text_bet_lost">You lost your $%1$s bet on the %2$s matchup</string>
+	<string name="text_no_games">"There are no %s  games going on for now. Please come back later</string>
 
 	<string-array name="leaderboard_filters">
         <item>All Leaderboards</item>

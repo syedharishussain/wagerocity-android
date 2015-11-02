@@ -13,6 +13,7 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.plego.wagerocity.R;
+import com.plego.wagerocity.android.WagerocityApplication;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.*;
 import com.plego.wagerocity.android.fragments.*;
@@ -21,19 +22,19 @@ import com.plego.wagerocity.android.model.*;
 import com.plego.wagerocity.android.util.*;
 import com.plego.wagerocity.constants.StringConstants;
 import com.plego.wagerocity.utils.AndroidUtils;
+import com.plego.wagerocity.utils.DateUtils;
 import com.sromku.simple.fb.*;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import roboguice.RoboGuice;
 import roboguice.activity.RoboFragmentActivity;
-import roboguice.event.EventManager;
-import roboguice.inject.RoboInjector;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+
 
 public class DashboardActivity
 		extends RoboFragmentActivity
@@ -69,7 +70,7 @@ public class DashboardActivity
 	OnPublishListener    onPublishListener;
 	BillingProcessor     bp;
 	ArrayList<Pick>      showPurchasePicks;
-	EventManager         eventManager;
+	//	EventManager         eventManager;
 	IabHelper            mHelper;
 	IInAppBillingService mService;
 	ServiceConnection                        mServiceConn               = new ServiceConnection() {
@@ -212,11 +213,16 @@ public class DashboardActivity
 				}
 			};
 
+	@javax.inject.Inject DateUtils dateUtils;
+
 	@Override
+
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate( savedInstanceState );
 		setContentView( R.layout.activity_dashboard );
 
+		WagerocityApplication.component( this )
+							 .inject( this );
 		bp = new BillingProcessor( this, this.getString( R.string.in_app_billing_public_key ), this );
 
 		addNavigationBarFragment();
@@ -261,8 +267,8 @@ public class DashboardActivity
 			}
 		};
 
-		final RoboInjector injector = RoboGuice.getInjector( this );
-		eventManager = injector.getInstance( EventManager.class );
+//		final RoboInjector injector = RoboGuice.getInjector( this );
+//		eventManager = injector.getInstance( EventManager.class );
 
 		mHelper = new IabHelper( this, getString( R.string.in_app_billing_public_key ) );
 
@@ -556,7 +562,7 @@ public class DashboardActivity
 	}
 
 	private void replaceGetDollarsFragment() {
-		replaceFragment(new GetDollarsFragment(), StringConstants.TAG_FRAG_GET_DOLLARS);
+		replaceFragment( new GetDollarsFragment(), StringConstants.TAG_FRAG_GET_DOLLARS );
 	}
 
 	private void replaceFragment(Fragment fragment, String TAG) {
@@ -609,10 +615,43 @@ public class DashboardActivity
 	}
 
 	@Override
-	public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam, String poolId) {
+	public void onSportsListFragmentInteraction (Uri uri, ArrayList<Game> games, String sportsName, String poolId) {
 		if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
-			replaceFragment(GamesListFragment.newInstance(games, sportsNameValueForParam, poolId), StringConstants.TAG_FRAG_GAMES_LIST);
+			replaceGameFragment( games, sportsName, poolId );
 		}
+	}
+
+	private void replaceGameFragment (ArrayList<Game> games, String sportsNameValueForParam,
+									  String poolId) {
+		ArrayList<Game> gameList = processGames( games );
+		if (gameList.size() <= 0) {
+			AndroidUtils.showDialog(
+					getString( R.string.no_games_found ),
+					getString( R.string.text_no_games, sportsNameValueForParam ),
+					SweetAlertDialog.ERROR_TYPE,
+					this
+			);
+			return;
+		}
+		replaceFragment( GamesListFragment.newInstance( gameList,
+														sportsNameValueForParam,
+														poolId ), StringConstants.TAG_FRAG_GAMES_LIST );
+	}
+
+	private ArrayList<Game> processGames (ArrayList<Game> games) {
+		ArrayList<Game> result = new ArrayList<>();
+		for (Game game : games) {
+			try {
+				if (!dateUtils.isPastDate( game.getCstStartTime() )) {
+					result.add( game );
+				}
+			}
+			catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		Log.d( TAG, "Filtered " + (games.size() - result.size()) + " out of " + games.size() );
+		return result;
 	}
 
 	@Override
@@ -717,7 +756,7 @@ public class DashboardActivity
 	@Override
 	public void onMyPoolDetailFragmentInteraction(Uri uri, ArrayList<Game> games, String leagueName, String poolId) {
 		if (uri.toString().equals(getString(R.string.uri_open_games_list_fragment))) {
-			replaceFragment(GamesListFragment.newInstance(games, leagueName, poolId), StringConstants.TAG_FRAG_GAMES_LIST);
+			replaceGameFragment( games, leagueName, poolId );
 		}
 	}
 

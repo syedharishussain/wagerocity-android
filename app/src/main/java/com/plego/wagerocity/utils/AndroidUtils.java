@@ -107,6 +107,29 @@ public class AndroidUtils {
         return "";
     }
 
+	public static String getSportsNameFromParam (String params) {
+
+		if (params.equals( "nfl" )) {
+			return "NFL";
+		} else if (params.equals( "ncaaf" )) {
+			return "NCAA Football";
+		} else if (params.equals( "mlb" )) {
+			return "MLB";
+		} else if (params.equals( "nba" )) {
+			return "NBA";
+		} else if (params.equals( "ncaab" )) {
+			return "NCAA Basketball";
+		} else if (params.equals( "nhl" )) {
+			return "NHL";
+		} else if (params.equals( "soccer" )) {
+			return "Soccer";
+		} else if (params.equals( "tennis" )) {
+			return "Tennis";
+		}
+
+		return "";
+	}
+
     public static String getSportsIdForParam(String sportsName) {
 
         if (sportsName.equals("NFL")) {
@@ -271,12 +294,12 @@ public class AndroidUtils {
 
     public static String getFormatedDate (String dateString) throws ParseException {
         String strCurrentDate = "2015-05-06 18:05:00";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");//    "EEE, dd MMM yyyy hh:mm:ss Z");
-        Date newDate = format.parse(dateString); // format.parse(strCurrentDate);
+		SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );//    "EEE, dd MMM yyyy hh:mm:ss Z");
+		Date newDate = format.parse(dateString); // format.parse(strCurrentDate);
 		newDate.setTime( newDate.getTime() - 7200000 );
 //        Thursday, May 07, 2015
-        format = new SimpleDateFormat("EEEE, MMM dd, yyyy hh:mm");
-        String date = format.format(newDate);
+		format = new SimpleDateFormat( "EEEE, MMM dd, yyyy HH:mm" );
+		String date = format.format(newDate);
 
         date = date + " CST";
 

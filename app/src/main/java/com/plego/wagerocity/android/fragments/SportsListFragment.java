@@ -6,29 +6,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
+import android.view.*;
+import android.widget.*;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.plego.wagerocity.R;
 import com.plego.wagerocity.android.WagerocityPref;
 import com.plego.wagerocity.android.adapters.SportsListAdapter;
-import com.plego.wagerocity.android.model.Game;
-import com.plego.wagerocity.android.model.LeaderboardPlayer;
-import com.plego.wagerocity.android.model.RestClient;
-import com.plego.wagerocity.android.model.SportsListObject;
+import com.plego.wagerocity.android.model.*;
 import com.plego.wagerocity.utils.AndroidUtils;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +41,10 @@ public class SportsListFragment extends Fragment {
 
     private OnSportsListFragmentInteractionListener mListener;
 
+	public SportsListFragment () {
+		// Required empty public constructor
+	}
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -65,10 +60,6 @@ public class SportsListFragment extends Fragment {
         args.putString(ARG_POOL_ID, poolId);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public SportsListFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -116,7 +107,7 @@ public class SportsListFragment extends Fragment {
                             if (games.size() > 0) {
 
                                 Uri uri = Uri.parse(getString(R.string.uri_open_games_list_fragment));
-                                mListener.onSportsListFragmentInteraction(uri, games, AndroidUtils.getSportsNameForParam(sportsName), poolId);
+								mListener.onSportsListFragmentInteraction( uri, games, sportsName, poolId );
 
                             } else {
 
@@ -170,37 +161,21 @@ public class SportsListFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnSportsListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onSportsListFragmentInteraction(Uri uri, ArrayList<Game> games, String sportsNameValueForParam, String poolId);
-        public void onSportsListLeaderbaordsFragmentInteraction(Uri uri, ArrayList<LeaderboardPlayer> leaderboardPlayers, String sportsNameValueForParam);
-    }
+	private ArrayList<SportsListObject> getSportsListData (boolean hasOverAllKey) {
+		ArrayList<SportsListObject> sportsListObjects = new ArrayList<SportsListObject>();
 
-    private ArrayList<SportsListObject> getSportsListData(boolean hasOverAllKey) {
-        ArrayList<SportsListObject> sportsListObjects = new ArrayList<SportsListObject>();
+		if (hasOverAllKey) sportsListObjects.add( new SportsListObject( "Overall", R.drawable.logo_w ) );
+		sportsListObjects.add( new SportsListObject( "NFL", R.drawable.nfl ) );
+		sportsListObjects.add( new SportsListObject( "NCAA Football", R.drawable.ncaa_football ) );
+		sportsListObjects.add( new SportsListObject( "MLB", R.drawable.mlb ) );
+		sportsListObjects.add( new SportsListObject( "NBA", R.drawable.nba ) );
+		sportsListObjects.add( new SportsListObject( "NCAA Basketball", R.drawable.ncaa_basketball ) );
+		sportsListObjects.add( new SportsListObject( "NHL", R.drawable.nhl ) );
+		sportsListObjects.add( new SportsListObject( "Soccer", R.drawable.soccer ) );
+		sportsListObjects.add( new SportsListObject( "Tennis", R.drawable.tennis ) );
 
-        if (hasOverAllKey) sportsListObjects.add(new SportsListObject("Overall", R.drawable.logo_w));
-        sportsListObjects.add(new SportsListObject("NFL", R.drawable.nfl));
-        sportsListObjects.add(new SportsListObject("NCAA Football", R.drawable.ncaa_football));
-        sportsListObjects.add(new SportsListObject("MLB", R.drawable.mlb));
-        sportsListObjects.add(new SportsListObject("NBA", R.drawable.nba));
-        sportsListObjects.add(new SportsListObject("NCAA Basketball", R.drawable.ncaa_basketball));
-        sportsListObjects.add(new SportsListObject("NHL", R.drawable.nhl));
-        sportsListObjects.add(new SportsListObject("Soccer", R.drawable.soccer));
-        sportsListObjects.add(new SportsListObject("Tennis", R.drawable.tennis));
-
-        return sportsListObjects;
-    }
+		return sportsListObjects;
+	}
 
     private void getLeaderboards(final String leagueName) {
         final SweetAlertDialog pDialog = AndroidUtils.showDialog(
@@ -234,7 +209,28 @@ public class SportsListFragment extends Fragment {
 
             }
         });
-    }
+	}
+
+	/**
+	 * This interface must be implemented by activities that contain this
+	 * fragment to allow an interaction in this fragment to be communicated
+	 * to the activity and potentially other fragments contained in that
+	 * activity.
+	 * <p/>
+	 * See the Android Training lesson <a href=
+	 * "http://developer.android.com/training/basics/fragments/communicating.html"
+	 * >Communicating with Other Fragments</a> for more information.
+	 */
+	public interface OnSportsListFragmentInteractionListener {
+
+		// TODO: Update argument type and name
+		public void onSportsListFragmentInteraction (Uri uri, ArrayList<Game> games, String sportsNameValueForParam,
+													 String poolId);
+
+		public void onSportsListLeaderbaordsFragmentInteraction (Uri uri,
+																 ArrayList<LeaderboardPlayer> leaderboardPlayers,
+																 String sportsNameValueForParam);
+	}
 
 }
 

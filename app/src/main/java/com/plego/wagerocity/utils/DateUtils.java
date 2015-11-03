@@ -28,9 +28,9 @@ public class DateUtils {
 
 	@NonNull public Date convertDate (String cstTime) throws ParseException {
 		Date newDate;
-		SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd hh:mm:ss" );//    "EEE, dd MMM yyyy hh:mm:ss Z");
+		SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );//    "EEE, dd MMM yyyy hh:mm:ss Z");
 		newDate = format.parse( cstTime );
-		newDate.setTime( newDate.getTime() - 7200000 );
+		newDate.setTime( newDate.getTime() );//- 7200000
 		return newDate;
 	}
 

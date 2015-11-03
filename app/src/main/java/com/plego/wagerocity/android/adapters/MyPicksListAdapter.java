@@ -27,8 +27,8 @@ public class MyPicksListAdapter extends BaseAdapter {
 
 	ArrayList<Pick> picks;
 	Context         context;
-	private OnMyPickShareInteractionListener mListener;
 	@Inject ImageLoader                      imageLoader;
+	private OnMyPickShareInteractionListener mListener;
 
 	public MyPicksListAdapter (Context context, ArrayList<Pick> picks) {
 		this.picks = picks;
@@ -120,7 +120,7 @@ public class MyPicksListAdapter extends BaseAdapter {
 			viewHolder.tvMatchTitle.setText( pick.getMatchDet() );
 //            viewHolder.tvTeamBName.setText( pick.getTeamBName() );
 			try {
-				viewHolder.textViewDate.setText( pick.getStartTime() );
+				viewHolder.textViewDate.setText( pick.getCstStartTime() );
 			}
 			catch (ParseException e) {
 				e.printStackTrace();
@@ -171,6 +171,11 @@ public class MyPicksListAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+	public interface OnMyPickShareInteractionListener {
+
+		public void onMyPickShareInteraction (Feed feed);
+	}
+
 	class ViewHolder {
 
 		@Bind(R.id.tv_match_title)
@@ -203,10 +208,5 @@ public class MyPicksListAdapter extends BaseAdapter {
 		ViewHolder (View view) {
 			ButterKnife.bind( this, view );
 		}
-	}
-
-	public interface OnMyPickShareInteractionListener {
-
-		public void onMyPickShareInteraction (Feed feed);
 	}
 }

@@ -296,9 +296,9 @@ public class AndroidUtils {
         String strCurrentDate = "2015-05-06 18:05:00";
 		SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );//    "EEE, dd MMM yyyy hh:mm:ss Z");
 		Date newDate = format.parse(dateString); // format.parse(strCurrentDate);
-		newDate.setTime( newDate.getTime() - 7200000 );
+		newDate.setTime( newDate.getTime() );//- 7200000
 //        Thursday, May 07, 2015
-		format = new SimpleDateFormat( "EEEE, MMM dd, yyyy HH:mm" );
+		format = new SimpleDateFormat( "EEEE, MMM dd, yyyy hh:mm a" );
 		String date = format.format(newDate);
 
         date = date + " CST";

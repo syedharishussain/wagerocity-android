@@ -640,20 +640,24 @@ public class BetOnGameFragment extends Fragment {
                 return false;
             }
 
-            if (!AndroidUtils.isEmpty( poolId )) {
-                for (OddHolder oddHolder : oddHolders) {
-                    if (oddHolder.getPoolCredits() < Float.parseFloat( oddHolder.getRiskValue() )) {
-                        if (progressAlert != null && progressAlert.isShowing()) {
-                            progressAlert.dismiss();
-                        }
-                        uiUtils.showDialog( "Not Enough Pool Credits", "You do not have enough pool credits to place this " +
-                                "bet.", SweetAlertDialog.ERROR_TYPE );
-                        return false;
-                    }
-                }
-            }
-
-            return true;
+			if (!AndroidUtils.isEmpty( poolId ) && oddHolders.size() > 0) {
+				float totalRiskValue = 0;
+				for (OddHolder oddHolder : oddHolders) {
+					totalRiskValue += Float.parseFloat( oddHolder.getRiskValue() );
+				}
+				if (oddHolders.get( 0 )
+							  .getPoolCredits() < totalRiskValue) {
+					if (progressAlert != null && progressAlert.isShowing()) {
+						progressAlert.dismiss();
+					}
+					uiUtils.showDialog( "Not Enough Pool Credits",
+										"You do not have enough pool credits to place this " +
+										"bet.",
+										SweetAlertDialog.ERROR_TYPE );
+					return false;
+				}
+			}
+			return true;
         }
 
         private void process () {

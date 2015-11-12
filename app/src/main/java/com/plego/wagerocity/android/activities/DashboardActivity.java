@@ -3,6 +3,7 @@ package com.plego.wagerocity.android.activities;
 import android.content.*;
 import android.net.Uri;
 import android.os.*;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -135,7 +136,7 @@ public class DashboardActivity
 						new Handler().postDelayed( new Runnable() {
 							@Override
 							public void run () {
-								replaceFragment( MyPicksFragment.newInstance( new ArrayList<>( showPurchasePicks ) ),
+								replaceFragment( MyPicksFragment.newInstance( filterPicks( showPurchasePicks ) ),
 												 StringConstants.TAG_FRAG_MY_PICKS );
 							}
 						}, 100 );
@@ -498,18 +499,7 @@ public class DashboardActivity
 				public void success(ArrayList<Pick> picks, Response response) {
 					pDialog.dismiss();
 
-					ArrayList<Pick> filteredPicks = new ArrayList<>();
-					for (Pick pick : picks) {
-						if (pick.getStake() != null) {
-							float stake = Float.parseFloat( pick.getStake() );
-							if (stake > 0f) {
-								filteredPicks.add( pick );
-							}
-						}
-					}
-					Log.d( TAG, "Filtered " + (picks.size() - filteredPicks.size()) + " out of " + picks.size() );
-					Collections.sort( filteredPicks, new Pick() );
-
+					ArrayList<Pick> filteredPicks = filterPicks( picks );
 					replaceFragment( MyPicksFragment.newInstance( filteredPicks ), StringConstants.TAG_FRAG_MY_PICKS );
 				}
 
@@ -529,6 +519,21 @@ public class DashboardActivity
 		if (uri.toString().equals(getString(R.string.uri_open_setting_fragment))) {
 			replaceFragment(new SettingsFragment(), StringConstants.TAG_FRAG_SETTING);
 		}
+	}
+
+	@NonNull private ArrayList<Pick> filterPicks (ArrayList<Pick> picks) {
+		ArrayList<Pick> filteredPicks = new ArrayList<>();
+		for (Pick pick : picks) {
+			if (pick.getStake() != null) {
+				float stake = Float.parseFloat( pick.getStake() );
+				if (stake > 0f) {
+					filteredPicks.add( pick );
+				}
+			}
+		}
+		Log.d( TAG, "Filtered " + (picks.size() - filteredPicks.size()) + " out of " + picks.size() );
+		Collections.sort( filteredPicks, new Pick() );
+		return filteredPicks;
 	}
 
 	@Override
@@ -681,7 +686,7 @@ public class DashboardActivity
 	@Override
 	public void onBetOnGameFragmentInteraction(Uri uri, ArrayList<Pick> picks) {
 		if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
-			replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+			replaceFragment( MyPicksFragment.newInstance( filterPicks( picks ) ), StringConstants.TAG_FRAG_MY_PICKS );
 		}
 	}
 
@@ -735,7 +740,8 @@ public class DashboardActivity
 	public void onPicksOfPlayerAdapterListAdapterFragmentInteraction(Uri uri, ArrayList<Pick> picks, boolean isPurchased) {
 		if (uri.toString().equals(getString(R.string.uri_open_my_picks_fragment))) {
 			if (isPurchased) {
-				replaceFragment(MyPicksFragment.newInstance(picks), StringConstants.TAG_FRAG_MY_PICKS);
+				replaceFragment( MyPicksFragment.newInstance( filterPicks( picks ) ),
+								 StringConstants.TAG_FRAG_MY_PICKS );
 			} else {
 //                bp.purchase(this, StringConstants.IAB_PURCHASE_PICK);
 //                bp.consumePurchase(StringConstants.IAB_PURCHASE_PICK);
@@ -800,7 +806,7 @@ public class DashboardActivity
 		if (transactionDetails.productId.equals( StringConstants.IAB_PURCHASE_PICK )) {
 
 			replaceFragment( MyPicksFragment
-									 .newInstance( new ArrayList<>( showPurchasePicks ) ),
+									 .newInstance( filterPicks( showPurchasePicks ) ),
 							 StringConstants.TAG_FRAG_MY_PICKS );
 			showPurchasePicks = null;
 		}

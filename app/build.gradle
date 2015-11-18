@@ -16,7 +16,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.plegotech.wagerocity"
+        applicationId "com.plegotech.wagerocityapp"
         minSdkVersion 16
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
@@ -54,6 +54,7 @@ android {
             proguardFiles getDefaultProguardFile( 'proguard-android.txt' ), 'proguard-rules.pro'
             buildConfigField( "String", "BASE_URL", "\"http://api.wagerocity.com\"" )
             buildConfigField( "boolean", "ENABLE_CRASHLYTICS", "true" )
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {

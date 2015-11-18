@@ -41,12 +41,12 @@
     <string name="ok">OK</string>
     <string name="no_games_found">No Games Found!</string>
     <string name="no_games_found_message">There are no games going on for now. Please come back later.</string>
-    <string name="in_app_billing_public_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAietZKFTmPtO5hTB6h3wUd6ZN1BTOn7QL4qoDO6Rc5KJ7ZAS3FpTNlMQRdXm6/KlEcAmjTclvWaAdYDhlsyCh027rlbJQnrjxu3rQ2Xt9qFXX35P7u0wfmlTaI0ahBaUI1VPDt+IdqdB3xK2lJNBrGyVy32d8WYXpg3kCnU/rDzaHgHYX4A6Sk+Pdc0A87mUzxlrldTE7trOzVx+KSZava+/ONHaHNgjTHFfLf239AxwaogR5ztlkYwu3KTqgewptPh8CwFREbvexZfSanFedXOXat39923dvL+if7zkPr5UlAWEfffpiLdu8kaoPby1YZbLiz4P/ibIbJJzY4DXXNwIDAQAB</string>
+	<string name="in_app_billing_public_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnxBAXru2kwiVJmk60awdU5ef0mi54LeQMA16S+sG1cNlhUkq0hHDaxCKB5M6fkETZ8pdXsS5PJ++Bmb0m2fmtbIn2pS2TZbr4iouo+d5b1BcqfwUxWRR8jYlc+guTnEOi4q3eR6Bi/LwA1OHjYJiKO6vDU7XtKh8Cpt16Elgyk3krbnYp4nvkkiYJwseVrn+nbp3YTMANUMmOxnPl7QwSF4IdMnR+rWwH+vFQX5Xplh93k3uLlEztk+8/KUF1MKzOlidhtdBvKBeS62Jgfz/G4w09ScmiVs7Zel6A9IVVgtAYieuWEgFWuKIBB4e6L/pMADutomKYEB/pjBE8OJOaQIDAQAB</string>
     <string name="in_app_billing_rookie">com.wagerocity.rookie</string>
     <string name="title_create_pool">Create Pool</string>
     <string name="uri_open_create_pool">create pool</string>
     <string name="text_over_under_value">Over\nO | %s | U\nUnder</string>
-	<string name="gcm_defaultSenderId">963388369453</string>
+	<string name="gcm_defaultSenderId">813061293013</string>
 	<string name="text_bet_won">You won your $%1$s bet on the %2$s matchup</string>
 	<string name="text_bet_lost">You lost your $%1$s bet on the %2$s matchup</string>
 	<string name="text_no_games">"There are no %s  games going on for now. Please come back later</string>

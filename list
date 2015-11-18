@@ -1,0 +1,67 @@
+* +2hr issue in betting portal
+* do not display $0 bets in My Picks
+* Names getting scrambled in betting portal
+* Matches should not appear in Betting portal after their start time
+
+Push Notifications on iOS and Android (pending)
+
+Pools (iOS and Android) (needs testing)
+
+My Picks
+
+Leaderboard (pending)
+
+Betting Portal (needs testing)
+	- Check NCAA Football mixing up team names (College Football Matchups on Android NCAA football matches not showing team full names)
+
+- Add test accounts for payments
+
+
+Backend:
+	- Unable to join pool getting 404 not found (backend)
+	- Show My Pool: Balance not updating after placing Bet in the Pool (Backend)
+	- Not displaying pool name on Pool bet (Not getting pool name from backend)
+	- Pitcher name not displaying on game list (not returning from the server)
+	- Do not display bets with 0 amount (should be done on backend)
+	-Buy Pick button turns light blue only if the pick is available (Backend giving 404 though player has 17 picks -> http://api.wagerocity.com/getGamesOfPlayer?playerID=1466&userID=1671 )
+
+Done
+	- My Picks - Not showing correct "To win" amount of Parlay bet
+	- Leaderboard - Follow Button Colors
+	- Betting Portal - Game should not be displayed after its start time
+	- Betting Portal - Over/Under value not correctly showing in the list
+	- Betting Portal - Update user balance on navigation to My picks and Betting Portal
+	
+[2:09:36 AM] Saad Yusuf: wagerocity@gmail.com
+[2:10:23 AM] Saad Yusuf: Hellmuth777
++1 (630) 881-0580
+
+wagerocity account
+saad.yusuf@ymail.com
+123456
+
+[2:40:10 AM] Haris Hussain: setDeviceToken
+[2:40:21 AM] Haris Hussain: Method Name: setDeviceToken
+Type: POST
+Request Parameters: playerId(String), deviceToken(String), deviceType(Int)
+Device Type: 
+1= iOS
+2= Android
+
+com.plegotech.wagerocityapp
+Server API Key help
+AIzaSyCHvdx2WCm6YDyCzWQYVy87bqamikYmWdY
+Sender ID help
+813061293013
+
+
+com.wagerocity.rookie
+com.wagerocity.chaser
+com.wagerocity.player
+com.wagerocity.guru
+com.wagerocity.bawse
+com.wagerocity.purchase_pick
+com.wagerocity.clear_record
+
+* $2,500 virtual dollars
+* Wagerocity community access

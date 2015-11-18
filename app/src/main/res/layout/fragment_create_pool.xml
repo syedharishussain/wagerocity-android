@@ -105,7 +105,7 @@
 				android:id="@+id/radio_private_pool"
 				android:textSize="@dimen/font_small"
 				android:text="Private (Only invited can join and participate)"
-				/>
+				android:visibility="gone" />
 		</RadioGroup>
 
 		<TextView
